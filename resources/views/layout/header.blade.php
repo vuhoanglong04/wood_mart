@@ -32,14 +32,37 @@
                         <li class="pc-item"><a class="pc-link" href="finance.html">Finance</a></li>
                     </ul>
                 </li>
-                <li class="pc-item"><a
-                        href="https://html.phoenixcoded.net/light-able/bootstrap/other/sample-page.html"
-                        class="pc-link">
+                <li class="pc-item pc-caption">
+                    <label>Admin Panel</label>
+                </li>
+                <li class="pc-item pc-hasmenu">
+                    <a href="#!" class="pc-link">
                         <span class="pc-micon">
-                            <i class="ph-duotone ph-desktop"></i>
+                            <i class="ph-duotone ph-user-list"></i>
                         </span>
-                        <span class="pc-mtext">Sample page</span></a></li>
-
+                        <span class="pc-mtext">Users</span>
+                        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+                    </a>
+                    <ul class="pc-submenu">
+                        <li class="pc-item"><a class="pc-link" href="{{route('admin.users.index')}}">Users List</a></li>
+                        <li class="pc-item"><a class="pc-link" href="affiliate-dashboard.html">Affiliate</a></li>
+                        <li class="pc-item"><a class="pc-link" href="finance.html">Finance</a></li>
+                    </ul>
+                </li>
+                <li class="pc-item pc-hasmenu">
+                    <a href="#!" class="pc-link">
+                        <span class="pc-micon">
+                            <i class="ph-duotone ph-armchair"></i>
+                        </span>
+                        <span class="pc-mtext">Products</span>
+                        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+                    </a>
+                    <ul class="pc-submenu">
+                        <li class="pc-item"><a class="pc-link" href="index.html">Products List</a></li>
+                        <li class="pc-item"><a class="pc-link" href="affiliate-dashboard.html">Affiliate</a></li>
+                        <li class="pc-item"><a class="pc-link" href="finance.html">Finance</a></li>
+                    </ul>
+                </li>
             </ul>
 
         </div>
@@ -47,11 +70,11 @@
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div class="flex-shrink-0">
-                        <img src="{{ asset('images') }}/user/avatar-1.jpg" alt="user-image"
+                        <img src="{{ asset('images') }}/user/{{ Auth::user()->img ?? '' }}" alt="user-image"
                             class="user-avtar wid-45 rounded-circle" />
                     </div>
                     <div class="flex-grow-1 ms-3 me-2">
-                        <h6 class="mb-0">Jonh Smith</h6>
+                        <h6 class="mb-0">{{ Auth::user()->full_name ?? '' }}</h6>
                         <small>Administrator</small>
                     </div>
                     <div class="dropdown">
@@ -73,7 +96,7 @@
                                         <i class="ph-duotone ph-lock-key"></i>
                                         <span>Lock Screen</span>
                                     </a></li>
-                                <li><a class="pc-user-links">
+                                <li><a class="pc-user-links" href='{{ route('logout') }}'>
                                         <i class="ph-duotone ph-power"></i>
                                         <span>Logout</span>
                                     </a>
@@ -103,8 +126,8 @@
                     </a>
                 </li>
                 <li class="dropdown pc-h-item d-inline-flex d-md-none">
-                    <a class="pc-head-link dropdown-toggle arrow-none m-0" data-bs-toggle="dropdown"
-                        href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                    <a class="pc-head-link dropdown-toggle arrow-none m-0" data-bs-toggle="dropdown" href="#"
+                        role="button" aria-haspopup="false" aria-expanded="false">
                         <i class="ph-duotone ph-magnifying-glass"></i>
                     </a>
                     <div class="dropdown-menu pc-h-dropdown drp-search">
@@ -131,8 +154,8 @@
         <div class="ms-auto">
             <ul class="list-unstyled">
                 <li class="dropdown pc-h-item">
-                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown"
-                        href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
+                        role="button" aria-haspopup="false" aria-expanded="false">
                         <i class="ph-duotone ph-sun-dim"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end pc-h-dropdown">
@@ -157,8 +180,8 @@
                     </a>
                 </li>
                 <li class="dropdown pc-h-item">
-                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown"
-                        href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
+                        role="button" aria-haspopup="false" aria-expanded="false">
                         <i class="ph-duotone ph-diamonds-four"></i>
                     </a>
                     <div class="dropdown-menu dropdown-menu-end pc-h-dropdown">
@@ -178,15 +201,15 @@
                             <i class="ph-duotone ph-lock-key"></i>
                             <span>Lock Screen</span>
                         </a>
-                        <a href="#!" class="dropdown-item">
+                        <a href="{{ route('logout') }}" class="dropdown-item">
                             <i class="ph-duotone ph-power"></i>
                             <span>Logout</span>
                         </a>
                     </div>
                 </li>
                 <li class="dropdown pc-h-item">
-                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown"
-                        href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
+                        role="button" aria-haspopup="false" aria-expanded="false">
                         <i class="ph-duotone ph-bell"></i>
                         <span class="badge bg-success pc-h-badge">3</span>
                     </a>
@@ -225,13 +248,11 @@
                                             <p class="position-relative mt-1 mb-2"><br /><span
                                                     class="text-truncate">Lorem Ipsum has been the industry's
                                                     standard dummy text ever since the 1500s.</span></p>
-                                            <span
-                                                class="badge bg-light-primary border border-primary me-1 mt-1">web
+                                            <span class="badge bg-light-primary border border-primary me-1 mt-1">web
                                                 design</span>
                                             <span
                                                 class="badge bg-light-warning border border-warning me-1 mt-1">Dashobard</span>
-                                            <span
-                                                class="badge bg-light-success border border-success me-1 mt-1">Design
+                                            <span class="badge bg-light-success border border-success me-1 mt-1">Design
                                                 System</span>
                                         </div>
                                     </div>
@@ -372,11 +393,9 @@
                     </div>
                 </li>
                 <li class="dropdown pc-h-item header-user-profile">
-                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown"
-                        href="#" role="button" aria-haspopup="false" data-bs-auto-close="outside"
-                        aria-expanded="false">
-                        <img src="{{ asset('images') }}/user/avatar-2.jpg" alt="user-image"
-                            class="user-avtar" />
+                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
+                        role="button" aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
+                        <img src="{{ asset('images') }}/user/avatar-2.jpg" alt="user-image" class="user-avtar" />
                     </a>
                     <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
                         <div class="dropdown-header d-flex align-items-center justify-content-between">
@@ -389,13 +408,13 @@
                                     <li class="list-group-item">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0">
-                                                <img src="{{ asset('images') }}/user/avatar-2.jpg"
-                                                    alt="user-image" class="wid-50 rounded-circle" />
+                                                <img src="{{ asset('images') }}/user/avatar-2.jpg" alt="user-image"
+                                                    class="wid-50 rounded-circle" />
                                             </div>
                                             <div class="flex-grow-1 mx-3">
-                                                <h5 class="mb-0">Carson Darrin</h5>
+                                                <h5 class="mb-0">{{ Auth::user()->full_name ?? '' }}</h5>
                                                 <a class="link-primary"
-                                                    href="mailto:carson.darrin@company.io">carson.darrin@company.io</a>
+                                                    href="mailto:carson.darrin@company.io">{{ Auth::user()->email ?? '' }}</a>
                                             </div>
                                             <span class="badge bg-primary">PRO</span>
                                         </div>
@@ -413,12 +432,12 @@
                                                 <span>Recently mail</span>
                                             </span>
                                             <div class="user-group">
-                                                <img src="{{ asset('images') }}/user/avatar-1.jpg"
-                                                    alt="user-image" class="avtar" />
-                                                <img src="{{ asset('images') }}/user/avatar-2.jpg"
-                                                    alt="user-image" class="avtar" />
-                                                <img src="{{ asset('images') }}/user/avatar-3.jpg"
-                                                    alt="user-image" class="avtar" />
+                                                <img src="{{ asset('images') }}/user/avatar-1.jpg" alt="user-image"
+                                                    class="avtar" />
+                                                <img src="{{ asset('images') }}/user/avatar-2.jpg" alt="user-image"
+                                                    class="avtar" />
+                                                <img src="{{ asset('images') }}/user/avatar-3.jpg" alt="user-image"
+                                                    class="avtar" />
                                             </div>
                                         </a>
                                         <a href="#" class="dropdown-item">
@@ -440,8 +459,7 @@
                                                 <i class="ph-duotone ph-arrow-circle-down"></i>
                                                 <span>Download</span>
                                             </span>
-                                            <span
-                                                class="avtar avtar-xs rounded-circle bg-danger text-white">10</span>
+                                            <span class="avtar avtar-xs rounded-circle bg-danger text-white">10</span>
                                         </a>
                                     </li>
                                     <li class="list-group-item">
@@ -471,8 +489,8 @@
                                                 <span>Dark mode</span>
                                             </span>
                                             <div class="form-check form-switch form-check-reverse m-0">
-                                                <input class="form-check-input f-18" id="dark-mode"
-                                                    type="checkbox" onclick="dark_mode()" role="switch" />
+                                                <input class="form-check-input f-18" id="dark-mode" type="checkbox"
+                                                    onclick="dark_mode()" role="switch" />
                                             </div>
                                         </div>
                                     </li>
@@ -499,7 +517,7 @@
                                     </li>
                                     <li class="list-group-item">
 
-                                        <a href="#" class="dropdown-item">
+                                        <a href="{{ route('logout') }}" class="dropdown-item">
                                             <span class="d-flex align-items-center">
                                                 <i class="ph-duotone ph-power"></i>
                                                 <span>Logout</span>
@@ -556,8 +574,7 @@
                                         onclick="layout_change_default();" data-bs-toggle="tooltip"
                                         title="Automatically sets the theme based on user's operating system's color scheme.">
                                         <span class="btn-label">Default</span>
-                                        <span
-                                            class="pc-lay-icon d-flex align-items-center justify-content-center">
+                                        <span class="pc-lay-icon d-flex align-items-center justify-content-center">
                                             <i class="ph-duotone ph-cpu"></i>
                                         </span>
                                     </button>
@@ -596,8 +613,7 @@
                     <h6 class="mb-1">Accent color</h6>
                     <p class="text-muted text-sm">Choose your primary theme color</p>
                     <div class="theme-color preset-color">
-                        <a href="#!" class="active" data-value="preset-1"><i
-                                class="ti ti-check"></i></a>
+                        <a href="#!" class="active" data-value="preset-1"><i class="ti ti-check"></i></a>
                         <a href="#!" data-value="preset-2"><i class="ti ti-check"></i></a>
                         <a href="#!" data-value="preset-3"><i class="ti ti-check"></i></a>
                         <a href="#!" data-value="preset-4"><i class="ti ti-check"></i></a>

@@ -355,4 +355,10 @@
             </div>
         </div>
     </div>
+    <script>
+        beautyToast.success({
+            title: 'Success', // Set the title of beautyToast
+            message: 'Success Message' // Set the message of beautyToast
+        });
+    </script>
 @endsection
