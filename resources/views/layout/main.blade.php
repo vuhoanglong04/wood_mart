@@ -24,7 +24,6 @@
     <!-- [Google Font : Public Sans] icon -->
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&amp;display=swap"
         rel="stylesheet">
-
     <!-- [Tabler Icons] https://tablericons.com -->
     <link rel="stylesheet" href="{{ asset('fonts') }}/tabler-icons.min.css">
     <!-- [Feather Icons] https://feathericons.com -->
@@ -36,6 +35,7 @@
     <!-- [Template CSS Files] -->
     <link rel="stylesheet" href="{{ asset('css') }}/style.css" id="main-style-link">
     <link rel="stylesheet" href="{{ asset('css') }}/style-preset.css">
+
 
 </head>
 <!-- [Head] end -->
@@ -55,7 +55,9 @@
     <!-- [ Main Content ] end -->
 
     @include('layout.footer')
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
     <script src="{{ asset('js') }}/plugins/apexcharts.min.js"></script>
     <script src="{{ asset('js') }}/plugins/jsvectormap.min.js"></script>
     <script src="{{ asset('js') }}/plugins/world.js"></script>
@@ -69,6 +71,7 @@
     <script src="{{ asset('js') }}/fonts/custom-font.js"></script>
     <script src="{{ asset('js') }}/pcoded.js"></script>
     <script src="{{ asset('js') }}/plugins/feather.min.js"></script>
+
     <script>
         layout_change('light');
     </script>
@@ -87,6 +90,7 @@
     <script>
         preset_change("preset-1");
     </script>
+    @stack('scripts')
 </body>
 
 </html>

@@ -17,7 +17,10 @@ return new class extends Migration
             $table->string('phone_number')->unique()->nullable();
             $table->string('full_name')->nullable();
             $table->string('password');
+            $table->text('img')->default('avatar-1.jpg');
             $table->integer('group_id')->default(0);
+            $table->integer('status')->default(1);
+            $table->integer('is_online')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });
