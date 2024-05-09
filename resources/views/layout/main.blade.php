@@ -35,7 +35,7 @@
     <!-- [Template CSS Files] -->
     <link rel="stylesheet" href="{{ asset('css') }}/style.css" id="main-style-link">
     <link rel="stylesheet" href="{{ asset('css') }}/style-preset.css">
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 <!-- [Head] end -->
@@ -44,13 +44,19 @@
 <body data-pc-preset="preset-1" data-pc-sidebar-theme="light" data-pc-sidebar-caption="true" data-pc-direction="ltr"
     data-pc-theme="light">
     <!-- [ Pre-loader ] start -->
-
+    <div class="loader" bis_skin_checked="1" style="display: none; opacity: -7.5287e-16;">
+        <div class="p-4 text-center" bis_skin_checked="1">
+            <div class="custom-loader" bis_skin_checked="1"></div>
+            <h2 class="my-3 f-w-400">Loading..</h2>
+            <p class="mb-0">Please wait...</p>
+        </div>
+    </div>
     @include('layout.header')
 
 
     <!-- [ Main Content ] start -->
     <div class="pc-container">
-            @yield('content')
+        @yield('content')
     </div>
     <!-- [ Main Content ] end -->
 
@@ -71,6 +77,7 @@
     <script src="{{ asset('js') }}/fonts/custom-font.js"></script>
     <script src="{{ asset('js') }}/pcoded.js"></script>
     <script src="{{ asset('js') }}/plugins/feather.min.js"></script>
+    <script src="{{ asset('js') }}/component.js"></script>
 
     <script>
         layout_change('light');
@@ -89,6 +96,53 @@
     </script>
     <script>
         preset_change("preset-1");
+    </script>
+    <script>
+        var elem = document.querySelector('.loader'),
+            fadeInInterval,
+            fadeOutInterval;
+
+        function showLoader() {
+
+            if (!elem.classList.contains('is-active')) {
+                clearInterval(fadeInInterval);
+                clearInterval(fadeOutInterval);
+                elem.fadeIn = function(timing) {
+                    var newValue = 0;
+                    elem.style.display = 'flex';
+                    elem.style.opacity = 0;
+                    fadeInInterval = setInterval(function() {
+                        if (newValue < 1) {
+                            newValue += 0.01;
+                        } else if (newValue === 1) {
+                            clearInterval(fadeInInterval);
+                        }
+                        elem.style.opacity = newValue;
+                    }, timing);
+                }
+                elem.fadeIn(3);
+            }
+        }
+
+        function stopLoader() {
+            clearInterval(fadeInInterval);
+            clearInterval(fadeOutInterval);
+            elem.fadeOut = function(timing) {
+                var newValue = 1;
+                elem.style.opacity = 1;
+                fadeOutInterval = setInterval(function() {
+                    if (newValue > 0) {
+                        newValue -= 0.01;
+                    } else if (newValue < 0) {
+                        elem.style.opacity = 0;
+                        elem.style.display = 'none';
+                        clearInterval(fadeOutInterval);
+                    }
+                    elem.style.opacity = newValue;
+                }, timing);
+            }
+            elem.fadeOut(3);
+        }
     </script>
     @stack('scripts')
 </body>

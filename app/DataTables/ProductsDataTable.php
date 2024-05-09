@@ -2,17 +2,17 @@
 
 namespace App\DataTables;
 
-use App\Models\User;
-use Illuminate\Database\Eloquent\Builder as QueryBuilder;
-use Yajra\DataTables\EloquentDataTable;
-use Yajra\DataTables\Html\Builder as HtmlBuilder;
+use App\Models\Products;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
+use Yajra\DataTables\Html\Builder as HtmlBuilder;
+use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 
-class UsersDataTable extends DataTable
+class ProductsDataTable extends DataTable
 {
     /**
      * Build the DataTable class.
@@ -21,14 +21,17 @@ class UsersDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
-        return (new EloquentDataTable($query))
+        $products = Products::with('category')->withTrashed();
+
+        return (new EloquentDataTable($products))
+            ->addColumn('action', 'Products.action')
             ->setRowId('id');
     }
 
     /**
      * Get the query source of dataTable.
      */
-    public function query(User $model): QueryBuilder
+    public function query(Products $model): QueryBuilder
     {
         return $model->newQuery();
     }
@@ -39,20 +42,13 @@ class UsersDataTable extends DataTable
     public function html(): HtmlBuilder
     {
         return $this->builder()
-                    ->setTableId('users-table')
+                    ->setTableId('products-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
                     ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->buttons([
-                        Button::make('excel'),
-                        Button::make('csv'),
-                        Button::make('pdf'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    ]);
+                    ->selectStyleSingle();
+
     }
 
     /**
@@ -61,17 +57,24 @@ class UsersDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            Column::make('full_name'),
-            Column::make('email'),
-            Column::make('phone_number'),
-            Column::make('updated_at'),
-            Column::make('updated_at'),
-            Column::make('status'),
-
+            Column::computed('#')
+                  ->exportable(false)
+                  ->printable(false)
+                  ->width(60)
+                  ->addClass('text-center'),
+                    Column::make('product_name'),
+                    Column::make('price'),
+                    Column::make('created_at'),
+                    Column::make('updated_at'),
+                    Column::make('deleted_at')
         ];
     }
+
+    /**
+     * Get the filename for export.
+     */
     protected function filename(): string
     {
-        return 'Users_' . date('YmdHis');
+        return 'Products_' . date('YmdHis');
     }
 }
