@@ -3,6 +3,8 @@
         <div class="loader-fill"></div>
     </div>
 </div>
+
+
 <nav class="pc-sidebar">
     <div class="navbar-wrapper">
         <div class="m-header">
@@ -35,6 +37,19 @@
                 <li class="pc-item pc-caption">
                     <label>Admin Panel</label>
                 </li>
+
+                <li class="pc-item pc-hasmenu">
+                    <a href="#!" class="pc-link">
+                        <span class="pc-micon">
+                            <i class="ph-duotone ph-users-three"></i>
+                        </span>
+                        <span class="pc-mtext">Groups</span>
+                        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+                    </a>
+                    <ul class="pc-submenu">
+                        <li class="pc-item"><a class="pc-link" href="{{route('admin.groups.index')}}">Group List</a></li>
+                    </ul>
+                </li>
                 <li class="pc-item pc-hasmenu">
                     <a href="#!" class="pc-link">
                         <span class="pc-micon">
@@ -44,9 +59,21 @@
                         <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
                     </a>
                     <ul class="pc-submenu">
-                        <li class="pc-item"><a class="pc-link" href="{{route('admin.users.index')}}">Users List</a></li>
-                        <li class="pc-item"><a class="pc-link" href="affiliate-dashboard.html">Affiliate</a></li>
-                        <li class="pc-item"><a class="pc-link" href="finance.html">Finance</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{ route('admin.users.index') }}">Users List</a>
+
+                    </ul>
+                </li>
+                <li class="pc-item pc-hasmenu">
+                    <a href="#!" class="pc-link">
+                        <span class="pc-micon">
+                            <i class="ph-duotone ph-tag"></i>
+                        </span>
+                        <span class="pc-mtext">Categories</span>
+                        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+                    </a>
+                    <ul class="pc-submenu">
+                        <li class="pc-item"><a class="pc-link" href="{{route('admin.category.index')}}">Category List</a></li>
+
                     </ul>
                 </li>
                 <li class="pc-item pc-hasmenu">
@@ -58,11 +85,10 @@
                         <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
                     </a>
                     <ul class="pc-submenu">
-                        <li class="pc-item"><a class="pc-link" href="index.html">Products List</a></li>
-                        <li class="pc-item"><a class="pc-link" href="affiliate-dashboard.html">Affiliate</a></li>
-                        <li class="pc-item"><a class="pc-link" href="finance.html">Finance</a></li>
+                        <li class="pc-item"><a class="pc-link" href="{{route('admin.products.index')}}">Products List</a></li>
                     </ul>
                 </li>
+
             </ul>
 
         </div>
@@ -70,7 +96,7 @@
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div class="flex-shrink-0">
-                        <img src="{{ asset('images') }}/user/{{ Auth::user()->img ?? '' }}" alt="user-image"
+                        <img src="{{ asset('storage/user/' . Auth::user()->img) }}" alt="user-image"
                             class="user-avtar wid-45 rounded-circle" />
                     </div>
                     <div class="flex-grow-1 ms-3 me-2">
@@ -395,7 +421,8 @@
                 <li class="dropdown pc-h-item header-user-profile">
                     <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
                         role="button" aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
-                        <img src="{{ asset('images') }}/user/avatar-2.jpg" alt="user-image" class="user-avtar" />
+                        <img src="{{ asset('storage/user/' . Auth::user()->img) }}" alt="user-image"
+                            class="user-avtar" />
                     </a>
                     <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
                         <div class="dropdown-header d-flex align-items-center justify-content-between">
@@ -408,8 +435,8 @@
                                     <li class="list-group-item">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0">
-                                                <img src="{{ asset('images') }}/user/avatar-2.jpg" alt="user-image"
-                                                    class="wid-50 rounded-circle" />
+                                                <img src="{{ asset('storage/user/' . Auth::user()->img) }}"
+                                                    alt="user-image" class="wid-50 rounded-circle" />
                                             </div>
                                             <div class="flex-grow-1 mx-3">
                                                 <h5 class="mb-0">{{ Auth::user()->full_name ?? '' }}</h5>

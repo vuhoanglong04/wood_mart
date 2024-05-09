@@ -11,12 +11,12 @@
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Home</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('admin.users.index') }}">User List</a></li>
-                            <li class="breadcrumb-item" aria-current="page">Add New User</li>
+                            <li class="breadcrumb-item" aria-current="page">Edit User</li>
                         </ul>
                     </div>
                     <div class="col-md-12">
                         <div class="page-header-title">
-                            <h2 class="mb-0">Add New User</h2>
+                            <h2 class="mb-0">Edit User #{{$user->id}}</h2>
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,7 @@
                                 Please fill in all the required fields.
                             </div>
                         @endif
-                        <form action="{{ route('admin.users.add') }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('admin.users.update' , $user->id) }}" method="post" enctype="multipart/form-data">
 
                             <div class="mt-3">
                                 <label class="form-label">Full name</label>
@@ -42,7 +42,7 @@
                                     class="form-control @error('full_name'){{ 'is-invalid' }}@enderror"
                                     placeholder="Enter full name"
                                     id="floatingInput"
-                                    value="{{old('full_name')}}"
+                                    value="{{old('full_name') ?? $user->full_name }}"
                                     >
                             </div>
                             @error('full_name')
@@ -53,7 +53,7 @@
                                 <input type="text" name='email'
                                     class="form-control @error('email'){{ 'is-invalid' }}@enderror"
                                     placeholder="Emaill address"
-                                    value="{{old('email')}}"
+                                    value="{{old('email') ?? $user->email}}"
                                     >
                             </div>
                             @error('email')
@@ -63,17 +63,18 @@
                                 <label class="form-label">Phone Number</label>
                                 <input type="text" name='phone_number'
                                     class="form-control @error('phone_number'){{ 'is-invalid' }}@enderror"
-                                    placeholder="+84" value="{{old('phone_number')}}">
+                                    placeholder="+84" value="{{old('phone_number') ?? $user->phone_number}}">
                             </div>
                             @error('phone_number')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
-                            <div class="mt-3">
-                                <label class="form-label">Password</label>
-                                <input type="password" name='password'
-                                    class="form-control @error('password'){{ 'is-invalid' }}@enderror"
-                                    placeholder="Enter password" value="{{old('password')}}">
-                            </div>
+                            <label class="form-label mt-3">Password</label>
+                            <div class="input-group mb-3">
+                                <div class="input-group-text">
+                                  <input class="form-check-input checkPass" type="checkbox" value="1" name="newPass" {{old('newPass')?'checked':''}}>
+                                </div>
+                                <input type="text" class="form-control @error('password'){{ 'is-invalid' }}@enderror" aria-label="Text input with checkbox" placeholder="Enter new password here" {{old('newPass')!=null ? '' :'disabled'}} name="password">
+                              </div>
                             @error('password')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
@@ -81,9 +82,8 @@
                                 <label class="form-label">Group</label>
                                 <select class="form-select fs-5 @error('group_id'){{ 'is-invalid' }}@enderror"
                                     name='group_id'>
-                                    <option hidden selected value="">Select group</option>
                                     @foreach ($groups as $item)
-                                        <option value="{{ $item->group_id }}" {{old('group_id')==$item->group_id ? 'selected' :''}}>{{ $item->group_name }}</option>
+                                        <option value="{{ $item->group_id }}" {{$item->group_id == $user->group_id ? 'selected' : ''}}>{{ $item->group_name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -100,7 +100,7 @@
                             @enderror
                             <div class="action mt-3">
                                 <button type="submit" class="btn btn-primary">Submit</button>
-                                <button class="btn btn-secondary">Cancel</button>
+                               
                             </div>
                             @csrf
                         </form>
@@ -110,6 +110,14 @@
                 </div>
 
             </div>
+<script>
+        document.querySelector('.checkPass').addEventListener('click', function(){
+            var passInput = this.parentNode.parentNode.querySelector('.form-control')
+            if(this.checked){
+                passInput.removeAttribute('disabled');
+            }else passInput.setAttribute('disabled' ,'');
+        })
 
+</script>
         </div>
     @endsection

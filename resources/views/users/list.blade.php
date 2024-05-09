@@ -144,15 +144,49 @@
             box-shadow: none;
         }
 
+        .user-profile-list table tbody tr .overlay-edit .btn,
+        .user-profile-list table tbody tr .overlay-edit .introjs-tooltip .introjs-button,
+        .introjs-tooltip .user-profile-list table tbody tr .overlay-edit .introjs-button {
+            margin: 0 3px;
+            width: 50px;
+            height: 35px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+        }
     </style>
     <div class="pc-content">
+        @if (session('success'))
+            <script>
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "bottom-end",
+                    showConfirmButton: false,
+                    timer: 3000,
+                    backdrop: 'swal2-backdrop-hide',
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.onmouseenter = Swal.stopTimer;
+                        toast.onmouseleave = Swal.resumeTimer;
+                    }
+                });
+                Toast.fire({
+                    icon: "success",
+                    title: "{{ session('success') }}",
+                });
+                document.querySelector('.swal2-container').classList.remove('swal2-backdrop-show')
+                document.querySelector('.swal2-container').classList.add('mb-2')
+
+            </script>
+        @endif
         <!-- [ breadcrumb ] start -->
         <div class="page-header">
             <div class="page-block">
                 <div class="row align-items-center">
                     <div class="col-md-12">
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{route('admin.index')}}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Home</a></li>
                             <li class="breadcrumb-item" aria-current="page">User List</li>
 
                         </ul>
@@ -167,7 +201,8 @@
         </div>
         <!-- [ breadcrumb ] end -->
         <div class="col-12 mt-4 mb-4">
-            <a type="submit" href="{{route('admin.users.add')}}" style="color:white" class="btn btn-primary"><i class="ph-duotone ph-plus-circle"></i> Add New
+            <a type="submit" href="{{ route('admin.users.add') }}" style="color:white" class="btn btn-primary"><i
+                    class="ph-duotone ph-plus-circle"></i> Add New
                 User</a>
         </div>
         <!-- [ Main Content ] start -->
@@ -221,7 +256,7 @@
                         zeroRecords: `<p class="datatable-empty text-center pt-1" colspan="6">No entries found</p>`,
                     },
                     "ajax": {
-                        "url": "http:\/\/127.0.0.1:8000\/admin\/users",
+                        "url": "{{route('admin.users.list')}}",
                         "type": "GET",
                         "data": function(data) {
                             for (var i = 0, len = data.columns.length; i < len; i++) {
@@ -244,8 +279,9 @@
                                 if (row.group_id == 1) role = "Staff"
                                 else if (row.group_id == 2) role = "Admintrator";
                                 else role = "Customer"
+                                var path = 'storage/user/'+row.img;
                                 return `<div class="d-inline-block align-middle">
-                                            <img src="{{ asset('images/user') }}/${row.img}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
+                                            <img src="{{ asset('${path}') }}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
                                             <div class="d-inline-block">
                                                 <h6 class="m-b-0">${row.full_name}</h6>
                                                 <p class="m-b-0 text-primary">
@@ -294,17 +330,26 @@
                             "searchable": true,
                             "render": function(data, type, row) {
                                 var status = "";
-                                if (data == 1) {
+                                if (row.deleted_at == null) {
                                     status = '<span class="badge bg-light-success">Active</span>'
                                 } else status = '<span class="badge bg-light-danger">Disabled</span>'
-                                return `${status}
+                                var result = `${status}
                                         <div class="overlay-edit">
-                                            <ul class="list-inline mb-0">
-                                                <li class="list-inline-item m-0"><a href="#" class="avtar avtar-s btn btn-primary p-4"><i class="ti ti-pencil f-18"></i></a></li>
-                                                <li class="list-inline-item m-0"><a href="#" class="avtar avtar-s btn bg-white btn-link-danger p-3"><i class="ti ti-trash f-18"></i></a></li>
-                                            </ul>
+                                            <div class="btn-group mb-2 me-2">
+                                            <button class="btn btn-primary dropdown-toggle p-2" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" onclick="onDetail('${row.id}')">Detail</a>
+                                                <a class="dropdown-item" onclick="onEdit('${row.id}')">Edit</a>`;
+                                if(!row.deleted_at) result += `<a class="dropdown-item" onclick="onLock('${row.id}' ,'${row.full_name}' )">Lock account</a>`
+                                 else result +=`<a class="dropdown-item" onclick="onUnLock('${row.id}' ,'${row.full_name}' )">Unlock account</a>`
+
+                                 result+= `<a class="dropdown-item" onclick="forceDelete('${row.id}' ,'${row.full_name}' )">Force Delete (<span style='color:red'>*</span>)</a>
+                                            </div>
+                                            </div>
                                         </div>
                                 `;
+
+                                return result;
                             }
                         }
                     ],
@@ -331,4 +376,56 @@
             });
         </script>
     @endpush
+    <script>
+        function onLock(id, name) {
+            Swal.fire({
+                title: `Do you want to lock account ${name}?`,
+                icon: "warning",
+                showDenyButton: true,
+                confirmButtonText: "Lock Account",
+                denyButtonText: `Cancel`
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    window.location.href = `{{ URL::to('admin/users/delete/${id}') }}`
+                }
+            });
+        }
+        function onUnLock(id, name) {
+            Swal.fire({
+                title: `Do you want to unlock account ${name}?`,
+                icon: "info",
+                showDenyButton: true,
+                confirmButtonText: "Unlock",
+                denyButtonText: `Cancel`
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    window.location.href = `{{ URL::to('admin/users/restore/${id}') }}`
+                }
+            });
+        }
+        function forceDelete(id, name) {
+            Swal.fire({
+                title: `Do you want to permanently delete ${name}?
+                (Can't restore in the future)`,
+                icon: "warning",
+                showDenyButton: true,
+                confirmButtonText: "Delete",
+                denyButtonText: `Cancel`
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    window.location.href = `{{ URL::to('admin/users/force-delete/${id}') }}`
+                }
+            });
+        }
+
+        function onEdit(id){
+            window.location.href = `{{ URL::to('admin/users/edit/${id}') }}`
+        }
+        function onDetail(id){
+            window.location.href = `{{ URL::to('admin/users/detail/${id}') }}`
+        }
+    </script>
 @endsection

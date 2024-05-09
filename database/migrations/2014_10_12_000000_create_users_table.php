@@ -22,6 +22,7 @@ return new class extends Migration
             $table->integer('status')->default(1);
             $table->integer('is_online')->default(0);
             $table->rememberToken();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

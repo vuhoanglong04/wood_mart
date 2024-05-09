@@ -17,7 +17,7 @@
     <!-- [Google Font : Public Sans] icon -->
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap"
         rel="stylesheet">
-<link rel="icon" href="https://html.phoenixcoded.net/light-able/bootstrap/assets/images/favicon.svg"
+    <link rel="icon" href="https://html.phoenixcoded.net/light-able/bootstrap/assets/images/favicon.svg"
         type="image/x-icon" />
 
     <!-- [Tabler Icons] https://tablericons.com -->
@@ -59,23 +59,35 @@
                             <img src="{{ asset('images') }}/logo-dark.svg" alt="images" class="img-fluid mb-3">
                             <h2 class="f-w-500 mb-3">Login with your email</h2>
                         </div>
-                        @if ($errors->any() && !session('msg'))
-                        <div class="alert alert-warning" role="alert">
-                           Please check back your email and password
-                        </div>
+                        @if ($errors->has('password') || $errors->has('confirm_password'))
+                            <div class="alert alert-warning" role="alert">
+                                Email or password is not valid
+                            </div>
                         @endif
-
-                        @if ($errors->any() && session('msg'))
-                          <div class="alert alert-danger" role="alert">
-                                Email or password are not correct
-                          </div>
+                        @if (session('notexist'))
+                            <script>
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: "{{ session('notexist') }}",
+                                });
+                            </script>
+                        @endif
+                        @if ($errors->has('msg'))
+                            <script>
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: "{{ $errors->first('msg') }}",
+                                });
+                            </script>
                         @endif
                         <form action="{{ route('login') }}" method="POST">
                             @csrf
                             <div class="mb-3">
                                 <input type="text" name="email"
-                                    class="form-control @error('email'){{ 'is-invalid' }}@enderror " id="floatingInput"
-                                    value='{{ old('email') }}' placeholder="Email Address">
+                                    class="form-control @error('email'){{ 'is-invalid' }}@enderror "
+                                    id="floatingInput" value='{{ old('email') }}' placeholder="Email Address">
                                 @error('email')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -87,6 +99,7 @@
                                 @error('password')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+
                             </div>
                             <div class="d-flex mt-1 justify-content-between align-items-center">
                                 <div class="form-check">
@@ -112,12 +125,13 @@
     </div>
 </body>
 @if (session('login'))
-<script>
-    Swal.fire({
-    icon: "error",
-    title: "Oops...",
-    text:"Please login first!!",
-    });
-</script>
+    <script>
+        Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: "Please login first!!",
+        });
+    </script>
 @endif
+
 </html>
