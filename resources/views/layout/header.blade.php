@@ -37,57 +37,69 @@
                 <li class="pc-item pc-caption">
                     <label>Admin Panel</label>
                 </li>
+                @can('groups.view')
+                    <li class="pc-item pc-hasmenu">
+                        <a href="#!" class="pc-link">
+                            <span class="pc-micon">
+                                <i class="ph-duotone ph-users-three"></i>
+                            </span>
+                            <span class="pc-mtext">Groups</span>
+                            <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+                        </a>
+                        <ul class="pc-submenu">
+                            <li class="pc-item"><a class="pc-link" href="{{ route('admin.groups.index') }}">Group List</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endcan
 
-                <li class="pc-item pc-hasmenu">
-                    <a href="#!" class="pc-link">
-                        <span class="pc-micon">
-                            <i class="ph-duotone ph-users-three"></i>
-                        </span>
-                        <span class="pc-mtext">Groups</span>
-                        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
-                    </a>
-                    <ul class="pc-submenu">
-                        <li class="pc-item"><a class="pc-link" href="{{route('admin.groups.index')}}">Group List</a></li>
-                    </ul>
-                </li>
-                <li class="pc-item pc-hasmenu">
-                    <a href="#!" class="pc-link">
-                        <span class="pc-micon">
-                            <i class="ph-duotone ph-user-list"></i>
-                        </span>
-                        <span class="pc-mtext">Users</span>
-                        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
-                    </a>
-                    <ul class="pc-submenu">
-                        <li class="pc-item"><a class="pc-link" href="{{ route('admin.users.index') }}">Users List</a>
+                @can('user.view')
+                    <li class="pc-item pc-hasmenu">
+                        <a href="#!" class="pc-link">
+                            <span class="pc-micon">
+                                <i class="ph-duotone ph-user-list"></i>
+                            </span>
+                            <span class="pc-mtext">Users</span>
+                            <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+                        </a>
+                        <ul class="pc-submenu">
+                            <li class="pc-item"><a class="pc-link" href="{{ route('admin.users.index') }}">Users List</a>
 
-                    </ul>
-                </li>
-                <li class="pc-item pc-hasmenu">
-                    <a href="#!" class="pc-link">
-                        <span class="pc-micon">
-                            <i class="ph-duotone ph-tag"></i>
-                        </span>
-                        <span class="pc-mtext">Categories</span>
-                        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
-                    </a>
-                    <ul class="pc-submenu">
-                        <li class="pc-item"><a class="pc-link" href="{{route('admin.category.index')}}">Category List</a></li>
+                        </ul>
+                    </li>
+                @endcan
+                @can('categories.view')
+                    <li class="pc-item pc-hasmenu">
+                        <a href="#!" class="pc-link">
+                            <span class="pc-micon">
+                                <i class="ph-duotone ph-tag"></i>
+                            </span>
+                            <span class="pc-mtext">Categories</span>
+                            <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+                        </a>
+                        <ul class="pc-submenu">
+                            <li class="pc-item"><a class="pc-link" href="{{ route('admin.category.index') }}">Category
+                                    List</a></li>
 
-                    </ul>
-                </li>
-                <li class="pc-item pc-hasmenu">
-                    <a href="#!" class="pc-link">
-                        <span class="pc-micon">
-                            <i class="ph-duotone ph-armchair"></i>
-                        </span>
-                        <span class="pc-mtext">Products</span>
-                        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
-                    </a>
-                    <ul class="pc-submenu">
-                        <li class="pc-item"><a class="pc-link" href="{{route('admin.products.index')}}">Products List</a></li>
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
+                @endcan
+
+                @can('products.view')
+                    <li class="pc-item pc-hasmenu">
+                        <a href="#!" class="pc-link">
+                            <span class="pc-micon">
+                                <i class="ph-duotone ph-armchair"></i>
+                            </span>
+                            <span class="pc-mtext">Products</span>
+                            <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+                        </a>
+                        <ul class="pc-submenu">
+                            <li class="pc-item"><a class="pc-link" href="{{ route('admin.products.index') }}">Products
+                                    List</a></li>
+                        </ul>
+                    </li>
+                @endcan
 
             </ul>
 

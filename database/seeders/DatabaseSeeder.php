@@ -4,6 +4,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Colors;
 use App\Models\Groups;
+use App\Models\Modules;
 use App\Models\Category;
 use App\Models\Products;
 use App\Models\Materials;
@@ -33,7 +34,9 @@ class DatabaseSeeder extends Seeder
         //     'product_description'=>"Et maiores nisi. Excepturi ut perferendis ut consectetur ea deserunt magnam numquam laboriosam. Asperiores sed sint voluptates dolores veniam totam. Vitae eos sapiente laboriosam ratione totam autem. Sint et culpa modi eligendi et consectetur."
 
         // ]);
-            Colors::insert(['color_name'=>'Yellow' , 'color_value'=>'#FFEC9E']);
-            Materials::insert(['material_value'=>'Leather']);
+            // Colors::insert(['color_name'=>'Yellow' , 'color_value'=>'#FFEC9E']);
+            // Materials::insert(['material_value'=>'Leather']);
+
+            // Modules::insert(['module_name'=>'productVariant'  , 'module_action'=>'["forceDelte", "add", "delete"]']);
     }
 }

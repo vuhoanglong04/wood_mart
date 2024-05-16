@@ -13,12 +13,16 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
-
     public function index(UsersDataTable $dataTable)
     {
+        if (!Gate::allows('user.view')) {
+            abort(404);
+        }
+        // dd(Auth::user()->hasPermission('users' , 'forceDelete'));
         return $dataTable->render('users.list');
     }
     public function getList()
@@ -31,6 +35,9 @@ class UserController extends Controller
 
     public function add()
     {
+        if (!Gate::allows('user.add')) {
+            abort(404);
+        }
         $groups = Groups::whereNull('deleted_at')->get();
         return view('users.add', compact('groups'));
     }
@@ -72,6 +79,9 @@ class UserController extends Controller
     }
     public function edit($id)
     {
+        if (!Gate::allows('user.edit')) {
+            abort(404);
+        }
         $user = User::withTrashed()->find($id);
         $groups = Groups::whereNull('deleted_at')->get();
 
@@ -133,6 +143,9 @@ class UserController extends Controller
     }
 
     public function detail($id){
+        if (!Gate::allows('user.detail')) {
+            abort(404);
+        }
         $user = User::withTrashed()->find($id);
         $groups = Groups::whereNull('deleted_at')->get();
         return view('users.detail' , compact('user' , 'groups'));

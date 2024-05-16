@@ -21,8 +21,8 @@
         </div>
         <div class="col-xl-12" bis_skin_checked="1">
 
-            <form action="{{ route('admin.products.store') }}" method="post" enctype="multipart/form-data">
-                <div class="card" bis_skin_checked="1">
+                <form action="{{ route('admin.products.store') }}" method="post" enctype="multipart/form-data">
+                    <div class="card" bis_skin_checked="1">
 
                     @csrf
                     <div class="card-body" bis_skin_checked="1">

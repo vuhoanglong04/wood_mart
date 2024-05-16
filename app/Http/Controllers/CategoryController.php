@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class CategoryController extends Controller
 {
@@ -12,6 +14,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
+        if (!Gate::allows('categories.view')) {
+            abort(404);
+        }
+        // dd(Auth::user()->hasPermission('categories' , 'add'));
         $categories = Category::withTrashed()->get();
         return view('category.list' , compact('categories'));
     }
@@ -55,6 +61,9 @@ class CategoryController extends Controller
      */
     public function edit(string $id)
     {
+        if (!Gate::allows('categories.edit')) {
+            abort(404);
+        }
         $category = Category::withTrashed()->find($id);
         $categories = Category::withTrashed()->get();
         return view('category.edit' , compact('category' ,'categories'));

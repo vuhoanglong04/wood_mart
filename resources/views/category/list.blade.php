@@ -43,39 +43,40 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="row">
-                        <form class="col-sm-6" method="post" action="{{ route('admin.category.store') }}">
-                            <h3>Add New Category</h3>
-                            <hr>
-                            @csrf
-                            <div class="mb-3">
-                                <label class="form-label" for="exampleInputEmail1">Category Name</label>
-                                <input type="text"
-                                    class="form-control @error('category_name'){{ 'is-invalid' }}@enderror"
-                                    value="{{ old('category_name') }}" name="category_name"
-                                    placeholder="Enter category name">
-                                @error('category_name')
-                                    <div class="invalid-feedback d-block">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label" for="exampleInputEmail1">Parent Category</label>
-                                <select class="mb-0 form-select" name="parent_category_id">
-                                    <option value="0" selected>None</option>
-                                    @foreach ($categories as $item)
-                                        <option value="{{ $item->id }}">{{ $item->category_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <button type="submit" style="color:white" class="btn btn-primary"><i
-                                    class="ph-duotone ph-plus-circle" style="margin-top: 3px"></i> Add New
-                                Category</button>
+                    @can('categories.add')
+                        <div class="row">
+                            <form class="col-sm-6" method="post" action="{{ route('admin.category.store') }}">
+                                <h3>Add New Category</h3>
+                                <hr>
+                                @csrf
+                                <div class="mb-3">
+                                    <label class="form-label" for="exampleInputEmail1">Category Name</label>
+                                    <input type="text"
+                                        class="form-control @error('category_name'){{ 'is-invalid' }}@enderror"
+                                        value="{{ old('category_name') }}" name="category_name"
+                                        placeholder="Enter category name">
+                                    @error('category_name')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="exampleInputEmail1">Parent Category</label>
+                                    <select class="mb-0 form-select" name="parent_category_id">
+                                        <option value="0" selected>None</option>
+                                        @foreach ($categories as $item)
+                                            <option value="{{ $item->id }}">{{ $item->category_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <button type="submit" style="color:white" class="btn btn-primary"><i
+                                        class="ph-duotone ph-plus-circle" style="margin-top: 3px"></i> Add New
+                                    Category</button>
 
 
 
-                        </form>
-                    </div>
-
+                            </form>
+                        </div>
+                    @endcan
                 </div>
 
                 <div class="card-body table-border-style">
@@ -105,32 +106,37 @@
                                         </td>
                                         <td class='action'>
                                             {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button> --}}
-
-                                            <a href="{{ route('admin.category.edit', $item->id) }}"
-                                                class="avtar avtar-xs btn-link-secondary">
-                                                <i class="ti ti-edit f-20"></i>
-                                            </a>
+                                            @can('categories.edit')
+                                                <a href="{{ route('admin.category.edit', $item->id) }}"
+                                                    class="avtar avtar-xs btn-link-secondary">
+                                                    <i class="ti ti-edit f-20"></i>
+                                                </a>
+                                            @endcan
 
 
                                             @if (!$item->deleted_at)
-                                                <a data-id="{{ $item->id }}" data-name="{{ $item->category_name }}"
-                                                    class="avtar avtar-xs btn-link-secondary disable edit">
-                                                    <i class="ti ti-eye-off f-20"></i>
-                                                </a>
+                                                @can('categories.delete')
+                                                    <a data-id="{{ $item->id }}" data-name="{{ $item->category_name }}"
+                                                        class="avtar avtar-xs btn-link-secondary disable edit">
+                                                        <i class="ti ti-eye-off f-20"></i>
+                                                    </a>
+                                                @endcan
                                             @else
-                                                <a data-id="{{ $item->id }}" data-name="{{ $item->category_name }}"
-                                                    class="avtar avtar-xs btn-link-secondary enable edit">
-                                                    <i class="ti ti-eye f-20 "></i>
-                                                </a>
+                                                @can('categories.restore')
+                                                    <a data-id="{{ $item->id }}" data-name="{{ $item->category_name }}"
+                                                        class="avtar avtar-xs btn-link-secondary enable edit">
+                                                        <i class="ti ti-eye f-20 "></i>
+                                                    </a>
+                                                @endcan
                                             @endif
-                                            <a data-id="{{ $item->id }}" data-name="{{ $item->category_name }}"
-                                                class="avtar avtar-xs btn-link-secondary delete_category">
-                                                <i class="ti ti-trash f-20"></i>
-                                            </a>
 
+                                            @can('categories.forceDelete')
+                                                <a data-id="{{ $item->id }}" data-name="{{ $item->category_name }}"
+                                                    class="avtar avtar-xs btn-link-secondary delete_category">
+                                                    <i class="ti ti-trash f-20"></i>
+                                                </a>
+                                            @endcan
                                         </td>
-
-
                                     </tr>
                                 @endforeach
                             </tbody>

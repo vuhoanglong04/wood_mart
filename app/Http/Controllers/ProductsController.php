@@ -9,6 +9,8 @@ use App\Models\Materials;
 use Illuminate\Http\Request;
 use App\Models\ProductsVariant;
 use App\DataTables\UsersDataTable;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use App\DataTables\ProductsDataTable;
 use App\Http\Requests\ProductsRequest;
 use Illuminate\Support\Facades\Session;
@@ -20,6 +22,9 @@ class ProductsController extends Controller
      */
     public function index(ProductsDataTable $dataTable)
     {
+        if (!Gate::allows('products.view')) {
+            abort(404);
+        }
         return $dataTable->render('products.list');
     }
 
@@ -28,6 +33,10 @@ class ProductsController extends Controller
      */
     public function create()
     {
+
+        if (!Gate::allows('products.add')) {
+            abort(404);
+        }
         $categories = Category::all();
         return view('products.add', compact('categories'));
     }
@@ -53,6 +62,9 @@ class ProductsController extends Controller
      */
     public function show(string $id)
     {
+        if (!Gate::allows('products.detail')) {
+            abort(404);
+        }
         $product = Products::withTrashed()->find($id);
         $colors = Colors::withTrashed()->get();
         $materials = Materials::withTrashed()->get();
@@ -69,6 +81,9 @@ class ProductsController extends Controller
      */
     public function edit(string $id)
     {
+        if (!Gate::allows('products.edit')) {
+            abort(404);
+        }
         $categories = Category::all();
         $product = Products::withTrashed()->find($id);
         return view('products.edit', compact('product', 'categories'));

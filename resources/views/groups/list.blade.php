@@ -42,32 +42,27 @@
         </div>
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header">
-                    <div class="row">
-                        <form class="col-sm-6" method="post" action="{{ route('admin.groups.store') }}">
-                            @csrf
-                            <div class="mb-3">
-                                <label class="form-label" for="exampleInputEmail1">Group Name</label>
-                                <input type="text" class="form-control @error('group_name'){{ 'is-invalid' }}@enderror"
-                                    value="{{ old('group_name') }}" name="group_name" placeholder="Enter group name">
-                                @error('group_name')
-                                <div class="invalid-feedback d-block">{{$message }}</div>
+                @can('groups.add')
+                    <div class="card-header">
+                        <div class="row">
+                            <form class="col-sm-6" method="post" action="{{ route('admin.groups.store') }}">
+                                @csrf
+                                <div class="mb-3">
+                                    <label class="form-label" for="exampleInputEmail1">Group Name</label>
+                                    <input type="text" class="form-control @error('group_name'){{ 'is-invalid' }}@enderror"
+                                        value="{{ old('group_name') }}" name="group_name" placeholder="Enter group name">
+                                    @error('group_name')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <button type="submit" style="color:white" class="btn btn-primary"><i
+                                        class="ph-duotone ph-plus-circle" style="margin-top: 3px"></i> Add New
+                                    Group</button>
+                            </form>
+                        </div>
 
-                                @enderror
-
-                            </div>
-
-                            <button type="submit" style="color:white" class="btn btn-primary"><i
-                                    class="ph-duotone ph-plus-circle" style="margin-top: 3px"></i> Add New
-                                Group</button>
-
-
-
-                        </form>
                     </div>
-
-                </div>
-
+                @endcan
                 <div class="card-body table-border-style">
                     <div class="table-responsive">
                         <table class="table table-hover">
@@ -93,32 +88,44 @@
                                         </td>
                                         <td class='action'>
                                             {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Open modal for @mdo</button> --}}
-
-                                            <a href="{{ route('admin.groups.edit', $item->id) }}"
-                                                class="avtar avtar-xs btn-link-secondary">
-                                                <i class="ti ti-edit f-20"></i>
-                                            </a>
-
-
-                                            @if (!$item->deleted_at)
-                                                <a data-id="{{ $item->id }}" data-name="{{ $item->group_name }}"
-                                                    class="avtar avtar-xs btn-link-secondary disable edit">
-                                                    <i class="ti ti-eye-off f-20"></i>
+                                            @can('groups.edit')
+                                                <a href="{{ route('admin.groups.edit', $item->id) }}"
+                                                    class="avtar avtar-xs btn-link-secondary">
+                                                    <i class="ti ti-edit f-20"></i>
                                                 </a>
-                                            @else
+                                            @endcan
+
+                                            @can('groups.delete')
+                                                @if (!$item->deleted_at)
+                                                    <a data-id="{{ $item->id }}" data-name="{{ $item->group_name }}"
+                                                        class="avtar avtar-xs btn-link-secondary disable edit">
+                                                        <i class="ti ti-eye-off f-20"></i>
+                                                    </a>
+                                                @else
+                                                    @can('groups.restore')
+                                                        <a data-id="{{ $item->id }}" data-name="{{ $item->group_name }}"
+                                                            class="avtar avtar-xs btn-link-secondary enable edit">
+                                                            <i class="ti ti-eye f-20 "></i>
+                                                        </a>
+                                                    @endcan
+                                                @endif
+                                            @endcan
+                                            @can('groups.forceDelete')
                                                 <a data-id="{{ $item->id }}" data-name="{{ $item->group_name }}"
-                                                    class="avtar avtar-xs btn-link-secondary enable edit">
-                                                    <i class="ti ti-eye f-20 "></i>
+                                                    class="avtar avtar-xs btn-link-secondary delete_group">
+                                                    <i class="ti ti-trash f-20"></i>
+                                                @endcan
+                                            </a>
+
+
+                                            @can('groups.authorization')
+                                                <a data-id="{{ $item->id }}"
+                                                    class="avtar avtar-xs btn-link-secondary authorization"
+                                                    title="Authorization">
+                                                    <i class="ti ti-hand-off f-20"></i>
                                                 </a>
-                                            @endif
-                                            <a data-id="{{ $item->id }}" data-name="{{ $item->group_name }}"
-                                                class="avtar avtar-xs btn-link-secondary delete_group">
-                                                <i class="ti ti-trash f-20"></i>
-                                            </a>
-                                            <a data-id="{{ $item->id }}" data-name="{{ $item->group_name }}"
-                                                class="avtar avtar-xs btn-link-secondary">
-                                                <i class="ti ti-hand-off f-20"></i>
-                                            </a>
+                                            @endcan
+
                                         </td>
 
 
@@ -333,6 +340,12 @@
             $('.action .enable').click(function() {
                 onRestore(this.dataset.id, this.dataset.name)
             })
+            document.querySelectorAll('.authorization').forEach(element => {
+                element.addEventListener('click', function() {
+                    window.location.href =
+                        `{{ URL::to('admin/groups/authorization/${this.dataset.id}') }}`
+                })
+            });
         })
     </script>
 @endpush

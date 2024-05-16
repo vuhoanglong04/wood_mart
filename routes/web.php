@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductsVariant;
 use App\Http\Controllers\GroupsController;
+use App\Http\Controllers\ModulesController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Controllers\DashboardController;
@@ -23,17 +24,22 @@ use App\Http\Controllers\ProductsVariantController;
 Route::get('login', [AuthController::class , 'index'])->name('login')->middleware('logout');
 Route::post('login', [AuthController::class , 'login']);
 Route::get('logout', [AuthController::class , 'logout'])->name('logout')->middleware('login');
-Route::get('', [AuthController::class , 'login']);
+Route::get('/', [AuthController::class , 'login']);
 
 Route::prefix('admin')->middleware('login')->name('admin.')->group(function(){
         //Dashboard
         Route::get('/', [DashboardController::class , 'index'])->name('index');
+        //Modules
+        Route::resource('modules' , ModulesController::class);
         //Groups
         Route::resource('groups' , GroupsController::class , ['parameters' => [
             'id' => 'id'
         ]]);
         Route::delete('groups/softDelete/{group}', [GroupsController::class , 'softDelete'])->name('groups.softDelete');
         Route::get('groups/restore/{group}', [GroupsController::class , 'restore'])->name('groups.restore');
+        Route::get('groups/authorization/{group}', [GroupsController::class , 'authorizationForm'])->name('groups.authorization');
+        Route::post('groups/authorization/{group}', [GroupsController::class , 'authorizationUpdate'])->name('groups.authorizationUpdate');
+
         //Users
         Route::prefix('users')->name('users.')->group(function(){
                 Route::get('/' , [UserController::class , 'index'])->name('index');
@@ -64,7 +70,7 @@ Route::prefix('admin')->middleware('login')->name('admin.')->group(function(){
         Route::resource('productsVariation' , ProductsVariantController::class);
         Route::delete('productsVariation/softDelete/{productsVariation}', [ProductsVariantController::class , 'softDelete'])->name('productsVariation.softDelete');
         Route::get('productsVariation/restore/{productsVariation}', [ProductsVariantController::class , 'restore'])->name('productsVariation.restore');
-    
+
 
 });
 

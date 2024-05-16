@@ -136,92 +136,97 @@
             </div>
         </div>
         <div class="row">
-            <div class="card col-xl-4" bis_skin_checked="1">
-                <div class="card-header" bis_skin_checked="1">
-                    <h5 id="add">Add Variants</h5>
-                </div>
-                <div class="card-body" bis_skin_checked="1">
+            @can('productsVariant.add')
+                <div class="card col-xl-4" bis_skin_checked="1">
+                    <div class="card-header" bis_skin_checked="1">
+                        <h5 id="add">Add Variants</h5>
+                    </div>
+                    <div class="card-body" bis_skin_checked="1">
 
-                    <form action="{{ route('admin.productsVariation.store') }}" method="post"
-                        enctype="multipart/form-data">
-                        @csrf
-                        <input type="text" name="id" value="{{ $product->id }}" style="display: none;">
-                        <div class=" mb-3" bis_skin_checked="1">
-                            <label class="form-label">Colors</label>
-                            <div class="col-lg-12 col-md-12 col-sm-12 d-flex align-items-center flex-wrap mb-0 p-2"
-                                bis_skin_checked="1">
+                        <form action="{{ route('admin.productsVariation.store') }}" method="post"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <input type="text" name="id" value="{{ $product->id }}" style="display: none;">
+                            <div class=" mb-3" bis_skin_checked="1">
+                                <label class="form-label">Colors</label>
+                                <div class="col-lg-12 col-md-12 col-sm-12 d-flex align-items-center flex-wrap mb-0 p-2"
+                                    bis_skin_checked="1">
 
-                                @foreach ($colors as $key => $item)
-                                    <div class="form-check form-check-inline color-checkbox mb-0 me-4 text-start h-50"
-                                        bis_skin_checked="1">
-                                        <input class="form-check-input" type="radio" name="color_id[]"
-                                            value="{{ $item->id }}"
-                                            {{ $item->id == old('color_id.' . 0) ? 'checked' : '' }}>
-                                        <i class="fas fa-circle text-primary"
-                                            style="color:{{ $item->color_value }} !important; margin-right:5px"></i>
-                                        <p class="mb-0">{{ $item->color_name }}</p>
-                                    </div>
-                                @endforeach
+                                    @foreach ($colors as $key => $item)
+                                        <div class="form-check form-check-inline color-checkbox mb-0 me-4 text-start h-50"
+                                            bis_skin_checked="1">
+                                            <input class="form-check-input" type="radio" name="color_id[]"
+                                                value="{{ $item->id }}"
+                                                {{ $item->id == old('color_id.' . 0) ? 'checked' : '' }}>
+                                            <i class="fas fa-circle text-primary"
+                                                style="color:{{ $item->color_value }} !important; margin-right:5px"></i>
+                                            <p class="mb-0">{{ $item->color_name }}</p>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                @error('color_id')
+                                    <span style="color:red" class=''>{{ $message }}</span>
+                                @enderror
                             </div>
-                            @error('color_id')
-                                <span style="color:red" class=''>{{ $message }}</span>
-                            @enderror
-                        </div>
-                        <div class="mb-3" bis_skin_checked="1">
-                            <label class="form-label">Materials</label>
-                            <select class="form-select @error('material_id'){{ 'is-invalid' }}@enderror"
-                                name="material_id">
-                                <option value="" selected hidden>Select Material</option>
-                                @foreach ($materials as $item)
-                                    <option value="{{ $item->id }}"
-                                        {{ $item->id == old('material_id') ? 'selected' : '' }}>
-                                        {{ $item->material_value }}</option>
-                                @endforeach
-                            </select>
-                            @error('material_id')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3" bis_skin_checked="1">
-                            <label class="form-label d-flex align-items-center">Price <i class="ph-duotone ph-info ms-1"
-                                    data-bs-toggle="tooltip" data-bs-title="Price"></i></label>
-                            <div class="input-group" bis_skin_checked="1">
-                                <span style=" @error('price'){{ 'border:red 1px solid' }}@enderror"
-                                    class="input-group-text">$</span>
-                                <input type="text" class="form-control @error('price'){{ 'is-invalid' }}@enderror"
-                                    placeholder="Price" name="price" value="{{ old('price') }}">
+                            <div class="mb-3" bis_skin_checked="1">
+                                <label class="form-label">Materials</label>
+                                <select class="form-select @error('material_id'){{ 'is-invalid' }}@enderror"
+                                    name="material_id">
+                                    <option value="" selected hidden>Select Material</option>
+                                    @foreach ($materials as $item)
+                                        <option value="{{ $item->id }}"
+                                            {{ $item->id == old('material_id') ? 'selected' : '' }}>
+                                            {{ $item->material_value }}</option>
+                                    @endforeach
+                                </select>
+                                @error('material_id')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
                             </div>
-                            @error('price')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3" bis_skin_checked="1">
-                            <label class="form-label">Quantity</label>
-                            <input type="text" class="form-control @error('qty_in_stock'){{ 'is-invalid' }}@enderror"
-                                placeholder="Enter Quantity" name="qty_in_stock" value="{{ old('qty_in_stock') }}">
-                            @error('qty_in_stock')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3" bis_skin_checked="1">
-                            <label class="form-label">Variant Image</label>
-                            <br>
-                            <label class="btn btn-outline-secondary" for="flupld"><i class="ti ti-upload me-2"></i>
-                                Click to Upload</label>
-                            <input type="file" id="flupld" class="d-none" name="img">
-                            @error('img')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        @if (session('unique'))
-                            <div class="alert alert-danger" role="alert">
-                                {{ session('unique') }}
+                            <div class="mb-3" bis_skin_checked="1">
+                                <label class="form-label d-flex align-items-center">Price <i class="ph-duotone ph-info ms-1"
+                                        data-bs-toggle="tooltip" data-bs-title="Price"></i></label>
+                                <div class="input-group" bis_skin_checked="1">
+                                    <span style=" @error('price'){{ 'border:red 1px solid' }}@enderror"
+                                        class="input-group-text">$</span>
+                                    <input type="text" class="form-control @error('price'){{ 'is-invalid' }}@enderror"
+                                        placeholder="Price" name="price" value="{{ old('price') }}">
+                                </div>
+                                @error('price')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
                             </div>
-                        @endif
-                        <button onclick ="onAddVariant()"class="btn btn-primary mb-0">Save</button>
-                    </form>
+                            <div class="mb-3" bis_skin_checked="1">
+                                <label class="form-label">Quantity</label>
+                                <input type="text" class="form-control @error('qty_in_stock'){{ 'is-invalid' }}@enderror"
+                                    placeholder="Enter Quantity" name="qty_in_stock" value="{{ old('qty_in_stock') }}">
+                                @error('qty_in_stock')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3" bis_skin_checked="1">
+                                <label class="form-label">Variant Image</label>
+                                <br>
+                                <label class="btn btn-outline-secondary" for="flupld"><i class="ti ti-upload me-2"></i>
+                                    Click to Upload</label>
+                                <input type="file" id="flupld" class="d-none" name="img">
+                                @error('img')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            @if (session('unique'))
+                                <div class="alert alert-danger" role="alert">
+                                    {{ session('unique') }}
+                                </div>
+                            @endif
+                            <button onclick ="onAddVariant()"class="btn btn-primary mb-0">Save</button>
+                        </form>
+                    </div>
                 </div>
-            </div>
+            @endcan
+            @can('productsVariant.view')
+
+
             <div class="col-md-8" bis_skin_checked="1">
                 <div class="card" bis_skin_checked="1">
                     <div class="card-header" bis_skin_checked="1">
@@ -258,27 +263,33 @@
                                                 <div class="prod-action-links" bis_skin_checked="1">
                                                     <ul class="list-inline me-auto mb-0 ">
                                                         @if (!$item->deleted_at)
-                                                            <li class="list-inline-item align-bottom" title="Disable">
-                                                                <a data-id="{{ $item->id }}"
-                                                                    class="avtar avtar-xs btn-link-secondary btn-pc-default hiddenVariant">
-                                                                    <i class="ti ti-eye-off f-18"></i>
-                                                                </a>
-                                                            </li>
+                                                            @can('productsVariant.delete')
+                                                                <li class="list-inline-item align-bottom" title="Disable">
+                                                                    <a data-id="{{ $item->id }}"
+                                                                        class="avtar avtar-xs btn-link-secondary btn-pc-default hiddenVariant">
+                                                                        <i class="ti ti-eye-off f-18"></i>
+                                                                    </a>
+                                                                </li>
+                                                            @endcan
                                                         @else
-                                                            <li class="list-inline-item align-bottom" title="Enable">
-                                                                <a data-id="{{ $item->id }}"
-                                                                    class="avtar avtar-xs btn-link-secondary btn-pc-default restore">
-                                                                    <i class="ti ti-eye f-18"></i>
-                                                                </a>
-                                                            </li>
+                                                            @can('productsVariant.restore')
+                                                                <li class="list-inline-item align-bottom" title="Enable">
+                                                                    <a data-id="{{ $item->id }}"
+                                                                        class="avtar avtar-xs btn-link-secondary btn-pc-default restore">
+                                                                        <i class="ti ti-eye f-18"></i>
+                                                                    </a>
+                                                                </li>
+                                                            @endcan
                                                         @endif
 
-                                                        <li class="list-inline-item align-bottom" title="Delete">
-                                                            <a data-id="{{ $item->id }}"
-                                                                class="avtar avtar-xs btn-link-danger btn-pc-default forceDelete">
-                                                                <i class="ti ti-trash f-18"></i>
-                                                            </a>
-                                                        </li>
+                                                        @can('productsVariant.forceDelete')
+                                                            <li class="list-inline-item align-bottom" title="Delete">
+                                                                <a data-id="{{ $item->id }}"
+                                                                    class="avtar avtar-xs btn-link-danger btn-pc-default forceDelete">
+                                                                    <i class="ti ti-trash f-18"></i>
+                                                                </a>
+                                                            </li>
+                                                        @endcan
                                                     </ul>
                                                 </div>
                                             </td>
@@ -291,6 +302,7 @@
                     </div>
                 </div>
             </div>
+            @endcan
         </div>
     </div>
     @if ($errors->any() || session('unique') || session('success'))
@@ -395,7 +407,7 @@
                                         `$${x.price  + (x.price*20 /100)}.00`
                                     var quantity = document.querySelector(
                                         '#qty_in_stock')
-                           
+
                                     quantity.parentElement.style.display = 'flex';
                                     quantity.innerText = `${x.qty_in_stock} (items)`
                                     stopLoader();
@@ -421,6 +433,7 @@
                 denyButtonText: `Cancel`
             }).then((result) => {
                 /* Read more about isConfirmed, isDenied below */
+                stopLoader();
                 if (result.isConfirmed) {
                     var url = `{{ URL::to('admin/productsVariation/${id}') }}`;
                     var token = '{{ csrf_token() }}';

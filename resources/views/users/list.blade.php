@@ -177,7 +177,6 @@
                 });
                 document.querySelector('.swal2-container').classList.remove('swal2-backdrop-show')
                 document.querySelector('.swal2-container').classList.add('mb-2')
-
             </script>
         @endif
         <!-- [ breadcrumb ] start -->
@@ -188,23 +187,26 @@
                         <ul class="breadcrumb">
                             <li class="breadcrumb-item"><a href="{{ route('admin.index') }}">Home</a></li>
                             <li class="breadcrumb-item" aria-current="page">User List</li>
-
                         </ul>
                     </div>
+
                     <div class="col-md-12">
                         <div class="page-header-title">
                             <h2 class="mb-0">User List</h2>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
         <!-- [ breadcrumb ] end -->
-        <div class="col-12 mt-4 mb-4">
-            <a type="submit" href="{{ route('admin.users.add') }}" style="color:white" class="btn btn-primary"><i
-                    class="ph-duotone ph-plus-circle"></i> Add New
-                User</a>
-        </div>
+        @can('user.add')
+            <div class="col-12 mt-4 mb-4">
+                <a type="submit" href="{{ route('admin.users.add') }}" style="color:white" class="btn btn-primary"><i
+                        class="ph-duotone ph-plus-circle"></i> Add New
+                    User</a>
+            </div>
+        @endcan
         <!-- [ Main Content ] start -->
         <div class="row">
             <!-- [ sample-page ] start -->
@@ -226,6 +228,8 @@
     </div>
     @push('scripts')
         <script type="module">
+            var hasForceDeletePermission = {{ Gate::allows('users.forceDelete') ? 'true' : 'false' }};
+            console.log(hasForceDeletePermission);
             var changeDate = function(data) {
                 if (data == null) return "---";
                 var createdAt = new Date(data);
@@ -256,7 +260,7 @@
                         zeroRecords: `<p class="datatable-empty text-center pt-1" colspan="6">No entries found</p>`,
                     },
                     "ajax": {
-                        "url": "{{route('admin.users.list')}}",
+                        "url": "{{ route('admin.users.list') }}",
                         "type": "GET",
                         "data": function(data) {
                             for (var i = 0, len = data.columns.length; i < len; i++) {
@@ -279,7 +283,7 @@
                                 if (row.group_id == 1) role = "Staff"
                                 else if (row.group_id == 2) role = "Admintrator";
                                 else role = "Customer"
-                                var path = 'storage/user/'+row.img;
+                                var path = 'storage/user/' + row.img;
                                 return `<div class="d-inline-block align-middle">
                                             <img src="{{ asset('${path}') }}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
                                             <div class="d-inline-block">
@@ -337,17 +341,38 @@
                                         <div class="overlay-edit">
                                             <div class="btn-group mb-2 me-2">
                                             <button class="btn btn-primary dropdown-toggle p-2" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</button>
-                                            <div class="dropdown-menu">
-                                                <a class="dropdown-item" onclick="onDetail('${row.id}')">Detail</a>
-                                                <a class="dropdown-item" onclick="onEdit('${row.id}')">Edit</a>`;
-                                if(!row.deleted_at) result += `<a class="dropdown-item" onclick="onLock('${row.id}' ,'${row.full_name}' )">Lock account</a>`
-                                 else result +=`<a class="dropdown-item" onclick="onUnLock('${row.id}' ,'${row.full_name}' )">Unlock account</a>`
+                                            <div class="dropdown-menu">`
+                                @can('user.detail')
 
-                                 result+= `<a class="dropdown-item" onclick="forceDelete('${row.id}' ,'${row.full_name}' )">Force Delete (<span style='color:red'>*</span>)</a>
-                                            </div>
-                                            </div>
-                                        </div>
+                                    result +=
+                                        ` <a class="dropdown-item" onclick="onDetail('${row.id}')">Detail</a>`
+                                @endcan
+
+                                @can('user.edit')
+
+                                    result +=
+                                        `<a class="dropdown-item" onclick="onEdit('${row.id}')">Edit</a>`;
+                                @endcan
+
+                                if (!row.deleted_at) {
+                                    @can('user.delete')
+                                        result +=
+                                            `<a class="dropdown-item" onclick="onLock('${row.id}' ,'${row.full_name}' )">Lock account</a>`
+                                    @endcan
+                                } else {
+                                    @can('user.restore')
+                                        result +=
+                                            `<a class="dropdown-item" onclick="onUnLock('${row.id}' ,'${row.full_name}' )">Unlock account</a>`
+                                    @endcan
+                                }
+                                @can('user.forceDelete')
+
+                                    result += `<a class="dropdown-item" onclick="forceDelete('${row.id}' ,'${row.full_name}' )">Force Delete (<span style='color:red'>*</span>)</a>
+                                </div>
+                                </div>
+                                </div>
                                 `;
+                                @endcan
 
                                 return result;
                             }
@@ -391,6 +416,7 @@
                 }
             });
         }
+
         function onUnLock(id, name) {
             Swal.fire({
                 title: `Do you want to unlock account ${name}?`,
@@ -405,6 +431,7 @@
                 }
             });
         }
+
         function forceDelete(id, name) {
             Swal.fire({
                 title: `Do you want to permanently delete ${name}?
@@ -421,10 +448,11 @@
             });
         }
 
-        function onEdit(id){
+        function onEdit(id) {
             window.location.href = `{{ URL::to('admin/users/edit/${id}') }}`
         }
-        function onDetail(id){
+
+        function onDetail(id) {
             window.location.href = `{{ URL::to('admin/users/detail/${id}') }}`
         }
     </script>

@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\API\ProductsController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,3 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::resource('/products',ProductsController::class);
+Route::get('products/restore/{products}', [ProductsController::class , 'restore']);
+Route::get('products/forceDelete/{products}', [ProductsController::class , 'forceDelete']);
+

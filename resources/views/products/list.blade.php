@@ -154,28 +154,27 @@
         }
     </style>
     @if (session('success'))
-    <script>
-        const Toast = Swal.mixin({
-            toast: true,
-            position: "bottom-end",
-            showConfirmButton: false,
-            timer: 3000,
-            backdrop: 'swal2-backdrop-hide',
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.onmouseenter = Swal.stopTimer;
-                toast.onmouseleave = Swal.resumeTimer;
-            }
-        });
-        Toast.fire({
-            icon: "success",
-            title: "{{ session('success') }}",
-        });
-        document.querySelector('.swal2-container').classList.remove('swal2-backdrop-show')
-        document.querySelector('.swal2-container').classList.add('mb-2')
-
-    </script>
-@endif
+        <script>
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "bottom-end",
+                showConfirmButton: false,
+                timer: 3000,
+                backdrop: 'swal2-backdrop-hide',
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+            });
+            Toast.fire({
+                icon: "success",
+                title: "{{ session('success') }}",
+            });
+            document.querySelector('.swal2-container').classList.remove('swal2-backdrop-show')
+            document.querySelector('.swal2-container').classList.add('mb-2')
+        </script>
+    @endif
     <div class="pc-content">
         <div class="page-header">
             <div class="page-block">
@@ -196,11 +195,13 @@
         </div>
 
         <div class="card products_list">
-            <div class="col-12 p-4 pb-0 text-end" bis_skin_checked="1">
-                <a type="submit" href="{{route('admin.products.create')}}" style="color:white"
-                    class="btn btn-primary"><i class="ph-duotone ph-plus-circle"></i> Add New
-                    Products</a>
-            </div>
+            @can('products.add')
+                <div class="col-12 p-4 pb-0 text-end" bis_skin_checked="1">
+                    <a type="submit" href="{{ route('admin.products.create') }}" style="color:white" class="btn btn-primary"><i
+                            class="ph-duotone ph-plus-circle"></i> Add New
+                        Products</a>
+                </div>
+            @endcan
             <div class="card-body">
                 {{ $dataTable->table() }}
             </div>
@@ -302,7 +303,7 @@
                         "orderable": true,
                         "searchable": true,
                         "render": function(data, type, row) {
-                            console.log(row);
+
                             return changeDate(data);
 
                         }
@@ -321,42 +322,64 @@
                             else show = '<span class="badge bg-light-danger">Disabled</span>'
 
                             if (!row.deleted_at) {
-                                status = `   <li class="list-inline-item align-bottom hidden"  title="Disable">
+                                @can('products.delete')
+                                    status = `   <li class="list-inline-item align-bottom hidden"  title="Disable">
                                                     <a onclick="onHidden('${row.id}' , '${row.product_name}')" class="avtar avtar-xs btn-link-secondary btn-pc-default" >
                                                     <i class="ti ti-eye-off f-18"></i>
                                                     </a>
                                             </li>`
+                                @endcan
                             } else {
+                                @can('products.restore')
+
                                 status = `   <li class="list-inline-item align-bottom show" title="Active">
                                                     <a onclick="onRestore('${row.id}' , '${row.product_name}')" class="avtar avtar-xs btn-link-secondary btn-pc-default" >
                                                     <i class="ti ti-eye f-18"></i>
                                                     </a>
                                             </li>`
+                                @endcan
+
                             }
-
-                            return `${show}
+                            var result = `${show}
                             <div class="prod-action-links" bis_skin_checked="1">
-                            <ul class="list-inline me-auto mb-0 ">
-                              ${status}
-                              <li class="list-inline-item align-bottom" title="Edit">
-                                <a onclick="onEdit('${row.id}')" class="avtar avtar-xs btn-link-success btn-pc-default">
-                                  <i class="ti ti-edit-circle f-18"></i>
-                                </a>
-                              </li>
+                                <ul class="list-inline me-auto mb-0 ">
+                                    ${status}
+                                    `;
 
+                            @can('products.edit')
+                                result +=
+                                    `
+                                <li class="list-inline-item align-bottom" title="Edit">
+                                    <a onclick="onEdit('${row.id}')" class="avtar avtar-xs btn-link-success btn-pc-default">
+                                        <i class="ti ti-edit-circle f-18"></i>
+                                        </a>
+                                        </li>
+                                        `
+                            @endcan
+                            @can('products.detail')
+
+                                result += `
                               <li class="list-inline-item align-bottom" title="SKU" onclick="onDetail('${row.id}')">
                                 <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default">
                                   <i class="ti ti-grid-dots f-18"></i>
                                 </a>
-                              </li>
+                              </li>`
+                            @endcan
+                            @can('products.forceDelete')
+
+                                result += `
                               <li class="list-inline-item align-bottom"" title="Delete" onclick="onDelete('${row.id}' , '${row.product_name}')">
                                 <a href="#" class="avtar avtar-xs btn-link-danger btn-pc-default">
                                   <i class="ti ti-trash f-18"></i>
                                 </a>
                               </li>
+                            `
+                            @endcan
+
+                            result += `
                             </ul>
                           </div>`
-                            return show;
+                            return result;
                         }
                     }],
                     createdRow: function(row, data, dataIndex) {
@@ -437,6 +460,7 @@
                 }
             });
         }
+
         function onHidden(id, name) {
             console.log(1);
             Swal.fire({
@@ -505,6 +529,7 @@
                 }
             });
         }
+
         function onRestore(id, name) {
             Swal.fire({
                 title: `Do you want to enable product ${name}?`,
@@ -572,14 +597,15 @@
                 }
             });
         }
-        function onEdit(id){
+
+        function onEdit(id) {
             window.location.href = `{{ URL::to('admin/products/${id}/edit') }}`
 
         }
-        function onDetail(id){
+
+        function onDetail(id) {
             window.location.href = `{{ URL::to('admin/products/${id}') }}`
 
         }
     </script>
 @endsection
-

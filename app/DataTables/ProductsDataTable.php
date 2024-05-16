@@ -5,6 +5,7 @@ namespace App\DataTables;
 use App\Models\Products;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
+use Illuminate\Support\Facades\Gate;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Editor\Editor;
 use Yajra\DataTables\Html\Editor\Fields;
@@ -21,6 +22,7 @@ class ProductsDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+     
         $products = Products::with('category')->withTrashed();
 
         return (new EloquentDataTable($products))
