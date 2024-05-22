@@ -52,9 +52,14 @@ class User extends Authenticatable
     public function hasPermission($module , $action)
     {
         $permissions = json_decode(Auth::user()->group->permissions);
-        for($i =0 ; $i<count($permissions->$module); $i++){
-            if($permissions->$module[$i] == $action)return true;
-        }
-        return false;
+        if($permissions){
+            for($i =0 ; $i<count($permissions->$module); $i++){
+                if($permissions->$module[$i] == $action)return true;
+            }
+            return false;
+        }else return false;
+    }
+    public function address(){
+        return $this->hasMany(UserAddress::class);
     }
 }

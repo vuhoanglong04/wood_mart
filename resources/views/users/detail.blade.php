@@ -82,7 +82,7 @@
 
                             </div>
                         </div>
-
+              
                     </div>
                     <div class="col-lg-7 col-xxl-9">
                         <div class="tab-content" id="user-set-tabContent">
@@ -121,59 +121,72 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            <li class="list-group-item px-0 pb-0">
-                                                <p class="mb-1 text-muted">Address</p>
-                                                <p class="mb-0">Street 110-B Kalians Bag, Dewan, M.P. New York</p>
-                                            </li>
+                                            @if ($defaultAddress)
+                                                <li class="list-group-item px-0 pb-0">
+                                                    <p class="mb-1 text-muted">Address</p>
+                                                    <p class="mb-0">{{ $defaultAddress->detail_address }},
+                                                        {{ $defaultAddress->city }},{{ $defaultAddress->country }}</p>
+                                                </li>
+                                            @endif
                                         </ul>
                                     </div>
                                 </div>
 
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5>Lastest Orders (After)</h5>
+                                        <h5>Lastest Orders</h5>
                                     </div>
                                     <div class="card-body">
                                         <ul class="list-group list-group-flush acc-feeds-list">
-                                            <li class="list-group-item p-0">
-                                                <div class="row">
-                                                    <div class="col-md-4 feed-title">
-                                                        <p class="mb-1 text-muted">Senior</p>
-                                                        <p class="mb-0">Senior UI/UX designer (Year)</p>
+                                            @foreach ($lastestOrders as $item)
+                                                <li class="list-group-item p-0">
+                                                    <div class="row">
+                                                        <div class="col-md-4 feed-title">
+                                                            <p class="mb-1 text-muted">#WM-{{$item->id}}</p>
+                                                            <p class="mb-0">{{$item->address}}</p>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <p class="mt-2 text-muted">-${{$item->total}}</p>
+
+                                                        </div>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <p class="mb-1 text-muted">Job Responsibility</p>
-                                                        <p class="mb-0">Perform task related to project manager with the
-                                                            100+ team under my
-                                                            observation. Team management is key
-                                                            role in this company.</p>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card" bis_skin_checked="1">
+                                    <div class="card-header" bis_skin_checked="1">
+                                        <h5>Address</h5>
+                                    </div>
+                                    <div class="card-body" bis_skin_checked="1">
+                                        <ul class="list-group list-group-flush">
+                                            @foreach ($address as $item)
+                                                <li class="list-group-item px-0 pt-0">
+                                                    <div class="d-flex align-items-center justify-content-between"
+                                                        bis_skin_checked="1">
+                                                        <div class="me-2" bis_skin_checked="1">
+                                                            <div class="d-flex align-items-center" bis_skin_checked="1">
+
+                                                                <div class="ms-2" bis_skin_checked="1">
+                                                                    <p class="mb-1">{{ $item->detail_address }}</p>
+                                                                    <p class="mb-0 text-muted">{{ $item->city }},
+                                                                        {{ $item->country }}</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="" bis_skin_checked="1">
+                                                            <div class="text-{{ $item->is_default == 1 ? 'success' : 'muted' }} d-inline-block me-2"
+                                                                bis_skin_checked="1">
+                                                                <i class="fas fa-circle f-10 me-2"></i>
+                                                                {{ $item->is_default == 1 ? 'Default' : 'Not default' }}
+                                                            </div>
+
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item p-0">
-                                                <div class="row">
-                                                    <div class="col-md-4 feed-title">
-                                                        <p class="mb-1 text-muted">Trainee cum Project Manager (Year)</p>
-                                                        <p class="mb-0">2017-2019</p>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <p class="mb-1 text-muted">Job Responsibility</p>
-                                                        <p class="mb-0">Team management is key role in this company.</p>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item p-0">
-                                                <div class="row">
-                                                    <div class="col-md-4 feed-title">
-                                                        <p class="mb-1 text-muted">School (Year)</p>
-                                                        <p class="mb-0">2009-2011</p>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <p class="mb-1 text-muted">Institute</p>
-                                                        <p class="mb-0">School of London, England</p>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                                </li>
+                                            @endforeach
+
                                         </ul>
                                     </div>
                                 </div>
@@ -764,8 +777,8 @@
                             password.classList.remove('is-invalid');
                             tag1.innerHTML = "";
                             tag2.innerHTML = "";
-                            password.value="";
-                            confirmPassword.value="";
+                            password.value = "";
+                            confirmPassword.value = "";
                             const Toast = Swal.mixin({
                                 toast: true,
                                 position: "bottom-end",

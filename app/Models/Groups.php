@@ -10,5 +10,6 @@ class Groups extends Model
 {
     use SoftDeletes;
     protected $dates = ['deleted_at'];
+    protected $fillable = ['group_name'];
 
 }

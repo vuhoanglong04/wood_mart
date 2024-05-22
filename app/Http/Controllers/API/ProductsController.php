@@ -84,7 +84,16 @@ class ProductsController extends Controller
     public function show($id)
     {
         $product = Products::find($id);
-        return ProductResource::make($product);
+        if($product){
+
+            return ProductResource::make($product);
+        }else{
+            $arr = [
+                'status' => 404,
+                'message' => "Product not found",
+            ];
+            return response()->json($arr, 404);
+        }
 
     }
 
@@ -128,7 +137,7 @@ class ProductsController extends Controller
             ];
             return response()->json($arr, 422);
         }
-        $product = Products::find($id)->update($request->all());
+        $product = Products::withTrashed()->find($id)->update($request->all());
         $arr = [
             'status' => 200,
             'message' => "Update product sucessfully",
@@ -177,14 +186,20 @@ class ProductsController extends Controller
         }
     }
     public function forceDelete($id){
-        $product = Products::withTrashed()->find($id);
-
+            $product = Products::withTrashed()->find($id);
+        if($product){
             $product->forceDelete();
             $arr = [
                 'status' => 200,
                 'message' => "Delete product sucessfully"
             ];
             return response()->json($arr, 200);
-      
+        }else{
+            $arr = [
+                'status' => 404,
+                'message' => "Product not found"
+            ];
+            return response()->json($arr, 404);
+        }
     }
 }

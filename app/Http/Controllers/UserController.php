@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\User;
 use App\Models\Groups;
+use App\Models\Orders;
 use Nette\Utils\Image;
+use App\Models\UserAddress;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\DataTables\UsersDataTable;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -46,11 +49,11 @@ class UserController extends Controller
         $newUser = new User();
         $newUser->full_name = $request->full_name;
         $newUser->email = $request->email;
-        $newUser->password =$request->password;
+        $newUser->password = $request->password;
         $newUser->phone_number = $request->phone_number;
         $newUser->group_id = $request->group_id;
         if ($request->img) {
-            $request->img->storeAs('storage/user' ,$request->img->getClientOriginalName());
+            $request->img->storeAs('storage/user', $request->img->getClientOriginalName());
             $newUser->img = $request->img->getClientOriginalName();
         }
         $newUser->save();
@@ -68,7 +71,8 @@ class UserController extends Controller
     public function restore($id)
     {
         $user = User::withTrashed()->find($id);
-        if($user->deleted_at) $user->restore();
+        if ($user->deleted_at)
+            $user->restore();
         return redirect()->route('admin.users.index')->with('success', "Restore account successfully!");
     }
     public function forceDelete($id)
@@ -89,6 +93,7 @@ class UserController extends Controller
     }
     public function update($id, Request $request)
     {
+        // dd($request->all());
         if ($request->newPass == 1) {
             $request->validate([
                 'email' => "required | email:rfc,dns",
@@ -129,12 +134,12 @@ class UserController extends Controller
         $oldUser->email = $request->email;
         $oldUser->phone_number = $request->phone_number;
         $oldUser->group_id = $request->group_id;
-        if($request->newPass){
+        if ($request->newPass) {
             $oldUser->password = $request->password;
         }
 
         if ($request->img) {
-            $request->img->storeAs('public/user' ,$request->img->getClientOriginalName());
+            $request->img->storeAs('public/user', $request->img->getClientOriginalName());
             $oldUser->img = $request->img->getClientOriginalName();
         }
         $oldUser->save();
@@ -142,33 +147,42 @@ class UserController extends Controller
 
     }
 
-    public function detail($id){
+    public function detail($id)
+    {
         if (!Gate::allows('user.detail')) {
             abort(404);
         }
         $user = User::withTrashed()->find($id);
         $groups = Groups::whereNull('deleted_at')->get();
-        return view('users.detail' , compact('user' , 'groups'));
+        $address = UserAddress::where('user_id', $id)->get();
+        $defaultAddress = UserAddress::where('user_id', $id)->where('is_default', 1)->first();
+        $lastestOrders = Orders::where('user_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->limit(3)
+            ->get();
+        return view('users.detail', compact('user', 'groups', 'defaultAddress', 'address' , 'lastestOrders'));
     }
-    public function updatePassword($id , Request $request){
-        $validate = Validator::make($request->all() ,[
-                'password' => "required | min:5 | different:current_password",
-                'confirm_password' => "required | min:5 |same:password",
+    public function updatePassword($id, Request $request)
+    {
+        $validate = Validator::make($request->all(), [
+            'password' => "required | min:5 | different:current_password",
+            'confirm_password' => "required | min:5 |same:password",
 
-        ],[
+        ], [
             "password.required" => "Password must be required",
             "password.min" => "Password must be at least :min characters",
-            "pasword.different"=>"New password must be different from old password",
+            "pasword.different" => "New password must be different from old password",
             "confirm_password.required" => "Password must be required",
             "confirm_password.min" => "Password must be at least :min characters",
-            "confirm_password.same"=>"Confirm password must be as same as password"
+            "confirm_password.same" => "Confirm password must be as same as password"
         ]);
 
-        if($validate->fails()) return $validate->errors();
-        $user =  User::withTrashed()->find($id);
-        if(Hash::check($request->password , $user->password)){
-            return  [
-                "password"=>["New password must be different from old password"]
+        if ($validate->fails())
+            return $validate->errors();
+        $user = User::withTrashed()->find($id);
+        if (Hash::check($request->password, $user->password)) {
+            return [
+                "password" => ["New password must be different from old password"]
             ];
         }
         $user->password = $request->password;

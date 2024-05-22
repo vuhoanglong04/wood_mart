@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\OrderDetailController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\ProductsVariant;
 use App\Http\Controllers\GroupsController;
+use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\ModulesController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductsController;
@@ -24,6 +26,15 @@ use App\Http\Controllers\ProductsVariantController;
 Route::get('login', [AuthController::class , 'index'])->name('login')->middleware('logout');
 Route::post('login', [AuthController::class , 'login']);
 Route::get('logout', [AuthController::class , 'logout'])->name('logout')->middleware('login');
+//forgot password
+Route::get('forgot-password', [AuthController::class , 'forgotPassword'])->name('forgot-password')->middleware('logout');
+Route::post('forgot-password', [AuthController::class , 'sendForgotPassword']);
+//code verification
+Route::get('code-verification', [AuthController::class , 'codeVerification'])->name('code-verification')->middleware('reset-password');
+Route::post('code-verification', [AuthController::class , 'codeVerificationCheck']);
+Route::get('reset-password', [AuthController::class , 'updatePasswordForm'])->name('reset-password')->middleware('reset-password');;
+Route::post('reset-password', [AuthController::class , 'updateNewPassword']);
+
 Route::get('/', [AuthController::class , 'login']);
 
 Route::prefix('admin')->middleware('login')->name('admin.')->group(function(){
@@ -70,7 +81,10 @@ Route::prefix('admin')->middleware('login')->name('admin.')->group(function(){
         Route::resource('productsVariation' , ProductsVariantController::class);
         Route::delete('productsVariation/softDelete/{productsVariation}', [ProductsVariantController::class , 'softDelete'])->name('productsVariation.softDelete');
         Route::get('productsVariation/restore/{productsVariation}', [ProductsVariantController::class , 'restore'])->name('productsVariation.restore');
-
+        //Orders
+        Route::resource('orders' , OrdersController::class);
+        Route::post('orders/update/{order}', [OrdersController::class , 'update'])->name('orders.update');
+        Route::resource('order-detail' , OrderDetailController::class);
 
 });
 

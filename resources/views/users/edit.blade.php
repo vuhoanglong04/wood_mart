@@ -83,7 +83,7 @@
                                 <select class="form-select fs-5 @error('group_id'){{ 'is-invalid' }}@enderror"
                                     name='group_id'>
                                     @foreach ($groups as $item)
-                                        <option value="{{ $item->group_id }}" {{$item->group_id == $user->group_id ? 'selected' : ''}}>{{ $item->group_name }}</option>
+                                        <option value="{{ $item->id }}" {{$item->id == $user->group_id ? 'selected' : ''}}>{{ $item->group_name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -100,7 +100,7 @@
                             @enderror
                             <div class="action mt-3">
                                 <button type="submit" class="btn btn-primary">Submit</button>
-                               
+
                             </div>
                             @csrf
                         </form>

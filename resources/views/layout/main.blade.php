@@ -36,7 +36,7 @@
     <link rel="stylesheet" href="{{ asset('css') }}/style.css" id="main-style-link">
     <link rel="stylesheet" href="{{ asset('css') }}/style-preset.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css">
 </head>
 <!-- [Head] end -->
 <!-- [Body] Start -->
@@ -78,7 +78,7 @@
     <script src="{{ asset('js') }}/pcoded.js"></script>
     <script src="{{ asset('js') }}/plugins/feather.min.js"></script>
     <script src="{{ asset('js') }}/component.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
     <script>
         layout_change('light');
     </script>

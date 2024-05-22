@@ -107,7 +107,7 @@
                                         checked="">
                                     <label class="form-check-label text-muted" for="customCheckc1">Remember me?</label>
                                 </div>
-                                <a href="../pages/forgot-password-v1.html">
+                                <a href="{{route('forgot-password')}}">
                                     <h6 class="f-w-400 mb-0">Forgot Password?</h6>
                                 </a>
                             </div>

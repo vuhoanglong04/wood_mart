@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Policies\OrdersPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\GroupsPolicy;
 use App\Policies\CategoryPolicy;
@@ -72,5 +73,9 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('productsVariant.forceDelete' , [ProductsVariantPolicy::class , 'forceDelete']);
         Gate::define('productsVariant.restore' , [ProductsVariantPolicy::class , 'restore']);
 
+
+        Gate::define('orders.view' , [OrdersPolicy::class , 'view']);
+        Gate::define('orders.detail' , [OrdersPolicy::class , 'detail']);
+        Gate::define('orders.update' , [OrdersPolicy::class , 'update']);
     }
 }

@@ -21,6 +21,7 @@ class UsersDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
+        
         return (new EloquentDataTable($query))
             ->setRowId('id');
     }
