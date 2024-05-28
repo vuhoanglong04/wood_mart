@@ -214,6 +214,7 @@
                     <div class="col-md-12">
                         <div class="page-header-title">
                             <h2 class="mb-0">Orders List</h2>
+
                         </div>
                     </div>
 
@@ -224,12 +225,17 @@
         <!-- [ Main Content ] start -->
         <div class="row">
             <!-- [ sample-page ] start -->
-            <div class="col-sm-12">
-                <div class="card border-0 table-card order-profile-list p-4">
-                    <div class="col-sm-4 mb-3">
-                        <label for="" class='mb-2'>Search by date</label>
-                        <input type="text" id="datePicker" class="form-control" placeholder="yyyy/mm/dd">
 
+            <div class="col-sm-12">
+
+                <div class="card border-0 table-card order-profile-list p-4">
+                    <div class="col-sm-2 mb-3">
+                        <a href="{{ URL::to('admin/orders/export') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Export to xlsx" style="color:white" class="btn btn-primary"><i class='ph-duotone ph-file-xls'></i></a>
+
+                    </div>
+                    <div class="col-sm-4 mb-3">
+                        <label for="" class=''>Search by date</label>
+                        <input type="text" id="datePicker" class="form-control" placeholder="yyyy/mm/dd">
                     </div>
                     <div class="card-body">
 

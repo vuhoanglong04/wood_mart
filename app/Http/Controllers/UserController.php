@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\UsersExport;
 use App\Models\Cart;
 use App\Models\User;
 use App\Models\Groups;
@@ -17,7 +18,9 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use App\Exports\CustomersExport;
 
+use Maatwebsite\Excel\Facades\Excel;
 class UserController extends Controller
 {
     public function index(UsersDataTable $dataTable)
@@ -97,16 +100,11 @@ class UserController extends Controller
         if ($request->newPass == 1) {
             $request->validate([
                 'email' => "required | email:rfc,dns",
-                'full_name' => "required",
                 'password' => "required | min:5",
-                'group_id' => "required",
-                'phone_number' => "required",
                 'img' => ["nullable", 'mimes:jpeg,png', 'max:5120']
             ], [
                 'email.required' => "Email must be required",
                 'email.email' => "Email is not valid",
-                "full_name" => "Password must be required",
-                "group_id" => "Please select group of user",
                 "password.required" => "Password must be required",
                 "password.min" => "Password must be at least :min characters",
                 'img.mimes' => 'The :attribute must be a file of type: :values.',
@@ -115,20 +113,14 @@ class UserController extends Controller
         } else {
             $request->validate([
                 'email' => "required | email:rfc,dns",
-                'full_name' => "required",
-                'group_id' => "required",
-                'phone_number' => "required",
                 'img' => ["nullable", 'mimes:jpeg,png', 'max:5120']
             ], [
                 'email.required' => "Email must be required",
                 'email.email' => "Email is not valid",
-                "full_name" => "Password must be required",
-                "group_id" => "Please select group of user",
                 'img.mimes' => 'The :attribute must be a file of type: :values.',
                 'img.max' => 'The :attribute may not be greater than :max kilobytes.'
             ]);
         }
-
         $oldUser = User::withTrashed()->find($id);
         $oldUser->full_name = $request->full_name;
         $oldUser->email = $request->email;
@@ -188,6 +180,15 @@ class UserController extends Controller
         $user->password = $request->password;
         $user->save();
         return true;
+    }
+
+    public function exportExcel(){
+
+        $fileExt = 'xlsx';
+        $exportFormat = \Maatwebsite\Excel\Excel::XLSX;
+
+        $filename = "users-".date('d-m-Y').".".$fileExt;
+        return Excel::download(new UsersExport, $filename, $exportFormat);
     }
 }
 

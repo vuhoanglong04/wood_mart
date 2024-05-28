@@ -196,10 +196,12 @@
 
         <div class="card products_list">
             @can('products.add')
-                <div class="col-12 p-4 pb-0 text-end" bis_skin_checked="1">
+                <div class="col-12 p-4 pb-0 text-start" bis_skin_checked="1">
                     <a type="submit" href="{{ route('admin.products.create') }}" style="color:white" class="btn btn-primary"><i
                             class="ph-duotone ph-plus-circle"></i> Add New
                         Products</a>
+                        <a href="{{ URL::to('admin/products/export') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Export to xlsx" style="color:white" class="btn btn-primary"><i class='ph-duotone ph-file-xls'></i></a>
+
                 </div>
             @endcan
             <div class="card-body">

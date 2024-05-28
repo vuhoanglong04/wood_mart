@@ -7,7 +7,7 @@ use App\Models\Modules;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-
+use Carbon\Carbon;
 class GroupsController extends Controller
 {
     /**
@@ -19,7 +19,7 @@ class GroupsController extends Controller
             abort(404);
         }
         $groups = Groups::withTrashed()->get();
-        return view('groups.list', compact('groups'));
+        return view('groups.list', compact('groups' , "title"));
     }
 
     /**

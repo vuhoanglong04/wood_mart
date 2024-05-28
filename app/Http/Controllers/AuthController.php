@@ -23,7 +23,6 @@ class AuthController extends Controller
     }
     public function login(AuthRequest $request)
     {
-
         $email = $request->email;
         $password = $request->password;
         if (User::where('email', $email)->first() == null) {

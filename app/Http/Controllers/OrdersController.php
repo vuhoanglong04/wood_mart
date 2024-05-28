@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\OrdersExport;
 use App\Models\Orders;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use App\Models\ProductsVariant;
 use App\DataTables\OrdersDataTable;
 use Illuminate\Support\Facades\Gate;
+use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class OrdersController extends Controller
 {
@@ -85,5 +88,30 @@ class OrdersController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function exportExcel(){
+
+        $fileExt = 'xlsx';
+        $exportFormat = \Maatwebsite\Excel\Excel::XLSX;
+        $filename = "orders-".date('d-m-Y').".".$fileExt;
+        return Excel::download(new OrdersExport, $filename, $exportFormat);
+    }
+    public function generatePDF($id)
+    {
+        $order = Orders::find($id);
+        $orderDetail = OrderDetail::where('order_id', $id)->get();
+        $total = 0;
+        foreach ($orderDetail as $key=>$value){
+            $total +=$value->quantity * $value->price;
+        }
+        $data = [
+            'order' => $order,
+            'orderDetail' => $orderDetail,
+            'total' => $total
+        ];
+
+        $pdf = PDF::loadView('orders.templatePDF' , $data);
+        return $pdf->download('order'.$order->id.'.pdf');
     }
 }

@@ -603,40 +603,7 @@
                             <div class="col-sm-12" bis_skin_checked="1">
                                 <div class="card" bis_skin_checked="1">
                                     <div class="card-body" bis_skin_checked="1">
-                                        <div class="mb-3 d-print-none" bis_skin_checked="1">
-                                            <ul class="list-inline ms-auto mb-0 d-flex justify-content-end flex-wrap">
-                                                <li class="list-inline-item align-bottom me-2">
-                                                    <a href="#" class="avtar avtar-s btn-link-secondary">
-                                                        <i class="ph-duotone ph-pencil-simple-line f-22"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="list-inline-item align-bottom me-2">
-                                                    <a href="#" class="avtar avtar-s btn-link-secondary">
-                                                        <i class="ph-duotone ph-eye f-22"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="list-inline-item align-bottom me-2">
-                                                    <a href="#" class="avtar avtar-s btn-link-secondary">
-                                                        <i class="ph-duotone ph-download-simple f-22"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="list-inline-item align-bottom me-2">
-                                                    <a href="#" class="avtar avtar-s btn-link-secondary">
-                                                        <i class="ph-duotone ph-printer f-22"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="list-inline-item align-bottom me-2">
-                                                    <a href="#" class="avtar avtar-s btn-link-secondary">
-                                                        <i class="ph-duotone ph-paper-plane-tilt f-22"></i>
-                                                    </a>
-                                                </li>
-                                                <li class="list-inline-item align-bottom me-2">
-                                                    <a href="#" class="avtar avtar-s btn-link-secondary">
-                                                        <i class="ph-duotone ph-share-network f-22"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                     
                                         <div class="card shadow-none bg-body mb-0" bis_skin_checked="1">
                                             <div class="card-body" bis_skin_checked="1">
                                                 <div class="card" bis_skin_checked="1">
@@ -805,9 +772,8 @@
                                                 <div class="row d-print-none align-items-center justify-content-end"
                                                     bis_skin_checked="1">
                                                     <div class="col-auto btn-page" bis_skin_checked="1">
-                                                        <button class="btn btn-primary btn-print-invoice">Print</button>
-                                                        <button
-                                                            class="btn btn-outline-secondary btn-print-invoice">Download</button>
+                                                        <a href="{{route('admin.orders.exportPDF', $order->id)}}"
+                                                            class="btn btn-outline-secondary btn-print-invoice">Download PDF</a>
                                                     </div>
                                                 </div>
                                             </div>

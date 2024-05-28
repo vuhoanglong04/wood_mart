@@ -1,16 +1,19 @@
 <?php
 
-use App\Http\Controllers\OrderDetailController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PostsController;
 use App\Http\Controllers\ProductsVariant;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\TopicsController;
 use App\Http\Controllers\ModulesController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\VouchersController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OrderDetailController;
 use App\Http\Controllers\ProductsVariantController;
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +25,9 @@ use App\Http\Controllers\ProductsVariantController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('', function (){
+return redirect()->route('login');
+});
 
 Route::get('login', [AuthController::class , 'index'])->name('login')->middleware('logout');
 Route::post('login', [AuthController::class , 'login']);
@@ -39,6 +45,9 @@ Route::get('/', [AuthController::class , 'login']);
 
 Route::prefix('admin')->middleware('login')->name('admin.')->group(function(){
         //Dashboard
+        Route::get('orders/export', [OrdersController::class, 'exportExcel'])->name('orders.export');
+        Route::get('products/export', [ProductsController::class, 'exportExcel'])->name('products.export');
+
         Route::get('/', [DashboardController::class , 'index'])->name('index');
         //Modules
         Route::resource('modules' , ModulesController::class);
@@ -64,6 +73,8 @@ Route::prefix('admin')->middleware('login')->name('admin.')->group(function(){
                 Route::get('edit/{id}' , [UserController::class , 'edit'])->name('edit');
                 Route::post('edit/{id}' , [UserController::class , 'update'])->name('update');
                 Route::post('update-password/{id}' , [UserController::class , 'updatePassword'])->name('update-password');
+                Route::get('export', [UserController::class, 'exportExcel'])->name('export');
+
         });
 
 
@@ -84,7 +95,24 @@ Route::prefix('admin')->middleware('login')->name('admin.')->group(function(){
         //Orders
         Route::resource('orders' , OrdersController::class);
         Route::post('orders/update/{order}', [OrdersController::class , 'update'])->name('orders.update');
+        Route::get('orders/exportPDF/{id}' ,[OrdersController::class , 'generatePDF'] )->name('orders.exportPDF');
+        //Orders Detail
         Route::resource('order-detail' , OrderDetailController::class);
+
+        //Vouchers
+        Route::resource('vouchers' , VouchersController::class);
+
+        //Topics
+        Route::resource('topics' , TopicsController::class);
+        Route::delete('topics/softDelete/{topic}', [TopicsController::class , 'softDelete'])->name('topics.softDelete');
+        Route::get('topics/restore/{topic}', [TopicsController::class , 'restore'])->name('topics.restore');
+
+
+        //Posts
+        Route::resource('posts' , PostsController::class);
+        Route::delete('posts/softDelete/{topic}', [PostsController::class , 'softDelete'])->name('posts.softDelete');
+        Route::get('posts/restore/{topic}', [PostsController::class , 'restore'])->name('posts.restore');
+
 
 });
 

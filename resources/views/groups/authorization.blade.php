@@ -55,7 +55,7 @@
                         var tag = `<div class="mb-3 row align-items-center" bis_skin_checked="1">
                                         <label class="col-sm-2 text-md-start col-form-label ps-5"><a
                                                 class="text-primary">${actions.module_name.charAt(0).toUpperCase() + actions.module_name.slice(1)} : </a></label>
-                                        <div class="col-sm-9 d-flex gap-5 " bis_skin_checked="1">`;
+                                        <div class="col-sm-9 d-flex gap-4 " bis_skin_checked="1">`;
                         actions.module_action = JSON.parse(actions.module_action);
                         for (var i = 0; i < actions.module_action.length; i++) {
                             var check = '';

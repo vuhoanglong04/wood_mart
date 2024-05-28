@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ProductsExport;
 use App\Models\Colors;
 use App\Models\Category;
 use App\Models\Products;
@@ -11,6 +12,7 @@ use App\Models\ProductsVariant;
 use App\DataTables\UsersDataTable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Maatwebsite\Excel\Facades\Excel;
 use App\DataTables\ProductsDataTable;
 use App\Http\Requests\ProductsRequest;
 use Illuminate\Support\Facades\Session;
@@ -144,5 +146,11 @@ class ProductsController extends Controller
     {
         Products::withTrashed()->find($id)->restore();
         return true;
+    }
+    public function exportExcel(){
+        $fileExt = 'xlsx';
+        $exportFormat = \Maatwebsite\Excel\Excel::XLSX;
+        $filename = "products-".date('d-m-Y').".".$fileExt;
+        return Excel::download(new ProductsExport, $filename, $exportFormat);
     }
 }

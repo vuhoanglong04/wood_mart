@@ -1,12 +1,16 @@
 <?php
 
-use App\Http\Controllers\API\GroupsController;
-use App\Http\Controllers\API\OrdersController;
-use App\Http\Controllers\API\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\ProductsController;
+use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\UserController;
+use App\Http\Controllers\API\GroupsController;
+use App\Http\Controllers\API\OrdersController;
 use App\Http\Controllers\API\CategoryController;
+use App\Http\Controllers\API\ProductsController;
+use App\Http\Controllers\API\UserReviewsController;
+use App\Http\Controllers\API\PaymentOnlineController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,26 +21,23 @@ use App\Http\Controllers\API\CategoryController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::post('/auth/register', [AuthController::class, 'register']);
+Route::post('/auth/login', [AuthController::class, 'login']);
+Route::post('/auth/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('/products', [ProductsController::class, 'index']);
+Route::get('/category', [CategoryController::class, 'index']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/orders', [OrdersController::class, 'store']);
+    Route::get('/orders/detail/{id}', [OrdersController::class, 'show']);
+    Route::patch('/orders/{id}', [OrdersController::class, 'update']);
+    Route::get('/users/{id}', [UserController::class, 'show']);
+
+    Route::post('/review', [UserReviewsController::class, 'store']);
+    Route::patch('/review/{id}', [UserReviewsController::class, 'update']);
+
+    Route::post('vnpay', [PaymentOnlineController::class, 'vnpay'])->name('vnpay');
+    Route::post('momo', [PaymentOnlineController::class, 'momo'])->name('momo');
 });
-
-Route::resource('/products',ProductsController::class);
-Route::get('products/restore/{products}', [ProductsController::class , 'restore']);
-Route::delete('products/forceDelete/{products}', [ProductsController::class , 'forceDelete']);
-
-Route::resource('/categories',CategoryController::class);
-Route::get('categories/restore/{category}', [CategoryController::class , 'restore']);
-Route::delete('categories/forceDelete/{category}', [CategoryController::class , 'forceDelete']);
-
-Route::resource('/users',UserController::class);
-Route::get('users/restore/{users}', [UserController::class , 'restore']);
-Route::delete('users/forceDelete/{users}', [UserController::class , 'forceDelete']);
-
-Route::resource('/groups',GroupsController::class);
-Route::get('groups/restore/{group}', [GroupsController::class , 'restore']);
-Route::delete('groups/forceDelete/{group}', [GroupsController::class , 'forceDelete']);
-
-Route::resource('/orders',OrdersController::class);
 

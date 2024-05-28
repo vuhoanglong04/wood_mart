@@ -3,10 +3,13 @@
 namespace App\Providers;
 
 use App\Policies\OrdersPolicy;
+use App\Policies\PostsPolicy;
+use App\Policies\TopicsPolicy;
 use App\Policies\UserPolicy;
 use App\Policies\GroupsPolicy;
 use App\Policies\CategoryPolicy;
 use App\Policies\ProductsPolicy;
+use App\Policies\VouchersPolicy;
 use Yajra\DataTables\Html\Builder;
 use Illuminate\Support\Facades\Gate;
 use App\Policies\ProductsVariantPolicy;
@@ -77,5 +80,26 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('orders.view' , [OrdersPolicy::class , 'view']);
         Gate::define('orders.detail' , [OrdersPolicy::class , 'detail']);
         Gate::define('orders.update' , [OrdersPolicy::class , 'update']);
+
+        Gate::define('vouchers.view' , [VouchersPolicy::class , 'view']);
+        Gate::define('vouchers.update' , [VouchersPolicy::class , 'update']);
+        Gate::define('vouchers.add' , [VouchersPolicy::class , 'create']);
+        Gate::define('vouchers.forceDelete' , [VouchersPolicy::class , 'forceDelete']);
+
+        Gate::define('topics.view' , [TopicsPolicy::class , 'view']);
+        Gate::define('topics.add' , [TopicsPolicy::class , 'create']);
+        Gate::define('topics.edit' , [TopicsPolicy::class , 'update']);
+        Gate::define('topics.delete' , [TopicsPolicy::class , 'delete']);
+        Gate::define('topics.forceDelete' , [TopicsPolicy::class , 'forceDelete']);
+        Gate::define('topics.restore' , [TopicsPolicy::class , 'restore']);
+
+        Gate::define('posts.view' , [PostsPolicy::class , 'view']);
+        Gate::define('posts.add' , [PostsPolicy::class , 'create']);
+        Gate::define('posts.edit' , [PostsPolicy::class , 'update']);
+        Gate::define('posts.delete' , [PostsPolicy::class , 'delete']);
+        Gate::define('posts.forceDelete' , [PostsPolicy::class , 'forceDelete']);
+        Gate::define('posts.restore' , [PostsPolicy::class , 'restore']);
+
+
     }
 }

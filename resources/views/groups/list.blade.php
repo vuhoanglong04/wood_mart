@@ -95,21 +95,21 @@
                                                 </a>
                                             @endcan
 
-                                            @can('groups.delete')
-                                                @if (!$item->deleted_at)
+                                            @if (!$item->deleted_at)
+                                                @can('groups.delete')
                                                     <a data-id="{{ $item->id }}" data-name="{{ $item->group_name }}"
                                                         class="avtar avtar-xs btn-link-secondary disable edit">
                                                         <i class="ti ti-eye-off f-20"></i>
                                                     </a>
-                                                @else
-                                                    @can('groups.restore')
-                                                        <a data-id="{{ $item->id }}" data-name="{{ $item->group_name }}"
-                                                            class="avtar avtar-xs btn-link-secondary enable edit">
-                                                            <i class="ti ti-eye f-20 "></i>
-                                                        </a>
-                                                    @endcan
-                                                @endif
-                                            @endcan
+                                                @endcan
+                                            @else
+                                                @can('groups.restore')
+                                                    <a data-id="{{ $item->id }}" data-name="{{ $item->group_name }}"
+                                                        class="avtar avtar-xs btn-link-secondary enable edit">
+                                                        <i class="ti ti-eye f-20 "></i>
+                                                    </a>
+                                                @endcan
+                                            @endif
                                             @can('groups.forceDelete')
                                                 <a data-id="{{ $item->id }}" data-name="{{ $item->group_name }}"
                                                     class="avtar avtar-xs btn-link-secondary delete_group">

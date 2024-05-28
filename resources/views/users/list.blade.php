@@ -205,6 +205,7 @@
                 <a type="submit" href="{{ route('admin.users.add') }}" style="color:white" class="btn btn-primary"><i
                         class="ph-duotone ph-plus-circle"></i> Add New
                     User</a>
+                <a type="submit" href="{{ route('admin.users.export') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Export to xlsx" style="color:white" class="btn btn-primary"><i class='ph-duotone ph-file-xls'></i></a>
             </div>
         @endcan
         <!-- [ Main Content ] start -->
@@ -259,6 +260,7 @@
                         search: "",
                         zeroRecords: `<p class="datatable-empty text-center pt-1" colspan="6">No entries found</p>`,
                     },
+
                     "ajax": {
                         "url": "{{ route('admin.users.list') }}",
                         "type": "GET",

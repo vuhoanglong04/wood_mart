@@ -13,9 +13,9 @@ class OrdersController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($id)
     {
-       return  Orders::with('user')->with('shipping')->with('userPayment.payment')->get();
+       return  Orders::with('user')->with('shipping')->with('userPayment.payment')->where('user_id' , $id)->get();
 
     }
 
