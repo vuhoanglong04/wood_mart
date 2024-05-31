@@ -39,9 +39,18 @@
                                     <div class="mt-3" bis_skin_checked="1">
                                         <label class="form-label">Title</label>
                                         <input type="text"
-                                            class="form-control @error('title'){{ 'is-invalid' }}@enderror" name="title"
+                                            class="form-control title @error('title'){{ 'is-invalid' }}@enderror" name="title"
                                             placeholder="Enter title" value="{{ old('title') }}">
                                         @error('title')
+                                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mt-3" bis_skin_checked="1">
+                                        <label class="form-label">Slug</label>
+                                        <input type="text"
+                                            class="form-control slug @error('slug'){{ 'is-invalid' }}@enderror" name="slug"
+                                            placeholder="Enter slug" value="{{ old('slug') }}">
+                                        @error('slug')
                                             <div class="invalid-feedback d-block">{{ $message }}</div>
                                         @enderror
                                     </div>
@@ -75,6 +84,13 @@
             </div>
         </div>
     </div>
+    <script>
+        document.querySelector('.title').addEventListener('input', function(){
+            var slug = document.querySelector('.slug');
+            var title = this.value.toLowerCase().replaceAll(' ' , '-');
+            slug.value = title;
+        })
+    </script>
 @endsection
 @push('scripts')
     <script>

@@ -27,13 +27,16 @@ class UserRequest extends FormRequest
         return [
             'email' => "required | email:rfc,dns | unique:users,email",
             'password' => "required | min:5",
-            'img' => ["nullable",'mimes:jpeg,png','max:5120']
+            'img' => ["nullable",'mimes:jpeg,png','max:5120'],
+            'full_name' => "required"
         ];
     }
     public function messages()
     {
         return [
-            'email.required' => "Email must be required",
+            'email.required' => "Please enter your email address",
+            'full_name.required' => "Please enter your full name",
+
             'email.email' => "Email is not valid",
             'email.unique' => "Email must be unique",
             "password.required" => "Password must be required",

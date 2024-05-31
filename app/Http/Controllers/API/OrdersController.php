@@ -2,21 +2,26 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Resources\OrdersResource;
-use App\Models\OrderDetail;
 use App\Models\Orders;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
+use App\Models\ProductsVariant;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrdersResource;
 
 class OrdersController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index($id)
+    public function index(Request $request)
     {
-       return  Orders::with('user')->with('shipping')->with('userPayment.payment')->where('user_id' , $id)->get();
-
+        $orders = Orders::with('user')->with('shipping')->with('userPayment.payment');
+        if ($request->user_id) {
+            $order = $orders->where('user_id', $request->user_id);
+        }
+        $orders = $orders->get();
+        return $orders;
     }
 
     /**
@@ -37,10 +42,11 @@ class OrdersController extends Controller
         $newOrder->user_id = $request->user_id;
         $newOrder->shipping_id = $request->shipping_id;
         $newOrder->user_payment_id = $request->user_payment_id;
+        $newOrder->voucher = $request->voucher;
         $newOrder->total = $request->total;
-        $newOrder->status= $request->status;
+        $newOrder->status = $request->status;
         $newOrder->save();
-        foreach ($request->products as $product){
+        foreach ($request->products as $product) {
             $detail = new OrderDetail();
             $detail->order_id = $newOrder->id;
             $detail->product_id = $product['product_id'];
@@ -64,16 +70,16 @@ class OrdersController extends Controller
     public function show(string $id)
     {
         $order = Orders::with('user')->with('shipping')->with('userPayment')->where('id', $id)->first();
-        if($order){
+        if ($order) {
             $orderDetail = OrderDetail::where('order_id', $order->id)->get();
             $arr = [
                 'status' => 201,
                 'order' => $order,
-                'order-detail'=> $orderDetail
+                'order-detail' => $orderDetail
             ];
             return response()->json($arr, 201);
 
-        }else{
+        } else {
             $arr = [
                 'status' => 404,
                 'message' => "Order not found",
@@ -96,17 +102,27 @@ class OrdersController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $order =  Orders::find($id);
-        if($order){
-            $order->status = $request->status ;
+        $order = Orders::find($id);
+        if ($order) {
+            $order->status = $request->status;
+            if ($request->status == 5) {
+                $listItem = OrderDetail::where('order_id', $id)->get();
+                foreach ($listItem as $item) {
+                    $variant = ProductsVariant::where('color_id', $item->color_id)->where('material_id', $item->material_id)->first();
+                    $variant->qty_in_stock -= $item->quantity;
+                    if ($variant->qty_in_stock < 0)
+                        $variant->qty_in_stock = 0;
+                    $variant->save();
+                }
+            }
             $order->save();
             $arr = [
                 'status' => 200,
                 'message' => "Update sucessfully",
-                'data' =>$order
+                'data' => $order
             ];
             return response()->json($arr, 200);
-        }else{
+        } else {
             $arr = [
                 'status' => 404,
                 'message' => "Order not found",

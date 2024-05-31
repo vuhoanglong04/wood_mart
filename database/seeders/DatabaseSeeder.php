@@ -10,6 +10,7 @@ use App\Models\Orders;
 use App\Models\Modules;
 use App\Models\Category;
 use App\Models\Products;
+use App\Models\Wishlist;
 use App\Models\Materials;
 use App\Models\OrderDetail;
 use App\Models\PaymentType;
@@ -59,10 +60,12 @@ class DatabaseSeeder extends Seeder
         // UserPayment::insert(['user_id'=>'1' , 'payment_id'=>'2' , 'card_number'=>'0344847295']);
 
         // Orders::insert(['address' => 'Home Number 44, New York , New York', 'user_id' => '1', 'shipping_id' => '1','user_payment_id'=>'1' , 'total'=>'255' , 'status'=>'0']);
-        Orders::insert(['address' => 'XXXX', 'user_id' => '1', 'shipping_id' => '1','user_payment_id'=>'1' , 'total'=>'38' , 'status'=>'0']);
+        // Orders::insert(['address' => 'XXXX', 'user_id' => '1', 'shipping_id' => '1','user_payment_id'=>'1' , 'total'=>'38' , 'status'=>'0']);
 
         // OrderDetail::insert(['order_id' => '1', 'product_id' => '24', 'color_id' => '1' , 'material_id' => '1' , 'product_variant_img'=>'Ảnh chụp màn hình 2024-05-07 211545.png' , 'price'=>'2222', 'quantity'=>'2']);
         // OrderDetail::insert(['order_id' => '1', 'product_id' => '24', 'color_id' => '2' , 'material_id' => '3' , 'product_variant_img'=>'wd-furniture-chair-prod-1-3.jpg' , 'price'=>'123', 'quantity'=>'1']);
 
+
+        // Wishlist::insert(['user_id' => '1', 'product_id'=>'1']);
     }
 }

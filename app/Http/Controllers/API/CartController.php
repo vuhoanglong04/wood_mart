@@ -11,9 +11,14 @@ class CartController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $allCart = Cart::with('user');
+        if($request->user_id){
+            $allCart  = $allCart->where('user_id', $request->user_id);
+        }
+        $allCart = $allCart->get();
+        return $allCart;
     }
 
     /**
@@ -29,7 +34,31 @@ class CartController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $findItemCart  = Cart::where('user_id', $request->user_id)->where('product_variant_id', $request->product_variant_id)->first();
+        if($findItemCart){
+            $findItemCart->quantity +=$request->quantity;
+            $findItemCart->save();
+            $arr = [
+                'status' => 200,
+                'message' => "Increase quantity product in cart successfully",
+                'data' => $findItemCart
+            ];
+            return response()->json($arr, 200);
+        }
+        else{
+            $newItemCart = new Cart();
+            $newItemCart->user_id = $request->user_id;
+            $newItemCart->product_variant_id = $request->product_variant_id;
+            $newItemCart->quantity = $request->quantity;
+            $newItemCart->save();
+            $arr = [
+                'status' => 201,
+                'message' => "Add to cart  sucessfully",
+                'data' => $newItemCart
+            ];
+            return response()->json($arr, 201);
+        }
+
     }
 
     /**
@@ -37,7 +66,7 @@ class CartController extends Controller
      */
     public function show(string $id)
     {
-        return Cart::where('user_id' , $id)->get();
+
     }
 
     /**
@@ -45,7 +74,7 @@ class CartController extends Controller
      */
     public function edit(string $id)
     {
-        //
+
     }
 
     /**
@@ -53,7 +82,15 @@ class CartController extends Controller
      */
     public function update(Request $request, string $id)
     {
-       
+        $item = Cart::find($id);
+        $item->quantity=$request->quantity;
+        $item->save();
+        $arr = [
+            'status' => 200,
+            'message' => "Update  sucessfully",
+            'data' => $item
+        ];
+        return response()->json($arr, 200);
     }
 
     /**
@@ -61,6 +98,12 @@ class CartController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $item = Cart::find($id);
+        $item->delete();
+        $arr = [
+            'status' => 200,
+            'message' => "Delete  sucessfully",
+        ];
+        return response()->json($arr, 200);
     }
 }

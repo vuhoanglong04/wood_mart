@@ -161,7 +161,8 @@
                                                         class="nav-link {{ $order->status == '0' ? 'active' : '' }}"
                                                         aria-selected="true" role="tab">
                                                         <i class="ti ti-receipt-off"></i>
-                                                        <span class="d-none d-sm-inline">Cancelled</span>
+                                                        <span class="d-none d-sm-inline"
+                                                            style="font-size: 14px">Cancelled</span>
                                                     </a>
                                                 </li>
                                                 <!-- end nav item -->
@@ -171,7 +172,8 @@
                                                         class="nav-link icon-btn {{ $order->status == '1' ? 'active' : '' }}"
                                                         aria-selected="false" role="tab" tabindex="-1">
                                                         <i class="ti ti-loader"></i>
-                                                        <span class="d-none d-sm-inline">Awaiting Payment</span>
+                                                        <span class="d-none d-sm-inline" style="font-size: 14px">Awaiting
+                                                            Payment</span>
                                                     </a>
                                                 </li>
                                                 <!-- end nav item -->
@@ -181,7 +183,8 @@
                                                         class="nav-link icon-btn {{ $order->status == '2' ? 'active' : '' }}"
                                                         aria-selected="false" role="tab" tabindex="-1">
                                                         <i class="ti ti-checkbox"></i>
-                                                        <span class="d-none d-sm-inline">Waiting Confirm</span>
+                                                        <span class="d-none d-sm-inline" style="font-size: 14px">Waiting
+                                                            Confirm</span>
                                                     </a>
                                                 </li>
                                                 <!-- end nav item -->
@@ -190,7 +193,8 @@
                                                         class="nav-link icon-btn {{ $order->status == '3' ? 'active' : '' }}"
                                                         aria-selected="false" role="tab" tabindex="-1">
                                                         <i class="ti ti-dots"></i>
-                                                        <span class="d-none d-sm-inline">Preparing</span>
+                                                        <span class="d-none d-sm-inline"
+                                                            style="font-size: 14px">Preparing</span>
                                                     </a>
                                                 </li>
                                                 <li class="nav-item" role="presentation">
@@ -198,7 +202,8 @@
                                                         class="nav-link icon-btn {{ $order->status == '4' ? 'active' : '' }}"
                                                         aria-selected="false" role="tab" tabindex="-1">
                                                         <i class="ti ti-truck-delivery"></i>
-                                                        <span class="d-none d-sm-inline">Being Transported</span>
+                                                        <span class="d-none d-sm-inline" style="font-size: 14px">Being
+                                                            Transported</span>
                                                     </a>
                                                 </li>
                                                 <li class="nav-item" role="presentation">
@@ -206,7 +211,8 @@
                                                         class="nav-link icon-btn {{ $order->status == '5' ? 'active' : '' }}"
                                                         aria-selected="false" role="tab" tabindex="-1">
                                                         <i class="ti ti-circle-check"></i>
-                                                        <span class="d-none d-sm-inline">Delivered</span>
+                                                        <span class="d-none d-sm-inline"
+                                                            style="font-size: 14px">Delivered</span>
                                                     </a>
                                                 </li>
                                             </ul>
@@ -381,7 +387,11 @@
                                             </li>
                                             <li class="list-group-item px-0">
                                                 <div class="float-end" bis_skin_checked="1">
-                                                    <h5 class="mb-0">-</h5>
+                                                    <h5 class="mb-0">
+                                                        @if ($voucher)
+                                                            {{ $order->voucher }} (-{{ $voucher->discount }}%)
+                                                        @endif
+                                                    </h5>
                                                 </div><span class="text-muted">Voucher</span>
                                             </li>
                                         </ul>
@@ -429,6 +439,7 @@
                                                         <label class="form-check-label d-block" for="address-check-1">
                                                             <span
                                                                 class="h6 mb-0 d-block">{{ $order->user->full_name }}</span>
+                                                        
                                                             <span
                                                                 class="text-muted address-details">{{ $order->address }}</span>
                                                             <span class="row align-items-center justify-content-between">
@@ -603,7 +614,7 @@
                             <div class="col-sm-12" bis_skin_checked="1">
                                 <div class="card" bis_skin_checked="1">
                                     <div class="card-body" bis_skin_checked="1">
-                                     
+
                                         <div class="card shadow-none bg-body mb-0" bis_skin_checked="1">
                                             <div class="card-body" bis_skin_checked="1">
                                                 <div class="card" bis_skin_checked="1">
@@ -749,17 +760,31 @@
                                                                         </div>
                                                                         <div class="col-6" bis_skin_checked="1">
                                                                             <p class="f-w-600 mb-1 text-end text-success">
-                                                                                ${{ $order->shipping->fee }}.00</p>
+                                                                                +${{ $order->shipping->fee }}.00</p>
                                                                         </div>
-
-
+                                                                        @if ($voucher)
+                                                                            <div class="col-6" bis_skin_checked="1">
+                                                                                <p class="text-muted mb-1 text-start">
+                                                                                    Voucher
+                                                                                    :</p>
+                                                                            </div>
+                                                                            <div class="col-6" bis_skin_checked="1">
+                                                                                <p class="f-w-600 mb-1 text-end">
+                                                                                    -${{ ($total * $voucher->discount) / 100 }}
+                                                                                </p>
+                                                                            </div>
+                                                                        @endif
                                                                         <div class="col-6" bis_skin_checked="1">
                                                                             <p class="f-w-600 mb-1 text-start">Grand Total
                                                                                 :</p>
                                                                         </div>
                                                                         <div class="col-6" bis_skin_checked="1">
                                                                             <p class="f-w-600 mb-1 text-end">
-                                                                                ${{ $total + $order->shipping->fee }}.00
+                                                                                @if ($voucher)
+                                                                                   ${{($total + $order->shipping->fee) -($total + $order->shipping->fee) * $voucher->discount /100  }}
+                                                                                @else
+                                                                                ${{ $total  + $order->shipping->fee}}
+                                                                                @endif
                                                                             </p>
                                                                         </div>
                                                                     </div>
@@ -772,8 +797,9 @@
                                                 <div class="row d-print-none align-items-center justify-content-end"
                                                     bis_skin_checked="1">
                                                     <div class="col-auto btn-page" bis_skin_checked="1">
-                                                        <a href="{{route('admin.orders.exportPDF', $order->id)}}"
-                                                            class="btn btn-outline-secondary btn-print-invoice">Download PDF</a>
+                                                        <a href="{{ route('admin.orders.exportPDF', $order->id) }}"
+                                                            class="btn btn-outline-secondary btn-print-invoice">Download
+                                                            PDF</a>
                                                     </div>
                                                 </div>
                                             </div>

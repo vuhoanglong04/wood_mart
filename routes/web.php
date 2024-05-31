@@ -5,12 +5,14 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\ProductsVariant;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\OrdersController;
 use App\Http\Controllers\TopicsController;
 use App\Http\Controllers\ModulesController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductsController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\VouchersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderDetailController;
@@ -29,6 +31,12 @@ Route::get('', function (){
 return redirect()->route('login');
 });
 
+
+//google
+Route::get('auth/google' , [GoogleController::class ,'redirectToGoogle'])->name('auth.google');
+Route::get('auth/google/callback' , [GoogleController::class ,'handleGoogle'])->name('auth.google.callback');
+
+//login-logout
 Route::get('login', [AuthController::class , 'index'])->name('login')->middleware('logout');
 Route::post('login', [AuthController::class , 'login']);
 Route::get('logout', [AuthController::class , 'logout'])->name('logout')->middleware('login');

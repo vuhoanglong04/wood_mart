@@ -19,20 +19,14 @@
                 <li class="pc-item pc-caption">
                     <label>Navigation</label>
                 </li>
-                <li class="pc-item pc-hasmenu">
-                    <a href="#!" class="pc-link">
-                        <span class="pc-micon">
-                            <i class="ph-duotone ph-gauge"></i>
-                        </span>
+                <li class="pc-item pc-\">
+                    <a href="{{route('admin.index')}}" class="pc-link">
+
                         <span class="pc-mtext">Dashboard</span>
                         <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
-                        <span class="pc-badge">2</span>
+                        <span class="pc-badge">0</span>
                     </a>
-                    <ul class="pc-submenu">
-                        <li class="pc-item"><a class="pc-link" href="index.html">Analytics</a></li>
-                        <li class="pc-item"><a class="pc-link" href="affiliate-dashboard.html">Affiliate</a></li>
-                        <li class="pc-item"><a class="pc-link" href="finance.html">Finance</a></li>
-                    </ul>
+
                 </li>
                 <li class="pc-item pc-caption">
                     <label>Admin Panel</label>
@@ -183,18 +177,12 @@
                         </a>
                         <div class="dropdown-menu">
                             <ul>
-                                <li><a class="pc-user-links">
+                                <li><a class="pc-user-links"
+                                        href="{{ route('admin.users.detail', Auth::user()->id) }}">
                                         <i class="ph-duotone ph-user"></i>
                                         <span>My Account</span>
                                     </a></li>
-                                <li><a class="pc-user-links">
-                                        <i class="ph-duotone ph-gear"></i>
-                                        <span>Settings</span>
-                                    </a></li>
-                                <li><a class="pc-user-links">
-                                        <i class="ph-duotone ph-lock-key"></i>
-                                        <span>Lock Screen</span>
-                                    </a></li>
+
                                 <li><a class="pc-user-links" href='{{ route('logout') }}'>
                                         <i class="ph-duotone ph-power"></i>
                                         <span>Logout</span>
@@ -252,60 +240,14 @@
         <!-- [Mobile Media Block end] -->
         <div class="ms-auto">
             <ul class="list-unstyled">
-                <li class="dropdown pc-h-item">
-                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
-                        role="button" aria-haspopup="false" aria-expanded="false">
-                        <i class="ph-duotone ph-sun-dim"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end pc-h-dropdown">
-                        <a href="#!" class="dropdown-item" onclick="layout_change('dark')">
-                            <i class="ph-duotone ph-moon"></i>
-                            <span>Dark</span>
-                        </a>
-                        <a href="#!" class="dropdown-item" onclick="layout_change('light')">
-                            <i class="ph-duotone ph-sun-dim"></i>
-                            <span>Light</span>
-                        </a>
-                        <a href="#!" class="dropdown-item" onclick="layout_change_default()">
-                            <i class="ph-duotone ph-cpu"></i>
-                            <span>Default</span>
-                        </a>
-                    </div>
-                </li>
+
                 <li class="pc-h-item">
                     <a class="pc-head-link pct-c-btn" href="#" data-bs-toggle="offcanvas"
                         data-bs-target="#offcanvas_pc_layout">
                         <i class="ph-duotone ph-gear-six"></i>
                     </a>
                 </li>
-                <li class="dropdown pc-h-item">
-                    <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
-                        role="button" aria-haspopup="false" aria-expanded="false">
-                        <i class="ph-duotone ph-diamonds-four"></i>
-                    </a>
-                    <div class="dropdown-menu dropdown-menu-end pc-h-dropdown">
-                        <a href="#!" class="dropdown-item">
-                            <i class="ph-duotone ph-user"></i>
-                            <span>My Account</span>
-                        </a>
-                        <a href="#!" class="dropdown-item">
-                            <i class="ph-duotone ph-gear"></i>
-                            <span>Settings</span>
-                        </a>
-                        <a href="#!" class="dropdown-item">
-                            <i class="ph-duotone ph-lifebuoy"></i>
-                            <span>Support</span>
-                        </a>
-                        <a href="#!" class="dropdown-item">
-                            <i class="ph-duotone ph-lock-key"></i>
-                            <span>Lock Screen</span>
-                        </a>
-                        <a href="{{ route('logout') }}" class="dropdown-item">
-                            <i class="ph-duotone ph-power"></i>
-                            <span>Logout</span>
-                        </a>
-                    </div>
-                </li>
+
                 <li class="dropdown pc-h-item">
                     <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
                         role="button" aria-haspopup="false" aria-expanded="false">
@@ -519,83 +461,10 @@
                                             <span class="badge bg-primary">PRO</span>
                                         </div>
                                     </li>
+
                                     <li class="list-group-item">
-                                        <a href="#" class="dropdown-item">
-                                            <span class="d-flex align-items-center">
-                                                <i class="ph-duotone ph-key"></i>
-                                                <span>Change password</span>
-                                            </span>
-                                        </a>
-                                        <a href="#" class="dropdown-item">
-                                            <span class="d-flex align-items-center">
-                                                <i class="ph-duotone ph-envelope-simple"></i>
-                                                <span>Recently mail</span>
-                                            </span>
-                                            <div class="user-group">
-                                                <img src="{{ asset('images') }}/user/avatar-1.jpg" alt="user-image"
-                                                    class="avtar" />
-                                                <img src="{{ asset('images') }}/user/avatar-2.jpg" alt="user-image"
-                                                    class="avtar" />
-                                                <img src="{{ asset('images') }}/user/avatar-3.jpg" alt="user-image"
-                                                    class="avtar" />
-                                            </div>
-                                        </a>
-                                        <a href="#" class="dropdown-item">
-                                            <span class="d-flex align-items-center">
-                                                <i class="ph-duotone ph-calendar-blank"></i>
-                                                <span>Schedule meetings</span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a href="#" class="dropdown-item">
-                                            <span class="d-flex align-items-center">
-                                                <i class="ph-duotone ph-heart"></i>
-                                                <span>Favorite</span>
-                                            </span>
-                                        </a>
-                                        <a href="#" class="dropdown-item">
-                                            <span class="d-flex align-items-center">
-                                                <i class="ph-duotone ph-arrow-circle-down"></i>
-                                                <span>Download</span>
-                                            </span>
-                                            <span class="avtar avtar-xs rounded-circle bg-danger text-white">10</span>
-                                        </a>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <div class="dropdown-item">
-                                            <span class="d-flex align-items-center">
-                                                <i class="ph-duotone ph-globe-hemisphere-west"></i>
-                                                <span>Languages</span>
-                                            </span>
-                                            <span class="flex-shrink-0">
-                                                <select
-                                                    class="form-select bg-transparent form-select-sm border-0 shadow-none">
-                                                    <option value="1">English</option>
-                                                    <option value="2">Spain</option>
-                                                    <option value="3">Arbic</option>
-                                                </select>
-                                            </span>
-                                        </div>
-                                        <a href="#" class="dropdown-item">
-                                            <span class="d-flex align-items-center">
-                                                <i class="ph-duotone ph-flag"></i>
-                                                <span>Country</span>
-                                            </span>
-                                        </a>
-                                        <div class="dropdown-item">
-                                            <span class="d-flex align-items-center">
-                                                <i class="ph-duotone ph-moon"></i>
-                                                <span>Dark mode</span>
-                                            </span>
-                                            <div class="form-check form-switch form-check-reverse m-0">
-                                                <input class="form-check-input f-18" id="dark-mode" type="checkbox"
-                                                    onclick="dark_mode()" role="switch" />
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <a href="#" class="dropdown-item">
+                                        <a href="{{ route('admin.users.detail', Auth::user()->id) }}"
+                                            class="dropdown-item">
                                             <span class="d-flex align-items-center">
                                                 <i class="ph-duotone ph-user-circle"></i>
                                                 <span>Edit profile</span>
@@ -608,12 +477,7 @@
                                                 <span>Notifications</span>
                                             </span>
                                         </a>
-                                        <a href="#" class="dropdown-item">
-                                            <span class="d-flex align-items-center">
-                                                <i class="ph-duotone ph-gear-six"></i>
-                                                <span>Settings</span>
-                                            </span>
-                                        </a>
+
                                     </li>
                                     <li class="list-group-item">
 
@@ -648,7 +512,7 @@
                         <h6 class="mb-1">Theme Mode</h6>
                         <p class="text-muted text-sm">Choose light or dark mode or Auto</p>
                         <div class="row theme-color theme-layout">
-                            <div class="col-4">
+                            <div class="col-6">
                                 <div class="d-grid">
                                     <button class="preset-btn btn active" data-value="true"
                                         onclick="layout_change('light');">
@@ -658,28 +522,17 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-6">
                                 <div class="d-grid">
-                                    <button class="preset-btn btn" data-value="false"
-                                        onclick="layout_change('dark');">
+                                    <button class="preset-btn btn dark  " data-value="false"
+                                        onclick="layout_change('dark')">
                                         <span class="btn-label">Dark</span>
                                         <span
                                             class="pc-lay-icon"><span></span><span></span><span></span><span></span></span>
                                     </button>
                                 </div>
                             </div>
-                            <div class="col-4">
-                                <div class="d-grid">
-                                    <button class="preset-btn btn" data-value="default"
-                                        onclick="layout_change_default();" data-bs-toggle="tooltip"
-                                        title="Automatically sets the theme based on user's operating system's color scheme.">
-                                        <span class="btn-label">Default</span>
-                                        <span class="pc-lay-icon d-flex align-items-center justify-content-center">
-                                            <i class="ph-duotone ph-cpu"></i>
-                                        </span>
-                                    </button>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </li>
@@ -689,17 +542,7 @@
                     <div class="row theme-color theme-sidebar-color">
                         <div class="col-6">
                             <div class="d-grid">
-                                <button class="preset-btn btn" data-value="true"
-                                    onclick="layout_sidebar_change('dark');">
-                                    <span class="btn-label">Dark</span>
-                                    <span
-                                        class="pc-lay-icon"><span></span><span></span><span></span><span></span></span>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="d-grid">
-                                <button class="preset-btn btn active" data-value="false"
+                                <button class="preset-btn btn active sidebarLight" data-id='1' data-value="false"
                                     onclick="layout_sidebar_change('light');">
                                     <span class="btn-label">Light</span>
                                     <span
@@ -707,111 +550,21 @@
                                 </button>
                             </div>
                         </div>
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <h6 class="mb-1">Accent color</h6>
-                    <p class="text-muted text-sm">Choose your primary theme color</p>
-                    <div class="theme-color preset-color">
-                        <a href="#!" class="active" data-value="preset-1"><i class="ti ti-check"></i></a>
-                        <a href="#!" data-value="preset-2"><i class="ti ti-check"></i></a>
-                        <a href="#!" data-value="preset-3"><i class="ti ti-check"></i></a>
-                        <a href="#!" data-value="preset-4"><i class="ti ti-check"></i></a>
-                        <a href="#!" data-value="preset-5"><i class="ti ti-check"></i></a>
-                        <a href="#!" data-value="preset-6"><i class="ti ti-check"></i></a>
-                        <a href="#!" data-value="preset-7"><i class="ti ti-check"></i></a>
-                        <a href="#!" data-value="preset-8"><i class="ti ti-check"></i></a>
-                        <a href="#!" data-value="preset-9"><i class="ti ti-check"></i></a>
-                        <a href="#!" data-value="preset-10"><i class="ti ti-check"></i></a>
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <h6 class="mb-1">Sidebar Caption</h6>
-                    <p class="text-muted text-sm">Sidebar Caption Hide/Show</p>
-                    <div class="row theme-color theme-nav-caption">
                         <div class="col-6">
                             <div class="d-grid">
-                                <button class="preset-btn btn active" data-value="true"
-                                    onclick="layout_caption_change('true');">
-                                    <span class="btn-label">Caption Show</span>
+                                <button class="preset-btn btn sidebarDark" data-id='0' data-value="true"
+                                    onclick="layout_sidebar_change('dark');">
+                                    <span class="btn-label">Dark</span>
                                     <span
-                                        class="pc-lay-icon"><span></span><span></span><span><span></span><span></span></span><span></span></span>
+                                        class="pc-lay-icon"><span></span><span></span><span></span><span></span></span>
                                 </button>
                             </div>
                         </div>
-                        <div class="col-6">
-                            <div class="d-grid">
-                                <button class="preset-btn btn" data-value="false"
-                                    onclick="layout_caption_change('false');">
-                                    <span class="btn-label">Caption Hide</span>
-                                    <span
-                                        class="pc-lay-icon"><span></span><span></span><span><span></span><span></span></span><span></span></span>
-                                </button>
-                            </div>
-                        </div>
+
                     </div>
                 </li>
-                <li class="list-group-item">
-                    <div class="pc-rtl">
-                        <h6 class="mb-1">Theme Layout</h6>
-                        <p class="text-muted text-sm">LTR/RTL</p>
-                        <div class="row theme-color theme-direction">
-                            <div class="col-6">
-                                <div class="d-grid">
-                                    <button class="preset-btn btn active" data-value="false"
-                                        onclick="layout_rtl_change('false');">
-                                        <span class="btn-label">LTR</span>
-                                        <span
-                                            class="pc-lay-icon"><span></span><span></span><span></span><span></span></span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="d-grid">
-                                    <button class="preset-btn btn" data-value="true"
-                                        onclick="layout_rtl_change('true');">
-                                        <span class="btn-label">RTL</span>
-                                        <span
-                                            class="pc-lay-icon"><span></span><span></span><span></span><span></span></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="list-group-item pc-box-width">
-                    <div class="pc-container-width">
-                        <h6 class="mb-1">Layout Width</h6>
-                        <p class="text-muted text-sm">Choose Full or Container Layout</p>
-                        <div class="row theme-color theme-container">
-                            <div class="col-6">
-                                <div class="d-grid">
-                                    <button class="preset-btn btn active" data-value="false"
-                                        onclick="change_box_container('false')">
-                                        <span class="btn-label">Full Width</span>
-                                        <span
-                                            class="pc-lay-icon"><span></span><span></span><span></span><span><span></span></span></span>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="d-grid">
-                                    <button class="preset-btn btn" data-value="true"
-                                        onclick="change_box_container('true')">
-                                        <span class="btn-label">Fixed Width</span>
-                                        <span
-                                            class="pc-lay-icon"><span></span><span></span><span></span><span><span></span></span></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="list-group-item">
-                    <div class="d-grid">
-                        <button class="btn btn-light-danger" id="layoutreset">Reset Layout</button>
-                    </div>
-                </li>
+
+
             </ul>
         </div>
     </div>

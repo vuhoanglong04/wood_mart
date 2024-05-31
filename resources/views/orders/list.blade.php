@@ -230,7 +230,9 @@
 
                 <div class="card border-0 table-card order-profile-list p-4">
                     <div class="col-sm-2 mb-3">
-                        <a href="{{ URL::to('admin/orders/export') }}" data-bs-toggle="tooltip" data-bs-placement="right" title="Export to xlsx" style="color:white" class="btn btn-primary"><i class='ph-duotone ph-file-xls'></i></a>
+                        <a href="{{ URL::to('admin/orders/export') }}" data-bs-toggle="tooltip" data-bs-placement="right"
+                            title="Export to xlsx" style="color:white" class="btn btn-primary"><i
+                                class='ph-duotone ph-file-xls'></i></a>
 
                     </div>
                     <div class="col-sm-4 mb-3">
@@ -335,7 +337,19 @@
                             "name": "user_payment_id",
                             "title": "Payment",
                             "orderable": true,
-                            "searchable": true
+                            "searchable": true,
+                            "render": function(data, type, row) {
+                                console.log(row);
+                                return row.user_payment.payment.payment_name;
+                            }
+                        },
+                        {
+                            "data": "voucher",
+                            "name": "voucher",
+                            "title": "Voucher",
+                            "render": function(data, type, row) {
+                                return data;
+                            }
                         }, {
                             "data": "total",
                             "name": "total",

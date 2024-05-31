@@ -45,12 +45,14 @@ class PostsController extends Controller
         }
         $request->validate([
             'topic_id' => 'required',
+            'slug' => 'required',
             'title' => 'required | min:10',
             'content' => 'required',
             'theme' => ["required", 'mimes:jpeg,png', 'max:5120'],
         ], [
             'topic_id.required' => "Please choose a topic",
-            'title.required' => "Please enter a title",
+            'title.required' => "Please enter a slug",
+            'slug.required' => "Please choose a topic",
             'content.required' => "Please enter content",
             'theme.required' => "Please upload post theme",
             'theme.mimes' => 'The :attribute must be a file of type: :values.',
@@ -60,6 +62,7 @@ class PostsController extends Controller
         $post->user_id = Auth::user()->id;
         $post->topic_id = $request->topic_id;
         $post->title = $request->title;
+        $post->slug = $request->slug;
         $post->content = $request->content;
         $post->theme = $request->theme->getClientOriginalName();
         $request->theme->storeAs('public/posts', $request->theme->getClientOriginalName());
@@ -100,11 +103,13 @@ class PostsController extends Controller
         $request->validate([
             'topic_id' => 'required',
             'title' => 'required | min:10',
+            'slug'=>'required',
             'content' => 'required',
             'theme' => ["nullable", 'mimes:jpeg,png', 'max:5120'],
         ], [
             'topic_id.required' => "Please choose a topic",
             'title.required' => "Please enter a title",
+            'slug.required' => "Please enter a slug",
             'content.required' => "Please enter content",
             'theme.mimes' => 'The :attribute must be a file of type: :values.',
             'theme.max' => 'The :attribute may not be greater than :max kilobytes.'
@@ -112,6 +117,7 @@ class PostsController extends Controller
         $post = Posts::withTrashed()->find($id);
         $post->topic_id = $request->topic_id;
         $post->title = $request->title;
+        $post->slug = $request->slug;
         $post->content = $request->content;
         if ($request->theme) {
             $post->theme = $request->theme->getClientOriginalName();

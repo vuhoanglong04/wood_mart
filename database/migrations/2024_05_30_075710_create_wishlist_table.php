@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_review', function (Blueprint $table) {
+        Schema::create('wishlist', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');
             $table->integer('product_id');
-            $table->integer('stars');
-            $table->string('comment');
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_review');
+        Schema::dropIfExists('wishlist');
     }
 };

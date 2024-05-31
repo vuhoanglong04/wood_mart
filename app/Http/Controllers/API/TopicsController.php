@@ -1,21 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Models\Orders;
-use App\Models\Vouchers;
-use App\Models\OrderDetail;
+use App\Models\Topics;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
+use App\Http\Controllers\Controller;
 
-class OrderDetailController extends Controller
+class TopicsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        return Topics::all();
     }
 
     /**
@@ -39,17 +37,7 @@ class OrderDetailController extends Controller
      */
     public function show(string $id)
     {
-        if (!Gate::allows('orders.detail')) {
-            abort(404);
-        }
-        $order = Orders::find($id);
-        $listProductInOrder = OrderDetail::where('order_id', $id)->get();
-        $total = 0;
-        foreach ($listProductInOrder as $key=>$value){
-            $total +=$value->quantity * $value->price;
-        }
-        $voucher = Vouchers::where('code' , $order->voucher)->first();
-        return view('orders.detail' , compact('order' , 'listProductInOrder' , 'total' , 'voucher'));
+        //
     }
 
     /**

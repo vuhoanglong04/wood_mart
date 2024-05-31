@@ -73,6 +73,15 @@
                                 });
                             </script>
                         @endif
+                        @if (session('error'))
+                            <script>
+                                Swal.fire({
+                                    icon: "error",
+                                    title: "Oops...",
+                                    text: "{{ session('error') }}",
+                                });
+                            </script>
+                        @endif
                         @if ($errors->has('msg'))
                             <script>
                                 Swal.fire({
@@ -107,14 +116,38 @@
                                         checked="">
                                     <label class="form-check-label text-muted" for="customCheckc1">Remember me?</label>
                                 </div>
-                                <a href="{{route('forgot-password')}}">
+                                <a href="{{ route('forgot-password') }}">
                                     <h6 class="f-w-400 mb-0">Forgot Password?</h6>
                                 </a>
                             </div>
                             <div class="d-grid mt-4">
                                 <button type="submit" class="btn btn-primary">Login</button>
                             </div>
-
+                            <div class="saprator my-3">
+                                <span>Or continue with</span>
+                            </div>
+                            <div class="text-center">
+                                <ul class="list-inline mx-auto mt-3 mb-0">
+                                    <li class="list-inline-item">
+                                        <a
+                                            class="avtar avtar-s rounded-circle bg-facebook" target="_blank">
+                                            <i class="fab fa-facebook-f text-white"></i>
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a class="avtar avtar-s rounded-circle bg-twitter"
+                                            target="_blank">
+                                            <i class="fab fa-twitter text-white"></i>
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a href="{{route('auth.google')}}"
+                                            class="avtar avtar-s rounded-circle bg-googleplus" target="_blank">
+                                            <i class="fab fa-google text-white"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                         </form>
 
                     </div>

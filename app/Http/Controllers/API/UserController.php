@@ -140,10 +140,10 @@ class UserController extends Controller
         }
         $user = User::find($id)->update($input);
         $arr = [
-            'status' => 201,
+            'status' => 200,
             'message' => "Update users sucessfully",
         ];
-        return response()->json($arr, 201);
+        return response()->json($arr, 200);
     }
 
     /**

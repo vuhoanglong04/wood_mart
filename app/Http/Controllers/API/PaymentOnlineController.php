@@ -15,10 +15,10 @@ class PaymentOnlineController extends Controller
         $vnp_TmnCode = "R85DPSR9";//Mã website tại VNPAY
         $vnp_HashSecret = "90Y8TI5MF8APZOXUM4H07PDRY0E9ZEOZ"; //Chuỗi bí mật
 
-        $vnp_TxnRef = 'WM_' . rand(1000, 9999);
+        $vnp_TxnRef = 'Bill_' . rand(1000, 9999);
         $vnp_OrderInfo = "Pay your bill";
         $vnp_OrderType = "Woodmart";
-        $vnp_Amount = 12345000;
+        $vnp_Amount = $request->total;
         $vnp_Locale = "VN";
         $vnp_BankCode = "NCB";
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
@@ -80,8 +80,6 @@ class PaymentOnlineController extends Controller
         } else {
             echo json_encode($returnData);
         }
-        // vui lòng tham khảo thêm tại code demo
-
     }
 
 
@@ -117,7 +115,7 @@ class PaymentOnlineController extends Controller
 
 
         $orderInfo = "Woodmart";
-        $amount = "10000";
+        $amount = $request->total;
         $orderId = time() . "";
         //Trang trả về để lây data
         $redirectUrl = "https://facebook.com";

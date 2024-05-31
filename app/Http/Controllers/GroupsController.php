@@ -19,7 +19,7 @@ class GroupsController extends Controller
             abort(404);
         }
         $groups = Groups::withTrashed()->get();
-        return view('groups.list', compact('groups' , "title"));
+        return view('groups.list', compact('groups'));
     }
 
     /**

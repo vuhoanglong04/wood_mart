@@ -74,6 +74,7 @@ class OrdersDataTable extends DataTable
             Column::make('address'),
             Column::make('shipping_id'),
             Column::make('user_payment_id'),
+            Column::make('voucher'),
             Column::make('total'),
             Column::make('status'),
             Column::make('created_at'),

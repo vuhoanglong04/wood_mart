@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Products;
+use App\Models\ProductsVariant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductsRequest;
@@ -19,8 +20,33 @@ class ProductsController extends Controller
     public function index(Request $request)
     {
 
-        $products = Products::with('category')->get();
-        return ProductResource::collection($products);
+        $products = Products::with('category')->with('variants');
+        if ($request->category_id) {
+            $products = $products->where('category_id', $request->category_id);
+        }
+        if($request->color_id && !$request->material_id) {
+            $color = $request->color_id;
+            $products = $products->whereHas('variants', function ($query) use ($color) {
+                $query->where('color_id', $color);
+            });
+        }
+        if($request->material_id && !$request->color_id) {
+            $material = $request->material_id;
+            $products = $products->whereHas('variants', function ($query) use ($material) {
+                $query->where('material_id', $material);
+            });
+        }
+
+        if($request->material_id && $request->color_id) {
+            $material = $request->material_id;
+            $color = $request->color_id;
+
+            $products = $products->whereHas('variants', function ($query) use ($material , $color) {
+                $query->where('material_id', $material)->where("color_id" , $color);
+            });
+        }
+        $products = $products->paginate(10);
+        return $products;
     }
 
     /**
@@ -84,11 +110,18 @@ class ProductsController extends Controller
      */
     public function show($id)
     {
-        $product = Products::find($id);
-        if($product){
-
-            return ProductResource::make($product);
-        }else{
+        $product = Products::find($id)->with('category')->first();
+        if ($product) {
+            $arr = [
+                'status' => 200,
+                'message' => "success",
+                'data' => [
+                    'product' => $product,
+                    'variant' => ProductsVariant::where('product_id', $id)->with('color')->with('material')->get()
+                ]
+            ];
+            return response()->json($arr, 200);
+        } else {
             $arr = [
                 'status' => 404,
                 'message' => "Product not found",
@@ -153,14 +186,14 @@ class ProductsController extends Controller
     public function destroy(string $id)
     {
         $product = Products::find($id);
-        if($product){
+        if ($product) {
             $product->delete();
             $arr = [
                 'status' => 200,
                 'message' => "Delete product sucessfully"
             ];
             return response()->json($arr, 200);
-        }else {
+        } else {
             $arr = [
                 'status' => 404,
                 'message' => "Product Not Found"
@@ -169,16 +202,17 @@ class ProductsController extends Controller
         }
 
     }
-    public function restore($id){
+    public function restore($id)
+    {
         $product = Products::withTrashed()->find($id);
-        if($product->deleted_at){
+        if ($product->deleted_at) {
             $product->restore();
             $arr = [
                 'status' => 200,
                 'message' => "Restore product sucessfully"
             ];
             return response()->json($arr, 200);
-        }else{
+        } else {
             $arr = [
                 'status' => 404,
                 'message' => "Product Not Found"
@@ -186,16 +220,17 @@ class ProductsController extends Controller
             return response()->json($arr, 404);
         }
     }
-    public function forceDelete($id){
-            $product = Products::withTrashed()->find($id);
-        if($product){
+    public function forceDelete($id)
+    {
+        $product = Products::withTrashed()->find($id);
+        if ($product) {
             $product->forceDelete();
             $arr = [
                 'status' => 200,
                 'message' => "Delete product sucessfully"
             ];
             return response()->json($arr, 200);
-        }else{
+        } else {
             $arr = [
                 'status' => 404,
                 'message' => "Product not found"

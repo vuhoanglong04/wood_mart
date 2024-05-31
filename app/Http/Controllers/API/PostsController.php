@@ -1,21 +1,24 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
-use App\Models\Orders;
-use App\Models\Vouchers;
-use App\Models\OrderDetail;
+use App\Models\Posts;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
+use App\Http\Controllers\Controller;
 
-class OrderDetailController extends Controller
+class PostsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $posts = Posts::with('user')->with('topic');
+        if($request->topic_id){
+            $posts = $posts->where('topic_id'  ,$request->topic_id);
+        }
+        $posts = $posts->get();
+        return $posts;
     }
 
     /**
@@ -37,19 +40,9 @@ class OrderDetailController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $slug)
     {
-        if (!Gate::allows('orders.detail')) {
-            abort(404);
-        }
-        $order = Orders::find($id);
-        $listProductInOrder = OrderDetail::where('order_id', $id)->get();
-        $total = 0;
-        foreach ($listProductInOrder as $key=>$value){
-            $total +=$value->quantity * $value->price;
-        }
-        $voucher = Vouchers::where('code' , $order->voucher)->first();
-        return view('orders.detail' , compact('order' , 'listProductInOrder' , 'total' , 'voucher'));
+        return Posts::where('slug',$slug)->first();
     }
 
     /**

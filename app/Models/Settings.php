@@ -5,11 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Cart extends Model
+class Settings extends Model
 {
     use HasFactory;
-    protected $table = 'cart';
-    public function user(){
-        return $this->belongsTo(User::class);
-    }
+    protected $table = 'settings';
 }

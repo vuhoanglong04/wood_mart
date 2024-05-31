@@ -51,16 +51,16 @@ class UserReviewsController extends Controller
         }
         $newReview = new UserReviews();
         $newReview->user_id = $request->user_id;
-        $newReview->order_detail_id = $request->order_detail_id;
+        $newReview->product_id = $request->product_id;
         $newReview->stars = $request->stars;
         $newReview->comment  = $request->comment;
         $newReview->save();
         $arr = [
-            'status' => 200,
+            'status' => 201,
             'message' => 'Add review successfully',
             'data' => $newReview
         ];
-        return response()->json($arr, 200);
+        return response()->json($arr, 201);
 
     }
 
@@ -105,8 +105,6 @@ class UserReviewsController extends Controller
             return response()->json($arr, 422);
         }
         $review = UserReviews::find($id);
-        $review->user_id = $request->user_id;
-        $review->order_detail_id = $request->order_detail_id;
         $review->stars = $request->stars;
         $review->comment  = $request->comment;
         $review->save();

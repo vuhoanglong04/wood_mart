@@ -82,7 +82,7 @@
 
                             </div>
                         </div>
-              
+
                     </div>
                     <div class="col-lg-7 col-xxl-9">
                         <div class="tab-content" id="user-set-tabContent">
@@ -125,7 +125,7 @@
                                                 <li class="list-group-item px-0 pb-0">
                                                     <p class="mb-1 text-muted">Address</p>
                                                     <p class="mb-0">{{ $defaultAddress->detail_address }},
-                                                        {{ $defaultAddress->city }},{{ $defaultAddress->country }}</p>
+                                                        {{ $defaultAddress->city }}  {{$defaultAddress->zip_code}},{{ $defaultAddress->country }}</p>
                                                 </li>
                                             @endif
                                         </ul>
@@ -170,7 +170,7 @@
 
                                                                 <div class="ms-2" bis_skin_checked="1">
                                                                     <p class="mb-1">{{ $item->detail_address }}</p>
-                                                                    <p class="mb-0 text-muted">{{ $item->city }},
+                                                                    <p class="mb-0 text-muted">{{ $item->city }}  {{$defaultAddress->zip_code}},
                                                                         {{ $item->country }}</p>
                                                                 </div>
                                                             </div>

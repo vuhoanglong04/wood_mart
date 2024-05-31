@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Exports\CustomersExport;
 
 use Maatwebsite\Excel\Facades\Excel;
+
 class UserController extends Controller
 {
     public function index(UsersDataTable $dataTable)
@@ -101,8 +102,11 @@ class UserController extends Controller
             $request->validate([
                 'email' => "required | email:rfc,dns",
                 'password' => "required | min:5",
-                'img' => ["nullable", 'mimes:jpeg,png', 'max:5120']
+                'img' => ["nullable", 'mimes:jpeg,png', 'max:5120'],
+                'full_name' => "required"
+
             ], [
+                'full_name.required' => "Please enter your full name",
                 'email.required' => "Email must be required",
                 'email.email' => "Email is not valid",
                 "password.required" => "Password must be required",
@@ -152,7 +156,7 @@ class UserController extends Controller
             ->orderBy('created_at', 'desc')
             ->limit(3)
             ->get();
-        return view('users.detail', compact('user', 'groups', 'defaultAddress', 'address' , 'lastestOrders'));
+        return view('users.detail', compact('user', 'groups', 'defaultAddress', 'address', 'lastestOrders'));
     }
     public function updatePassword($id, Request $request)
     {
@@ -182,12 +186,13 @@ class UserController extends Controller
         return true;
     }
 
-    public function exportExcel(){
+    public function exportExcel()
+    {
 
         $fileExt = 'xlsx';
         $exportFormat = \Maatwebsite\Excel\Excel::XLSX;
 
-        $filename = "users-".date('d-m-Y').".".$fileExt;
+        $filename = "users-" . date('d-m-Y') . "." . $fileExt;
         return Excel::download(new UsersExport, $filename, $exportFormat);
     }
 }

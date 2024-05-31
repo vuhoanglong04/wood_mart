@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\User;
+use App\Mail\SignUpMail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -14,13 +17,15 @@ class AuthController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
+                'full_name' => 'required',
                 'email' => "required | email:rfc,dns | unique:users,email",
                 'password' => "required | min:5",
             ], [
-                'email.required' => "Email must be required",
+                'full_name.required'=>'Please enter your full name',
+                'email.required' => "Please enter your email address",
                 'email.email' => "Email is not valid",
                 'email.unique' => "Email already exists",
-                "password.required" => "Password must be required",
+                "password.required" => "Please enter your password",
                 "password.min" => "Password must be at least :min characters",
             ]);
             if ($validator->fails()) {
@@ -106,11 +111,57 @@ class AuthController extends Controller
         }
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         $request->user()->currentAccessToken()->delete();
         return response()->json([
             'status' => 200,
             'message' => 'Logout successfully!',
         ]);
+    }
+
+    public function loginGoogle()
+    {
+        config(['services.google.redirect' => env('GOOGLE_REDIRECT_USER')]);
+        $redirectResponse = Socialite::driver('google')->stateless()->redirect();
+        $redirectUrl = $redirectResponse->getTargetUrl();
+
+        return response()->json(['redirect_url' => $redirectUrl]);
+    }
+    public function loginGoogleHandle()
+    {
+        config(['services.google.redirect' => env('GOOGLE_REDIRECT_USER')]);
+        $googleAccount = Socialite::driver('google')->stateless()->user();
+        $findUser = User::where('email', $googleAccount->email)->first();
+        if ($findUser) {
+            $findUser->is_online = 1;
+            $findUser->save();
+            $arr = [
+                'status' => 200,
+                'message' => "Login sucessfully",
+                'data' => $findUser
+            ];
+            return response()->json($arr, 200);
+        } else {
+            $newUser = new User();
+            $newUser->email = $googleAccount->email;
+            $newUser->full_name = $googleAccount->name;
+            //regenerate password
+            $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            $password = '';
+            for ($i = 0; $i < 10; $i++) {
+                $index = random_int(0, strlen($chars) - 1);
+                $password .= $chars[$index];
+            }
+            $newUser->password = $password;
+            $newUser->save();
+            Mail::to($googleAccount->email)->send(new SignUpMail($password));
+            $arr = [
+                'status' => 200,
+                'message' => "Login sucessfully",
+                'data' => $newUser
+            ];
+            return response()->json($arr, 200);
+        }
     }
 }
