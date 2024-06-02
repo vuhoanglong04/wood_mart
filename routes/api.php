@@ -51,34 +51,27 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/address', [UserAddressController::class, 'index']);
     Route::post('/address', [UserAddressController::class, 'store']);
     Route::patch('/address/{id}', [UserAddressController::class, 'update']);
-
     //Cart
     Route::get('/cart', [CartController::class, 'index']);
     Route::post('/cart', [CartController::class, 'store']);
     Route::patch('/cart/{id}', [CartController::class, 'update']);
     Route::delete('/cart/{id}', [CartController::class, 'destroy']);
-
     //orders
     Route::get('/orders', [OrdersController::class, 'index']);
     Route::get('/orders/detail/{id}', [OrdersController::class, 'show']);
     Route::post('/orders', [OrdersController::class, 'store']);
     Route::patch('/orders/{id}', [OrdersController::class, 'update']);
-
     //user detail
     Route::get('/users/{id}', [UserController::class, 'show']);
     Route::patch('/users/{id}', [UserController::class, 'update']);
-
-
     //Review
     Route::post('/review', [UserReviewsController::class, 'store']);
     Route::patch('/review/{id}', [UserReviewsController::class, 'update']);
-
     //Wishlish
     Route::get('/wishlist', [WishlistController::class, 'index']);
     Route::post('/wishlist', [WishlistController::class, 'store']);
     Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy']);
-
-
+    
     Route::get('momo', [PaymentOnlineController::class, 'momo'])->name('momo');
     Route::get('vnpay', [PaymentOnlineController::class, 'vnpay'])->name('vnpay');
 });

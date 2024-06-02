@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\ProductsVariant;
 use App\Http\Requests\VariantRequest;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ProductsVariantController extends Controller
 {
@@ -38,8 +39,14 @@ class ProductsVariantController extends Controller
         $newItem->material_id = $request->material_id;
         $newItem->price = $request->price;
         $newItem->qty_in_stock = $request->qty_in_stock;
-        $request->img->storeAs('public/products', $request->img->getClientOriginalName());
-        $newItem->img = $request->img->getClientOriginalName();
+
+        $cloudinaryImage = new Cloudinary();
+        $cloudinaryImage = $request->img->storeOnCloudinary('variants');
+        $url = $cloudinaryImage->getSecurePath();
+        $public_id = $cloudinaryImage->getPublicId();
+
+        $newItem->img = $url;
+        $newItem->id_image = $public_id;
         $newItem->save();
         return back()->with('success', 'Add Variant Successfully!');
     }
@@ -73,7 +80,9 @@ class ProductsVariantController extends Controller
      */
     public function destroy(string $id)
     {
-        ProductsVariant::withTrashed()->find($id)->forceDelete();
+       $variant =  ProductsVariant::withTrashed()->find($id);
+       Cloudinary::destroy($variant->id_image);
+       $variant->forceDelete();
         return true;
     }
     public function softDelete($id){

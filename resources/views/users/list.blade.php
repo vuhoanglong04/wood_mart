@@ -287,7 +287,7 @@
                                 else role = "Customer"
                                 var path = 'storage/user/' + row.img;
                                 return `<div class="d-inline-block align-middle">
-                                            <img src="{{ asset('${path}') }}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
+                                            <img src="${row.img}" alt="user image" class="img-radius align-top m-r-15" style="width:40px;">
                                             <div class="d-inline-block">
                                                 <h6 class="m-b-0">${row.full_name}</h6>
                                                 <p class="m-b-0 text-primary">

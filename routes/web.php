@@ -1,10 +1,14 @@
 <?php
 
+use App\Models\User;
+use App\Models\Posts;
+use App\Models\Category;
+use App\Models\Products;
+use App\Models\ProductsVariant;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostsController;
-use App\Http\Controllers\ProductsVariant;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\GroupsController;
 use App\Http\Controllers\OrdersController;
@@ -121,6 +125,14 @@ Route::prefix('admin')->middleware('login')->name('admin.')->group(function(){
         Route::delete('posts/softDelete/{topic}', [PostsController::class , 'softDelete'])->name('posts.softDelete');
         Route::get('posts/restore/{topic}', [PostsController::class , 'restore'])->name('posts.restore');
 
+        Route::get('/gallery' , function (){
+            $imageProducts = Products::all();
+            $imageUser = User::all();
+            $imageCategory = Category::all();
+            $imagePosts = Posts::all();
+            $imageVariant = ProductsVariant::all();
+            return view('gallery' , compact('imageProducts' , 'imageUser', 'imageCategory' , 'imagePosts' , 'imageVariant'));
+        })->name('gallery');
 
 });
 

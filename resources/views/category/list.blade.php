@@ -45,7 +45,8 @@
                 <div class="card-header">
                     @can('categories.add')
                         <div class="row">
-                            <form class="col-sm-6" method="post" action="{{ route('admin.category.store') }}">
+                            <form class="col-sm-6" method="post" action="{{ route('admin.category.store') }}"
+                                enctype="multipart/form-data" >
                                 <h3>Add New Category</h3>
                                 <hr>
                                 @csrf
@@ -59,6 +60,7 @@
                                         <div class="invalid-feedback d-block">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                                 <div class="mb-3">
                                     <label class="form-label" for="exampleInputEmail1">Parent Category</label>
                                     <select class="mb-0 form-select" name="parent_category_id">
@@ -68,11 +70,24 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <button type="submit" style="color:white" class="btn btn-primary"><i
+                                <div class=" mt-3">
+                                    <label class="form-label"
+                                        for="inputGroupFile01">Icon</label>
+                                    <input type="file" name="icon" class="form-control  @error('icon'){{ 'is-invalid' }}@enderror" id="inputGroupFile01">
+                                    @error('icon')
+                                        <div class="invalid-feedback d-block">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class=" mt-3">
+                                    <label class="form-label" for="inputGroupFile02">Background</label>
+                                    <input type="file" name="background" class="form-control @error('background'){{ 'is-invalid' }}@enderror" id="inputGroupFile02">
+                                    @error('background')
+                                    <div class="invalid-feedback d-block">{{ $message }}</div>
+                                @enderror
+                                </div>
+                                <button type="submit" style="color:white" class="btn btn-primary mt-3"><i
                                         class="ph-duotone ph-plus-circle" style="margin-top: 3px"></i> Add New
                                     Category</button>
-
-
 
                             </form>
                         </div>
@@ -86,6 +101,7 @@
                                 <tr>
                                     <th width="30%">#ID</th>
                                     <th>Category Name</th>
+                                    <th>Icon</th>
                                     <th>Parent Category Name</th>
                                     <th>Status</th>
                                     <th>Action</th>
@@ -95,6 +111,7 @@
                                 @foreach ($categories as $item)
                                     <tr id="group_{{ $item->id }}">
                                         <td>{{ $item->id }}</td>
+                                        <td><img src="{{$item->icon}}" alt=""></td>
                                         <td>{{ $item->category_name }}</td>
                                         <td>{{ $item->parent_category_id }}</td>
                                         <td class='status'>

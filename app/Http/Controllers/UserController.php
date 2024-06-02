@@ -19,11 +19,15 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use App\Exports\CustomersExport;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+
+
 
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
+
     public function index(UsersDataTable $dataTable)
     {
         if (!Gate::allows('user.view')) {
@@ -50,6 +54,7 @@ class UserController extends Controller
     }
     public function postUser(UserRequest $request)
     {
+
         $newUser = new User();
         $newUser->full_name = $request->full_name;
         $newUser->email = $request->email;
@@ -57,8 +62,12 @@ class UserController extends Controller
         $newUser->phone_number = $request->phone_number;
         $newUser->group_id = $request->group_id;
         if ($request->img) {
-            $request->img->storeAs('storage/user', $request->img->getClientOriginalName());
-            $newUser->img = $request->img->getClientOriginalName();
+            $cloudinaryImage = new Cloudinary();
+            $cloudinaryImage = $request->img->storeOnCloudinary('users');
+            $url = $cloudinaryImage->getSecurePath();
+            $public_id = $cloudinaryImage->getPublicId();
+            $newUser->img = $url;
+            $newUser->id_image = $public_id;
         }
         $newUser->save();
         return redirect()->route('admin.users.index')->with('success', "Add new user successfully!");
@@ -82,6 +91,8 @@ class UserController extends Controller
     public function forceDelete($id)
     {
         $user = User::withTrashed()->find($id);
+       Cloudinary::destroy($user->id_image);
+
         $user->forceDelete();
         return redirect()->route('admin.users.index')->with('success', "Detete successfully!");
     }
@@ -135,9 +146,15 @@ class UserController extends Controller
         }
 
         if ($request->img) {
-            $request->img->storeAs('public/user', $request->img->getClientOriginalName());
-            $oldUser->img = $request->img->getClientOriginalName();
+            if($oldUser->id_image)Cloudinary::destroy($oldUser->id_image);
+            $cloudinaryImage = new Cloudinary();
+            $cloudinaryImage = $request->img->storeOnCloudinary('users');
+            $url = $cloudinaryImage->getSecurePath();
+            $public_id = $cloudinaryImage->getPublicId();
+            $oldUser->img = $url;
+            $oldUser->id_image = $public_id;
         }
+
         $oldUser->save();
         return redirect()->route('admin.users.index')->with('success', "Update user successfully!");
 

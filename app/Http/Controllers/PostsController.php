@@ -7,6 +7,7 @@ use App\Models\Topics;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class PostsController extends Controller
 {
@@ -64,8 +65,12 @@ class PostsController extends Controller
         $post->title = $request->title;
         $post->slug = $request->slug;
         $post->content = $request->content;
-        $post->theme = $request->theme->getClientOriginalName();
-        $request->theme->storeAs('public/posts', $request->theme->getClientOriginalName());
+        $cloudinaryImage = new Cloudinary();
+        $cloudinaryImage = $request->theme->storeOnCloudinary('posts');
+        $url = $cloudinaryImage->getSecurePath();
+        $public_id = $cloudinaryImage->getPublicId();
+        $post->theme = $url;
+        $post->id_theme = $public_id;
         $post->save();
         return redirect()->route('admin.posts.index')->with('success', "Add post successfully");
     }
@@ -120,8 +125,13 @@ class PostsController extends Controller
         $post->slug = $request->slug;
         $post->content = $request->content;
         if ($request->theme) {
-            $post->theme = $request->theme->getClientOriginalName();
-            $request->theme->storeAs('public/posts', $request->theme->getClientOriginalName());
+        Cloudinary::destroy($post->id_theme);
+            $cloudinaryImage = new Cloudinary();
+            $cloudinaryImage = $request->theme->storeOnCloudinary('posts');
+            $url = $cloudinaryImage->getSecurePath();
+            $public_id = $cloudinaryImage->getPublicId();
+            $post->theme = $url;
+            $post->id_theme = $public_id;
         }
         $post->save();
         return redirect()->route('admin.posts.index')->with('success', "Update post successfully");
@@ -137,6 +147,7 @@ class PostsController extends Controller
         }
         $post = Posts::withTrashed()->find($id);
         if ($post) {
+         Cloudinary::destroy($post->id_theme);
             $post->forceDelete();
             return true;
         }

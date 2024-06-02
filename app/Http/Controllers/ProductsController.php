@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\ProductsExport;
 use App\Models\Colors;
 use App\Models\Category;
 use App\Models\Products;
 use App\Models\Materials;
 use Illuminate\Http\Request;
+use App\Exports\ProductsExport;
 use App\Models\ProductsVariant;
 use App\DataTables\UsersDataTable;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +16,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\DataTables\ProductsDataTable;
 use App\Http\Requests\ProductsRequest;
 use Illuminate\Support\Facades\Session;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class ProductsController extends Controller
 {
@@ -53,8 +54,15 @@ class ProductsController extends Controller
         $newPr->price = $request->price;
         $newPr->category_id = $request->category_id;
         $newPr->product_description = $request->product_description;
-        $newPr->product_theme = $request->product_theme->getClientOriginalName();
-        $request->product_theme->storeAs('public/products', $request->product_theme->getClientOriginalName());
+
+        $cloudinaryImage = new Cloudinary();
+        $cloudinaryImage = $request->product_theme->storeOnCloudinary('products');
+        $url = $cloudinaryImage->getSecurePath();
+        $public_id = $cloudinaryImage->getPublicId();
+
+        $newPr->product_theme = $url;
+        $newPr->id_image = $public_id;
+
         $newPr->save();
         return redirect()->route('admin.products.index')->with('success', 'Add product sucessfully!');
     }
@@ -72,7 +80,7 @@ class ProductsController extends Controller
         $materials = Materials::withTrashed()->get();
         $listVariant = ProductsVariant::withTrashed()->where('product_id', $id)->get();
         $listColorsOfProduct = ProductsVariant::with('color')->where('product_id', $id)->distinct('color_id')->pluck('color_id');
-        $colors = Colors::whereIn('id', $listColorsOfProduct)->get();
+        // $colors = Colors::whereIn('id', $listColorsOfProduct)->get();
         $listMaterial = ProductsVariant::withTrashed()->with('material')->where('product_id', $id)->distinct('material_id')->pluck('material_id');
         $material = Materials::whereIn('id', $listMaterial)->get();
         return view('products.detail', compact('product', 'colors', 'materials', 'listVariant' , 'material'));
@@ -119,8 +127,14 @@ class ProductsController extends Controller
         $old->price = $request->price;
         $old->category_id = $request->category_id;
         if ($request->product_theme) {
-            $old->product_theme = $request->product_theme->getClientOriginalName();
-            $request->product_theme->storeAs('public/products', $request->product_theme->getClientOriginalName());
+            $cloudinaryImage = new Cloudinary();
+            $cloudinaryImage = $request->product_theme->storeOnCloudinary('products');
+            $url = $cloudinaryImage->getSecurePath();
+            $public_id = $cloudinaryImage->getPublicId();
+
+            $old->product_theme = $url;
+            $old->id_image = $public_id;
+
         }
         $old->product_description = $request->product_description;
         $old->save();
@@ -133,8 +147,10 @@ class ProductsController extends Controller
      */
     public function destroy(string $id)
     {
-        return Products::withTrashed()->find($id)->forceDelete();
-        ;
+        $product =  Products::withTrashed()->find($id);
+        Cloudinary::destroy($product->id_image);
+        return $product->forceDelete();
+
     }
 
     public function softDelete($id)

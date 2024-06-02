@@ -20,11 +20,11 @@
                     <label>Navigation</label>
                 </li>
                 <li class="pc-item pc-\">
-                    <a href="{{route('admin.index')}}" class="pc-link">
+                    <a href="{{ route('admin.index') }}" class="pc-link">
 
-                        <span class="pc-mtext">Dashboard</span>
-                        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
-                        <span class="pc-badge">0</span>
+                    <span class="pc-mtext">Dashboard</span>
+                    <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+                    <span class="pc-badge">0</span>
                     </a>
 
                 </li>
@@ -155,7 +155,16 @@
                         </ul>
                     </li>
                 @endcan
+                <li class="pc-item pc-hasmenu">
+                    <a href="{{route('admin.gallery')}}" class="pc-link">
+                        <span class="pc-micon">
+                            <i class="ph-duotone ph-image"></i>
+                        </span>
+                        <span class="pc-mtext">Gallery</span>
+                        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+                    </a>
 
+                </li>
             </ul>
 
         </div>
@@ -163,7 +172,7 @@
             <div class="card-body">
                 <div class="d-flex align-items-center">
                     <div class="flex-shrink-0">
-                        <img src="{{ asset('storage/user/' . Auth::user()->img) }}" alt="user-image"
+                        <img src="{{ Auth::user()->img }}" alt="user-image"
                             class="user-avtar wid-45 rounded-circle" />
                     </div>
                     <div class="flex-grow-1 ms-3 me-2">
@@ -273,7 +282,7 @@
                                     <p class="text-span">Today</p>
                                     <div class="d-flex">
                                         <div class="flex-shrink-0">
-                                            <img src="{{ asset('images') }}/user/avatar-2.jpg" alt="user-image"
+                                            <img src="{{ Auth::user()->img }}" alt="user-image"
                                                 class="user-avtar avtar avtar-s" />
                                         </div>
                                         <div class="flex-grow-1 ms-3">
@@ -372,7 +381,7 @@
                                 <li class="list-group-item">
                                     <div class="d-flex">
                                         <div class="flex-shrink-0">
-                                            <img src="{{ asset('images') }}/user/avatar-2.jpg" alt="user-image"
+                                            <img src="{{ Auth::user()->img }}" alt="user-image"
                                                 class="user-avtar avtar avtar-s" />
                                         </div>
                                         <div class="flex-grow-1 ms-3">
@@ -436,8 +445,7 @@
                 <li class="dropdown pc-h-item header-user-profile">
                     <a class="pc-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown" href="#"
                         role="button" aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false">
-                        <img src="{{ asset('storage/user/' . Auth::user()->img) }}" alt="user-image"
-                            class="user-avtar" />
+                        <img src="{{ Auth::user()->img }}" alt="user-image" class="user-avtar" />
                     </a>
                     <div class="dropdown-menu dropdown-user-profile dropdown-menu-end pc-h-dropdown">
                         <div class="dropdown-header d-flex align-items-center justify-content-between">
@@ -450,8 +458,8 @@
                                     <li class="list-group-item">
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0">
-                                                <img src="{{ asset('storage/user/' . Auth::user()->img) }}"
-                                                    alt="user-image" class="wid-50 rounded-circle" />
+                                                <img src="{{ Auth::user()->img }}" alt="user-image"
+                                                    class="wid-50 rounded-circle" />
                                             </div>
                                             <div class="flex-grow-1 mx-3">
                                                 <h5 class="mb-0">{{ Auth::user()->full_name ?? '' }}</h5>

@@ -64,7 +64,7 @@
                                     @foreach ($listVariant as $key => $value)
                                         <div class="carousel-item @if ($key == 0) {{ 'active' }} @endif"
                                             bis_skin_checked="1">
-                                            <img src="{{ asset('storage/products/') }}/{{ $value->img }}"
+                                            <img src="{{$value->img}}"
                                                 class="d-block w-100" alt="Product images">
                                         </div>
                                     @endforeach
@@ -76,7 +76,7 @@
                                         <li data-bs-target="#carouselExampleCaptions" data-bs-slide-to="{{ $key }}"
                                             class="list-inline-item @if ($key == 0) {{ 'active' }} @endif"
                                             style="height: 4rem; width:4rem">
-                                            <img src="{{ asset('storage/products/') }}/{{ $value->img }}"
+                                            <img src="{{ $value->img }}"
                                                 class="d-block wid-50 rounded w-100 h-100" alt="Product images"
                                                 style="object-fit: cover;">
                                         </li>
@@ -104,9 +104,7 @@
                             <i class="far fa-star text-muted"></i>
                             <span class="text-sm text-muted">(4.0)</span>
                         </div>
-                        <h5 class="mt-4 mb-sm-3 mb-2 f-w-500">Description : </h5>
-                        <p class="d-inline-block w-100">{{ $product->product_description }}</p>
-
+      
                         <div class="mb-3 row" bis_skin_checked="1">
                             <label class="col-form-label col-lg-2 col-sm-12">Colors <span
                                     class="text-danger">*</span></label>

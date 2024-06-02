@@ -79,11 +79,9 @@
                             @enderror
                             <div class="mt-3">
                                 <label class="form-label">Group</label>
-                                <select class="form-select fs-5 @error('group_id'){{ 'is-invalid' }}@enderror"
-                                    name='group_id'>
-                                    <option hidden selected value="">Select group</option>
+                                <select    name='group_id' class="form-select fs-5 @error('group_id'){{ 'is-invalid' }}@enderror">
                                     @foreach ($groups as $item)
-                                        <option value="{{ $item->group_id }}" {{old('group_id')==$item->group_id ? 'selected' :''}}>{{ $item->group_name }}</option>
+                                        <option value="{{ $item->id }}">{{ $item->group_name }}</option>
                                     @endforeach
                                 </select>
                             </div>

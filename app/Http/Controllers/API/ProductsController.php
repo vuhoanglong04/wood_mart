@@ -19,7 +19,6 @@ class ProductsController extends Controller
 
     public function index(Request $request)
     {
-
         $products = Products::with('category')->with('variants');
         if ($request->category_id) {
             $products = $products->where('category_id', $request->category_id);
@@ -44,6 +43,9 @@ class ProductsController extends Controller
             $products = $products->whereHas('variants', function ($query) use ($material , $color) {
                 $query->where('material_id', $material)->where("color_id" , $color);
             });
+        }
+        if($request->from && $request->to){
+            $products = $products->whereBetween('price' , [$request->from , $request->to]);
         }
         $products = $products->paginate(10);
         return $products;

@@ -28,7 +28,8 @@ class UserRequest extends FormRequest
             'email' => "required | email:rfc,dns | unique:users,email",
             'password' => "required | min:5",
             'img' => ["nullable",'mimes:jpeg,png','max:5120'],
-            'full_name' => "required"
+            'full_name' => "required",
+            'group_id' => "required"
         ];
     }
     public function messages()
@@ -36,6 +37,7 @@ class UserRequest extends FormRequest
         return [
             'email.required' => "Please enter your email address",
             'full_name.required' => "Please enter your full name",
+            'group_id.required' => "Please choose group",
 
             'email.email' => "Email is not valid",
             'email.unique' => "Email must be unique",

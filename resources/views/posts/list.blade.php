@@ -69,8 +69,8 @@
                                 @foreach ($posts as $item)
                                     <tr id="posts_{{ $item->id }}">
                                         <td>{{ $item->id }}</td>
-                                        <td><img src="{{ asset('storage/posts') }}/{{ $item->theme }}"
-                                                style="height: 100px;width:100px;oject-fit:cover" alt=""></td>
+                                        <td><img src="{{ $item->theme }}"
+                                                style="height: 100px;width:100px;oject-fit:maintain" alt=""></td>
                                         <td>{{ $item->title }}</td>
                                         <td>{{ $item->user->full_name }}</td>
                                         <td>{{ $item->topic->topic_name }}</td>

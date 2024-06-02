@@ -24,28 +24,14 @@ class GoogleController extends Controller
         $googleAccount = Socialite::driver('google')->user();
         $findUser = User::where('email', $googleAccount->email)->first();
         if ($findUser) {
-            $findUser->is_online = 1;
-            $findUser->save();
-            Auth::login($findUser);
-            return redirect()->intended('admin');
-        } else {
-            $newUser = new User();
-            $newUser->email = $googleAccount->email;
-            $newUser->full_name = $googleAccount->name;
-
-            //regenerate password
-            $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            $password = '';
-            for ($i = 0; $i < 10; $i++) {
-                $index = random_int(0, strlen($chars) - 1);
-                $password .= $chars[$index];
-            }
-            $newUser->password = $password;
-            $newUser->save();
-            Mail::to($googleAccount->email)->send(new SignUpMail($password));
-            Auth::login($newUser);
-            return redirect()->intended('admin');
+            if ($findUser->group_id != 1) {
+                $findUser->is_online = 1;
+                $findUser->save();
+                Auth::login($findUser);
+                return redirect()->intended('admin');
+            }else return redirect()->route('login')->with('error' , 'You are not allowed to this page ');
         }
+        return redirect()->route('login')->with('error' , 'You are not admin');
     }
 
 }

@@ -270,7 +270,7 @@
                         "render": function(data, type, row) {
                             return `<div class="row">
                             <div class="col-auto pe-0">
-                              <img src="{{ asset('storage/products/${row.product_theme}') }}" alt="product-image" class="wid-40 rounded">
+                              <img src="{{ '${row.product_theme}' }}" alt="product-image" class="wid-40 rounded">
                             </div>
                             <div class="col">
                               <h6 class="mb-1"><a href="">${row.product_name}</a></h6>

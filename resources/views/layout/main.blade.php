@@ -36,9 +36,9 @@
     <link rel="stylesheet" href="{{ asset('css') }}/style.css" id="main-style-link">
     <link rel="stylesheet" href="{{ asset('css') }}/style-preset.css">
     <link rel="stylesheet" href="{{ asset('ckeditor5-build-classic') }}/sample/css/sample.css">
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/css/bootstrap-datepicker.min.css">
 
 </head>
 <!-- [Head] end -->
@@ -81,7 +81,12 @@
     <script src="{{ asset('js') }}/pcoded.js"></script>
     <script src="{{ asset('js') }}/plugins/feather.min.js"></script>
     <script src="{{ asset('js') }}/component.js"></script>
-    <script src="https://cdn.tiny.cloud/1/d4rm16ulf1htqyv427arbpzmu2y5pgpbzovg1peb7te6r96s/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script type="text/javascript" src="{{ asset('js') }}/venobox.min.js"></script>
+
+    <script src="https://unpkg.com/packery@2/dist/packery.pkgd.js"></script>
+
+    <script src="https://cdn.tiny.cloud/1/d4rm16ulf1htqyv427arbpzmu2y5pgpbzovg1peb7te6r96s/tinymce/7/tinymce.min.js"
+        referrerpolicy="origin"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-datepicker@1.9.0/dist/js/bootstrap-datepicker.min.js"></script>
     <script>
@@ -98,9 +103,6 @@
     </script>
     <script>
         layout_rtl_change('false');
-    </script>
-    <script>
-        preset_change("preset-1");
     </script>
     <script>
         var elem = document.querySelector('.loader'),

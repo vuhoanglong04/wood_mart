@@ -6,6 +6,7 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class CategoryController extends Controller
 {
@@ -36,14 +37,33 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'category_name'=>"required | unique:category,category_name"
+            'category_name'=>"required",
+            'icon'=>"required | max:5120",
+            'background'=>"required | mimes:jpeg,png | max:5120",
         ] , [
             'category_name.required'=>"Please enter a category name",
-            'category_name.unique'=>"Category name must be unique"
+            'icon.required'=>"Please upload icon",
+            'icon.max' => 'The :attribute may not be greater than :max kilobytes.',
+            'background.required'=>"Please upload background",
+            'background.mimes' => 'The :attribute must be a file of type: :values.',
+            'background.max' => 'The :attribute may not be greater than :max kilobytes.',
         ]);
         $newCate = new Category();
         $newCate->category_name = $request->category_name;
         $newCate->parent_category_id = $request->parent_category_id;
+         $cloudinaryImage = new Cloudinary();
+        //Icon
+        $cloudinaryImage = $request->icon->storeOnCloudinary('category');
+        $url = $cloudinaryImage->getSecurePath();
+        $id_icon = $cloudinaryImage->getPublicId();
+        $newCate->icon = $url;
+        $newCate->id_icon = $id_icon;
+        //Background
+        $cloudinaryImage = $request->background->storeOnCloudinary('category');
+        $url = $cloudinaryImage->getSecurePath();
+        $id_background = $cloudinaryImage->getPublicId();
+        $newCate->background = $url;
+        $newCate->id_background = $id_background;
         $newCate->save();
         return back()->with('success', 'Add new category successfully');
     }
@@ -75,16 +95,43 @@ class CategoryController extends Controller
     public function update(Request $request, string $id)
     {
         $request->validate([
-            'category_name'=>"required"
+            'category_name'=>"required",
+            'icon'=>"nullable | max:5120",
+            'background'=>"nullable | mimes:jpeg,png | max:5120",
         ] , [
-            'category_name.required'=>"Please enter a category name"
+            'category_name.required'=>"Please enter a category name",
+            'icon.required'=>"Please upload icon",
+            'icon.max' => 'The :attribute may not be greater than :max kilobytes.',
+            'background.required'=>"Please upload background",
+            'background.mimes' => 'The :attribute must be a file of type: :values.',
+            'background.max' => 'The :attribute may not be greater than :max kilobytes.',
         ]);
         if(Category::withTrashed()->where('category_name',$request->category_name)->where('id' , '!=' , $id)->first()){
             return back()->with('unique' , 'Already have category name '.$request->category_name)->withInput();
         }
         $category = Category::withTrashed()->find($id);
         $category->category_name = $request->category_name;
-        $category->parent_category_id = $request->parent_category_id;
+        if($request->parent_category_id)$category->parent_category_id = $request->parent_category_id;
+        $cloudinaryImage = new Cloudinary();
+        //Icon
+        if($request->icon){
+             Cloudinary::destroy($category->id_icon);
+            $cloudinaryImage = $request->icon->storeOnCloudinary('category');
+            $url = $cloudinaryImage->getSecurePath();
+            $id_icon = $cloudinaryImage->getPublicId();
+            $category->icon = $url;
+            $category->id_icon = $id_icon;
+        }
+        //Background
+        if($request->background){
+            Cloudinary::destroy($category->id_background);
+            $cloudinaryImage = $request->background->storeOnCloudinary('category');
+            $url = $cloudinaryImage->getSecurePath();
+            $id_background = $cloudinaryImage->getPublicId();
+            $category->background = $url;
+            $category->id_background = $id_background;
+        }
+
         $category->save();
         return redirect()->route('admin.category.index')->with('success' , 'Edit category sucessfully!');
 
@@ -95,7 +142,10 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        Category::withTrashed()->find($id)->forceDelete();
+        $category = Category::withTrashed()->find($id);
+        Cloudinary::destroy($category->id_icon);
+        Cloudinary::destroy($category->id_background);
+        $category->forceDelete();
         return true;
     }
     public function softDelete($id){
