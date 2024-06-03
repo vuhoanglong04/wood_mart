@@ -46,6 +46,7 @@
                 "method": "GET",
                 success: function(response) {
                     stopLoader();
+
                     var permission = document.querySelector('#permissions').dataset.arr;
                     if(permission){
                         permission =JSON.parse(permission);
@@ -80,6 +81,7 @@
                     }
                     document.querySelectorAll('input[type=checkbox]').forEach(element => {
                         element.addEventListener('change', function() {
+
                             var turn= 0;
                             if (this.checked) turn = 1;
                             var data = {
@@ -96,7 +98,7 @@
                                 data: data,
                                 "method": "POST",
                                 success: function(response) {
-                                       console.log(response);
+                                       console.log(1);
                                 },
                                 error: function(xhr, status, error) {
                                     console.log(xhr);

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\UserReviews;
 use App\Policies\OrdersPolicy;
 use App\Policies\PostsPolicy;
 use App\Policies\TopicsPolicy;
@@ -9,6 +10,7 @@ use App\Policies\UserPolicy;
 use App\Policies\GroupsPolicy;
 use App\Policies\CategoryPolicy;
 use App\Policies\ProductsPolicy;
+use App\Policies\UserReviewsPolicy;
 use App\Policies\VouchersPolicy;
 use Yajra\DataTables\Html\Builder;
 use Illuminate\Support\Facades\Gate;
@@ -100,6 +102,10 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('posts.forceDelete' , [PostsPolicy::class , 'forceDelete']);
         Gate::define('posts.restore' , [PostsPolicy::class , 'restore']);
 
+        Gate::define('reviews.view' , [UserReviewsPolicy::class , 'view']);
+        Gate::define('reviews.delete' , [UserReviewsPolicy::class , 'delete']);
+        Gate::define('reviews.forceDelete' , [UserReviewsPolicy::class , 'forceDelete']);
+        Gate::define('reviews.restore' , [UserReviewsPolicy::class , 'restore']);
 
     }
 }

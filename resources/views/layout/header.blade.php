@@ -1,3 +1,24 @@
+<style>
+    .search {
+        position: relative;
+    }
+
+    .searchBox {
+        position: absolute;
+        top: 80%;
+        width: 100%;
+        /* height: 5rem; */
+        background-color: white;
+        border-bottom-left-radius: 15px;
+        border-bottom-right-radius: 15px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+    }
+
+    .hidden {
+        display: none
+    }
+</style>
 <div class="loader-bg">
     <div class="loader-track">
         <div class="loader-fill"></div>
@@ -140,6 +161,22 @@
                         </ul>
                     </li>
                 @endcan
+                @can('reviews.view')
+                    <li class="pc-item pc-hasmenu">
+                        <a href="#!" class="pc-link">
+                            <span class="pc-micon">
+                                <i class="ph-duotone ph-chat-text"></i>
+                            </span>
+                            <span class="pc-mtext">Reviews</span>
+                            <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+                        </a>
+                        <ul class="pc-submenu">
+                            <li class="pc-item"><a class="pc-link" href="{{ route('admin.reviews.index') }}">Reviews
+                                    List</a></li>
+                        </ul>
+                    </li>
+                @endcan
+
                 @can('posts.view')
                     <li class="pc-item pc-hasmenu">
                         <a href="#!" class="pc-link">
@@ -156,7 +193,7 @@
                     </li>
                 @endcan
                 <li class="pc-item pc-hasmenu">
-                    <a href="{{route('admin.gallery')}}" class="pc-link">
+                    <a href="{{ route('admin.gallery') }}" class="pc-link">
                         <span class="pc-micon">
                             <i class="ph-duotone ph-image"></i>
                         </span>
@@ -164,6 +201,15 @@
                         <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
                     </a>
 
+                </li>
+                <li class="pc-item pc-hasmenu">
+                    <a href="{{ route('admin.statistic') }}" class="pc-link">
+                        <span class="pc-micon">
+                            <i class="ph-duotone ph-align-bottom"></i>
+                        </span>
+                        <span class="pc-mtext">Statistic</span>
+                        <span class="pc-arrow"><i data-feather="chevron-right"></i></span>
+                    </a>
                 </li>
             </ul>
 
@@ -237,12 +283,23 @@
                     </div>
                 </li>
                 <li class="pc-h-item d-none d-md-inline-flex">
-                    <form class="form-search">
+                    <form class="form-search search">
                         <i class="ph-duotone ph-magnifying-glass icon-search"></i>
                         <input type="search" class="form-control" placeholder="Search..." />
 
                         <button class="btn btn-search" style="padding: 0"><kbd>ctrl+k</kbd></button>
                     </form>
+                    <div class="searchBox p-2">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-borderless table-sm mb-0">
+                                    <tbody class="result">
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -577,3 +634,35 @@
         </div>
     </div>
 </div>
+<script>
+    var searchInput = document.querySelector('.search input');
+    var result = document.querySelector('.result');
+    var modules = ['dashboard', 'groups', 'users', 'categories', 'products', 'orders', 'vouchers', 'topics', 'reviews',
+        'posts', 'gallery', 'statistic'
+    ];
+    var resultParent = result.parentNode.parentNode.parentNode.parentNode
+    resultParent.classList.add('hidden');
+    searchInput.addEventListener('input', function(event) {
+        // result.innerText = " ";
+        var listTD =  result.querySelectorAll('.tagSearch')
+            if(listTD.length != 0){
+                listTD.forEach(item=>{
+                    item.parentNode.remove()
+                })
+            }
+        if (this.value=="")    resultParent.classList.add('hidden');
+        else {
+
+            resultParent.classList.remove('hidden');
+            modules.forEach(element => {
+                if (element.includes(searchInput.value.trim())) {
+                    var url = `{{ URL::to('admin/${element}') }}`
+                    var tag =
+                        `<td><a class="mt-2 mb-2 tagSearch" href="${url}">${element.charAt(0).toUpperCase() + element.slice(1)}</a> </td>`
+                    result.insertAdjacentHTML('beforeend', tag);
+                }
+            });
+        }
+
+    })
+</script>

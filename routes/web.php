@@ -2,8 +2,10 @@
 
 use App\Models\User;
 use App\Models\Posts;
+use App\Models\Orders;
 use App\Models\Category;
 use App\Models\Products;
+use App\Models\UserReviews;
 use App\Models\ProductsVariant;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -20,6 +22,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\VouchersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderDetailController;
+use App\Http\Controllers\UserReviewsController;
 use App\Http\Controllers\ProductsVariantController;
 /*
 |--------------------------------------------------------------------------
@@ -55,7 +58,7 @@ Route::post('reset-password', [AuthController::class , 'updateNewPassword']);
 
 Route::get('/', [AuthController::class , 'login']);
 
-Route::prefix('admin')->middleware('login')->name('admin.')->group(function(){
+Route::prefix('admin')->middleware(['login' ,'cacheResponse:600'])->name('admin.')->group(function(){
         //Dashboard
         Route::get('orders/export', [OrdersController::class, 'exportExcel'])->name('orders.export');
         Route::get('products/export', [ProductsController::class, 'exportExcel'])->name('products.export');
@@ -125,6 +128,13 @@ Route::prefix('admin')->middleware('login')->name('admin.')->group(function(){
         Route::delete('posts/softDelete/{topic}', [PostsController::class , 'softDelete'])->name('posts.softDelete');
         Route::get('posts/restore/{topic}', [PostsController::class , 'restore'])->name('posts.restore');
 
+        //Review
+        Route::resource('/reviews' , UserReviewsController::class);
+        Route::delete('reviews/softDelete/{review}', [UserReviewsController::class , 'softDelete'])->name('reviews.softDelete');
+        Route::get('reviews/restore/{review}', [UserReviewsController::class , 'restore'])->name('reviews.restore');
+
+
+        //Others
         Route::get('/gallery' , function (){
             $imageProducts = Products::all();
             $imageUser = User::all();
@@ -133,6 +143,21 @@ Route::prefix('admin')->middleware('login')->name('admin.')->group(function(){
             $imageVariant = ProductsVariant::all();
             return view('gallery' , compact('imageProducts' , 'imageUser', 'imageCategory' , 'imagePosts' , 'imageVariant'));
         })->name('gallery');
+
+
+        Route::get('/statistic' , function (){
+            $orders = Orders::all()->count();
+            $users = User::all()->count();
+            $products = Products::all()->count();
+            $sales = Orders::where('status', 5)->sum('total');
+            $totalByUser =Orders::select('user_id', DB::raw('SUM(total) as total'))
+            ->where('status', 5)
+            ->groupBy('user_id')->with('user')
+            ->get();
+            $reviews  = UserReviews::all();
+            return view('statistic',
+            compact('orders' , 'users' , 'products' , 'sales' , 'totalByUser' , 'reviews'));
+        })->name('statistic');
 
 });
 

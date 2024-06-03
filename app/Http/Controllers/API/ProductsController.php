@@ -47,6 +47,12 @@ class ProductsController extends Controller
         if($request->from && $request->to){
             $products = $products->whereBetween('price' , [$request->from , $request->to]);
         }
+        if($request->sort_low_to_high){
+            $products = $products->orderBy('price' , 'asc');
+        }
+        if($request->sort_high_to_low){
+            $products = $products->orderBy('price' , 'desc');
+        }
         $products = $products->paginate(10);
         return $products;
     }

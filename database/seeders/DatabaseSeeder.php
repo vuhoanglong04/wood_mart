@@ -16,6 +16,7 @@ use App\Models\OrderDetail;
 use App\Models\PaymentType;
 use App\Models\UserAddress;
 use App\Models\UserPayment;
+use App\Models\UserReviews;
 use App\Models\ShippingMethod;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -67,5 +68,6 @@ class DatabaseSeeder extends Seeder
 
 
         // Wishlist::insert(['user_id' => '1', 'product_id'=>'1']);
+        UserReviews::insert(['user_id' => '1' , 'product_id' => '24', 'stars'=>5, 'comment' => 'Good GOood']);
     }
 }
