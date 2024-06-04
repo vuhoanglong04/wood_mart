@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\API;
 
 use App\Models\Products;
-use App\Models\ProductsVariant;
 use Illuminate\Http\Request;
+use App\Models\ProductsVariant;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductsRequest;
 use App\Http\Resources\ProductResource;
@@ -53,7 +54,12 @@ class ProductsController extends Controller
         if($request->sort_high_to_low){
             $products = $products->orderBy('price' , 'desc');
         }
+
         $products = $products->paginate(10);
+
+        if($request->group_by_category){
+            $products = Products::with('category')->select('category_id' , DB::raw('COUNT(id)'))->groupBy('category_id')->get();
+        }
         return $products;
     }
 
