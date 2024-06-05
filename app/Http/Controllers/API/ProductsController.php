@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\OrderDetail;
 use App\Models\Products;
 use Illuminate\Http\Request;
 use App\Models\ProductsVariant;
@@ -20,17 +21,17 @@ class ProductsController extends Controller
 
     public function index(Request $request)
     {
-        $products = Products::with('category')->with('variants');
+        $products = Products::with('category')->with('variants.color')->with('variants.material')->withAvg('reviews','stars');
         if ($request->category_id) {
             $products = $products->where('category_id', $request->category_id);
         }
-        if($request->color_id && !$request->material_id) {
+        if($request->color_id) {
             $color = $request->color_id;
             $products = $products->whereHas('variants', function ($query) use ($color) {
                 $query->where('color_id', $color);
             });
         }
-        if($request->material_id && !$request->color_id) {
+        if($request->material_id) {
             $material = $request->material_id;
             $products = $products->whereHas('variants', function ($query) use ($material) {
                 $query->where('material_id', $material);
@@ -59,6 +60,16 @@ class ProductsController extends Controller
 
         if($request->group_by_category){
             $products = Products::with('category')->select('category_id' , DB::raw('COUNT(id)'))->groupBy('category_id')->get();
+           return $products;
+        }
+        if($request->best_seller){
+            $products = OrderDetail::orderBy('quantity' , 'desc')->with(['product.variants.color', 'product.variants.material'])
+            ->with(['product.reviews' => function ($query) {
+                $query->select('product_id', DB::raw('AVG(stars) as average_rating'))
+                    ->groupBy('product_id');
+            }])
+            ->limit(10)->get();
+           return $products;
         }
         return $products;
     }

@@ -28,4 +28,8 @@ class Products extends Model
     public function variants(){
         return $this->hasMany(ProductsVariant::class , 'product_id' , 'id');
     }
+    public function reviews(){
+        return $this->hasMany(UserReviews::class , 'product_id');
+    }
+
 }

@@ -12,9 +12,9 @@ class UserReviewsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return UserReviews::where('product_id', $request->product_id)->get();
     }
 
     /**

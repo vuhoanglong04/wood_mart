@@ -12,11 +12,13 @@ class UserAddressController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $address = UserAddress::all();
+        if($request->user_id)     $address = UserAddress::where('user_id', $request->user_id)->get();
         $arr = [
             'status' => 200,
-            'data' => UserAddress::all()
+            'data' => $address
         ];
         return response()->json($arr, 200);
     }

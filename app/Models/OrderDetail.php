@@ -18,4 +18,8 @@ class OrderDetail extends Model
     public function material(){
         return $this->belongsTo(Materials::class);
     }
+    public function reviews()
+    {
+        return $this->product()->hasManyThrough( UserReviews::class ,Products::class );
+    }
 }
