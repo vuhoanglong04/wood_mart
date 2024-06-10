@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NotificationsController;
 use App\Models\User;
 use App\Models\Posts;
 use App\Models\Orders;
@@ -34,7 +35,7 @@ use App\Http\Controllers\ProductsVariantController;
 |
 */
 Route::get('', function (){
-return redirect()->route('login');
+    return redirect()->route('login');
 });
 
 
@@ -131,7 +132,10 @@ Route::prefix('admin')->middleware(['login' ,'cacheResponse:600'])->name('admin.
         Route::resource('/reviews' , UserReviewsController::class);
         Route::delete('reviews/softDelete/{review}', [UserReviewsController::class , 'softDelete'])->name('reviews.softDelete');
         Route::get('reviews/restore/{review}', [UserReviewsController::class , 'restore'])->name('reviews.restore');
-
+    
+        //Nofications
+        Route::get('/notifications' , [NotificationsController::class , 'index']);
+        Route::post('/notifications' , [NotificationsController::class , 'store']);
 
         //Others
         Route::get('/gallery' , function (){

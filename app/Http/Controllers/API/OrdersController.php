@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use Pusher\Pusher;
 use App\Models\Orders;
 use App\Models\OrderDetail;
 use Illuminate\Http\Request;
@@ -58,6 +59,14 @@ class OrdersController extends Controller
             $detail->quantity = $product['quantity'];
             $detail->save();
         }
+         $pusher = new Pusher(
+           env('PUSHER_APP_KEY'),
+            env('PUSHER_APP_SECRET'),
+            env('PUSHER_APP_ID'),
+            ['cluster' => env('PUSHER_APP_CLUSTER')]
+        );
+        $pusher->trigger('woodmart', 'my-event', 'New order have been created');
+
         $arr = [
             'status' => 201,
             'message' => "Create order sucessfully",

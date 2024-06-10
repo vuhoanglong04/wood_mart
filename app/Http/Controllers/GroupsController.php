@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use Pusher\Pusher;
 use App\Models\Groups;
 use App\Models\Modules;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Carbon\Carbon;
+
 class GroupsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index()
     {
         if (!Gate::allows('groups.view')) {
@@ -44,6 +44,16 @@ class GroupsController extends Controller
                 'group_name.unique' => "Group name must be unique"
             ]
         );
+
+
+        $pusher = new Pusher(
+            env('PUSHER_APP_KEY'),
+            env('PUSHER_APP_SECRET'),
+            env('PUSHER_APP_ID'),
+            ['cluster' => env('PUSHER_APP_CLUSTER')]
+        );
+        $pusher->trigger('woodmart', 'my-event', 'Add new Group Successfully');
+
         $newGroup = new Groups();
         $newGroup->group_name = $request->group_name;
         $newGroup->save();

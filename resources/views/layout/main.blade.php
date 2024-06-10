@@ -151,6 +151,7 @@
             elem.fadeOut(3);
         }
     </script>
+ 
     @stack('scripts')
 </body>
 
