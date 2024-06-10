@@ -89,6 +89,7 @@ class AuthController extends Controller
                 $user = User::find(Auth::user()->id);
                 $user->is_online = 1;
                 $user->save();
+                $user->tokens()->delete();
                 $tokenResult = $user->createToken('authToken')->plainTextToken;
                 return response()->json([
                     'status_code' => 200,
@@ -136,17 +137,19 @@ class AuthController extends Controller
         if ($findUser) {
             $findUser->is_online = 1;
             $findUser->save();
+            $findUser->tokens()->delete();
+            $tokenResult = $findUser->createToken('authToken')->plainTextToken;
             $arr = [
                 'status' => 200,
                 'message' => "Login sucessfully",
-                'data' => $findUser
+                'data' => $findUser,
+                'token'=>$tokenResult
             ];
             return response()->json($arr, 200);
         } else {
             $newUser = new User();
             $newUser->email = $googleAccount->email;
             $newUser->full_name = $googleAccount->name;
-            //regenerate password
             $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
             $password = '';
             for ($i = 0; $i < 10; $i++) {
@@ -156,10 +159,12 @@ class AuthController extends Controller
             $newUser->password = $password;
             $newUser->save();
             Mail::to($googleAccount->email)->send(new SignUpMail($password));
+            $tokenResult = $newUser->createToken('authToken')->plainTextToken;
             $arr = [
                 'status' => 200,
                 'message' => "Login sucessfully",
-                'data' => $newUser
+                'data' => $newUser,
+                'token'=>$tokenResult
             ];
             return response()->json($arr, 200);
         }

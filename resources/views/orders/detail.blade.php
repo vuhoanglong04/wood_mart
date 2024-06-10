@@ -445,7 +445,7 @@
                                                             <span class="row align-items-center justify-content-between">
                                                                 <span class="col-6">
                                                                     <span
-                                                                        class="text-muted mb-0">{{ $order->user->phone_number }}</span>
+                                                                        class="text-muted mb-0">{{ $order->phone_number }}</span>
                                                                 </span>
                                                                 <span class="col-6 text-end">
                                                                     <span
@@ -586,15 +586,11 @@
                                             </li>
                                             <li class="list-group-item px-0">
                                                 <div class="float-end" bis_skin_checked="1">
-                                                    <h5 class="mb-0">{{ $order->userPayment->payment->payment_name }}
+                                                    <h5 class="mb-0">{{ $order->payment->payment_name }}
                                                     </h5>
-                                                </div><span class="text-muted">Sub Total</span>
+                                                </div><span class="text-muted">Payment Method</span>
                                             </li>
-                                            <li class="list-group-item px-0">
-                                                <div class="float-end" bis_skin_checked="1">
-                                                    <h5 class="mb-0">{{ $order->userPayment->card_number }}</h5>
-                                                </div><span class="text-muted">Account number/Card number</span>
-                                            </li>
+                                        
                                             <li class="list-group-item px-0">
                                                 <div class="float-end" bis_skin_checked="1">
                                                     <h5 class="mb-0">{{ $order->status == '0' ? 'Waiting...' : 'Paid' }}
@@ -669,7 +665,7 @@
                                                                     <h6 class="mb-0">To:</h6>
                                                                     <h5>{{ $order->user->full_name }}</h5>
                                                                     <p class="mb-0">{{ $order->address }}</p>
-                                                                    <p class="mb-0">{{ $order->user->phone_number }}</p>
+                                                                    <p class="mb-0">{{ $order->telephone }}</p>
                                                                     <p class="mb-0">{{ $order->user->email }}</p>
                                                                 </div>
                                                             </div>

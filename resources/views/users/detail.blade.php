@@ -121,13 +121,7 @@
                                                     </div>
                                                 </div>
                                             </li>
-                                            @if ($defaultAddress)
-                                                <li class="list-group-item px-0 pb-0">
-                                                    <p class="mb-1 text-muted">Address</p>
-                                                    <p class="mb-0">{{ $defaultAddress->detail_address }},
-                                                        {{ $defaultAddress->city }}  {{$defaultAddress->zip_code}},{{ $defaultAddress->country }}</p>
-                                                </li>
-                                            @endif
+                                      
                                         </ul>
                                     </div>
                                 </div>
@@ -155,41 +149,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="card" bis_skin_checked="1">
-                                    <div class="card-header" bis_skin_checked="1">
-                                        <h5>Address</h5>
-                                    </div>
-                                    <div class="card-body" bis_skin_checked="1">
-                                        <ul class="list-group list-group-flush">
-                                            @foreach ($address as $item)
-                                                <li class="list-group-item px-0 pt-0">
-                                                    <div class="d-flex align-items-center justify-content-between"
-                                                        bis_skin_checked="1">
-                                                        <div class="me-2" bis_skin_checked="1">
-                                                            <div class="d-flex align-items-center" bis_skin_checked="1">
-
-                                                                <div class="ms-2" bis_skin_checked="1">
-                                                                    <p class="mb-1">{{ $item->detail_address }}</p>
-                                                                    <p class="mb-0 text-muted">{{ $item->city }}  {{$defaultAddress->zip_code}},
-                                                                        {{ $item->country }}</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="" bis_skin_checked="1">
-                                                            <div class="text-{{ $item->is_default == 1 ? 'success' : 'muted' }} d-inline-block me-2"
-                                                                bis_skin_checked="1">
-                                                                <i class="fas fa-circle f-10 me-2"></i>
-                                                                {{ $item->is_default == 1 ? 'Default' : 'Not default' }}
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            @endforeach
-
-                                        </ul>
-                                    </div>
-                                </div>
+                            
                             </div>
                             <div class="tab-pane fade" id="user-set-information" role="tabpanel"
                                 aria-labelledby="user-set-information-tab">
@@ -264,20 +224,7 @@
                                     </div>
                                     <div class="card-body">
                                         <ul class="list-group list-group-flush">
-                                            <li class="list-group-item px-0 pt-0">
-                                                <div class="row mb-0">
-                                                    <label class="col-form-label col-md-4 col-sm-12 text-md-end">Username
-                                                        <span class="text-danger">*</span></label>
-                                                    <div class="col-md-8 col-sm-12">
-                                                        <input type="text" class="form-control"
-                                                            value="Ashoka_Tano_16">
-                                                        <div class="form-text">
-                                                            Your Profile URL: <a href="#"
-                                                                class="link-primary">https://pc.com/Ashoka_Tano_16</a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                           
                                             <li class="list-group-item px-0">
                                                 <div class="row mb-0">
                                                     <label class="col-form-label col-md-4 col-sm-12 text-md-end">Account

@@ -17,8 +17,8 @@ class Orders extends Model
     public function shipping(){
         return $this->belongsTo(ShippingMethod::class);
     }
-    public function userPayment(){
-        return $this->belongsTo(UserPayment::class , 'user_payment_id');
+    public function payment(){
+        return $this->belongsTo(PaymentType::class);
     }
 
 }

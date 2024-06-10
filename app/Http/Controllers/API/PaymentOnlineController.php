@@ -11,14 +11,14 @@ class PaymentOnlineController extends Controller
     {
 
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-        $vnp_Returnurl = route('login');
+        $vnp_Returnurl = $request->url;
         $vnp_TmnCode = "R85DPSR9";//Mã website tại VNPAY
         $vnp_HashSecret = "90Y8TI5MF8APZOXUM4H07PDRY0E9ZEOZ"; //Chuỗi bí mật
 
-        $vnp_TxnRef = 'Bill_' . rand(1000, 9999);
-        $vnp_OrderInfo = "Pay your bill";
+        $vnp_TxnRef = 'WM_' . rand(1000, 9999);
+        $vnp_OrderInfo = "VNPAY PAYMENT";
         $vnp_OrderType = "Woodmart";
-        $vnp_Amount = $request->total;
+        $vnp_Amount = $request->total * 2400000;
         $vnp_Locale = "VN";
         $vnp_BankCode = "NCB";
         $vnp_IpAddr = $_SERVER['REMOTE_ADDR'];
@@ -78,11 +78,9 @@ class PaymentOnlineController extends Controller
             header('Location: ' . $vnp_Url);
             die();
         } else {
-            echo json_encode($returnData);
+            return  json_encode($returnData);
         }
     }
-
-
     public function execPostRequest($url, $data)
     {
         $ch = curl_init($url);
@@ -115,26 +113,18 @@ class PaymentOnlineController extends Controller
 
 
         $orderInfo = "Woodmart";
-        $amount = $request->total;
+        $amount = $request->total  * 24000;
         $orderId = time() . "";
         //Trang trả về để lây data
-        $redirectUrl = "https://facebook.com";
-        $ipnUrl = "https://facebook.com";
+        $redirectUrl = $request->url;
+        $ipnUrl = $request->url;
         $extraData = "";
-        //Chinh thanh request->data
-        // $partnerCode = $partnerCode;
-        // $accessKey = $accessKey;
-        // $serectkey = $serectkey;
+
         $orderId = 'WM_' . rand(1000, 9999); // Mã đơn hàng
-        $orderInfo = 'OKOK';
-        $amount = 50*24000 ;
-        // $ipnUrl = $_POST["ipnUrl"];
-        // $redirectUrl = $_POST["redirectUrl"];
-        // $extraData = $_POST["extraData"];
-
-
+        $orderInfo = 'MOMO PAYMENT';
+        $amount = ($request->total * 24000);
         $requestId = time() . "";
-        $requestType = "captureWallet";
+        $requestType = "payWithATM";
         // $extraData = ($extraData ? $_POST["extraData"] : "");
         //before sign HMAC SHA256 signature
         $rawHash = "accessKey=" . $accessKey . "&amount=" . $amount . "&extraData=" . $extraData . "&ipnUrl=" . $ipnUrl . "&orderId=" . $orderId . "&orderInfo=" . $orderInfo . "&partnerCode=" . $partnerCode . "&redirectUrl=" . $redirectUrl . "&requestId=" . $requestId . "&requestType=" . $requestType;
@@ -146,7 +136,6 @@ class PaymentOnlineController extends Controller
             'requestId' => $requestId,
             'amount' => $amount,
             'orderId' => $orderId,
-            'items'=>$request->list,   //Need
             'orderInfo' => $orderInfo,
             'redirectUrl' => $redirectUrl,
             'ipnUrl' => $ipnUrl,
@@ -161,6 +150,5 @@ class PaymentOnlineController extends Controller
         //Just a example, please check more in there
 
         return json_encode($jsonResult);
-
     }
 }

@@ -9,10 +9,10 @@ use App\Http\Controllers\API\PostsController;
 use App\Http\Controllers\API\GroupsController;
 use App\Http\Controllers\API\OrdersController;
 use App\Http\Controllers\API\TopicsController;
+use App\Http\Controllers\API\AddressController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ProductsController;
 use App\Http\Controllers\API\WishlistController;
-use App\Http\Controllers\API\UserAddressController;
 use App\Http\Controllers\API\UserReviewsController;
 use App\Http\Controllers\API\PaymentOnlineController;
 
@@ -49,11 +49,13 @@ Route::get('/posts/{slug}' , [PostsController::class, 'show']);
 Route::get('/reviews', [UserReviewsController::class, 'index']);
 
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    //Addrress
-    Route::get('/address', [UserAddressController::class, 'index']);
-    Route::post('/address', [UserAddressController::class, 'store']);
-    Route::patch('/address/{id}', [UserAddressController::class, 'update']);
+Route::middleware(['auth:sanctum' , 'checkTokenExpiration'])->group(function () {
+
+    //Address
+    Route::get('/address', [AddressController::class, 'index']);
+    Route::post('/address', [AddressController::class, 'store']);
+    Route::patch('/address', [AddressController::class, 'update']);
+    
     //Cart
     Route::get('/cart', [CartController::class, 'index']);
     Route::post('/cart', [CartController::class, 'store']);
@@ -75,7 +77,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/wishlist', [WishlistController::class, 'store']);
     Route::delete('/wishlist/{id}', [WishlistController::class, 'destroy']);
 
-    Route::get('momo', [PaymentOnlineController::class, 'momo'])->name('momo');
-    Route::get('vnpay', [PaymentOnlineController::class, 'vnpay'])->name('vnpay');
+    Route::post('momo', [PaymentOnlineController::class, 'momo'])->name('momo');
+    Route::post('vnpay', [PaymentOnlineController::class, 'vnpay'])->name('vnpay');
 });
 

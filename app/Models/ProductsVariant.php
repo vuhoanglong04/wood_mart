@@ -22,4 +22,7 @@ class ProductsVariant extends Model
     {
         return $this->belongsTo(Materials::class);
     }
+    public function product(){
+        return $this->hasOne(Products::class , 'id' , 'product_id');
+    }
 }

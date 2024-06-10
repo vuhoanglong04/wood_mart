@@ -60,7 +60,7 @@ class User extends Authenticatable
         }else return false;
     }
     public function address(){
-        return $this->hasMany(UserAddress::class);
+        return $this->hasOne(Address::class);
     }
 
 }

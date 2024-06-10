@@ -23,7 +23,7 @@ class OrdersDataTable extends DataTable
      */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
-        $orders = Orders::with('user')->with('shipping')->with('userPayment.payment');
+        $orders = Orders::with('user')->with('shipping')->with('payment');
         return (new EloquentDataTable($orders))
 
             ->setRowId('id');
@@ -72,8 +72,7 @@ class OrdersDataTable extends DataTable
                 ->width(60)
                 ->addClass('text-center'),
             Column::make('address'),
-            Column::make('shipping_id'),
-            Column::make('user_payment_id'),
+            Column::make('telephone'),
             Column::make('voucher'),
             Column::make('total'),
             Column::make('status'),

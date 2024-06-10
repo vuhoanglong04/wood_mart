@@ -18,7 +18,6 @@ use App\Http\Controllers\TopicsController;
 use App\Http\Controllers\ModulesController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductsController;
-use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\VouchersController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OrderDetailController;

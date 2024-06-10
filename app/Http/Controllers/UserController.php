@@ -167,13 +167,11 @@ class UserController extends Controller
         }
         $user = User::withTrashed()->find($id);
         $groups = Groups::whereNull('deleted_at')->get();
-        $address = UserAddress::where('user_id', $id)->get();
-        $defaultAddress = UserAddress::where('user_id', $id)->where('is_default', 1)->first();
         $lastestOrders = Orders::where('user_id', $id)
             ->orderBy('created_at', 'desc')
             ->limit(3)
             ->get();
-        return view('users.detail', compact('user', 'groups', 'defaultAddress', 'address', 'lastestOrders'));
+        return view('users.detail', compact('user', 'groups', 'lastestOrders'));
     }
     public function updatePassword($id, Request $request)
     {

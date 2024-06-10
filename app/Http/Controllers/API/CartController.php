@@ -13,7 +13,7 @@ class CartController extends Controller
      */
     public function index(Request $request)
     {
-        $allCart = Cart::with('user');
+        $allCart = Cart::with('user')->with('variant.product');
         if($request->user_id){
             $allCart  = $allCart->where('user_id', $request->user_id);
         }

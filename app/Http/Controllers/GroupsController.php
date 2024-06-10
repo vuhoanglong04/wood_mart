@@ -124,7 +124,7 @@ class GroupsController extends Controller
     }
     public function authorizationUpdate(Request $request, $id)
     {
-        $group = Groups::withTrashed()->find(3);
+        $group = Groups::withTrashed()->find($id);
         $dataPermissions = json_decode($group->permissions, true);
 
         if ($request->turn) {

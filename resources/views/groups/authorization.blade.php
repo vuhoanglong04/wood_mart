@@ -69,7 +69,7 @@
                                         name="${actions.module_name}"
                                         id="customCheckdefh_${actions.module_name}_${actions.module_action[i]}"
                                         data-module="${actions.module_name}" data-actions="${actions.module_action[i]}"
-                                        ${check}
+                                        ${check} 
                                         >
                                     <label class="form-check-label"
                                         for="customCheckdefh_${actions.module_name}_${actions.module_action[i]}">${actions.module_action[i].charAt(0).toUpperCase() +actions.module_action[i].slice(1) }</label>
@@ -81,7 +81,7 @@
                     }
                     document.querySelectorAll('input[type=checkbox]').forEach(element => {
                         element.addEventListener('change', function() {
-
+                            
                             var turn= 0;
                             if (this.checked) turn = 1;
                             var data = {
@@ -98,7 +98,7 @@
                                 data: data,
                                 "method": "POST",
                                 success: function(response) {
-                                       console.log(1);
+                                       console.log('Sucess...');
                                 },
                                 error: function(xhr, status, error) {
                                     console.log(xhr);

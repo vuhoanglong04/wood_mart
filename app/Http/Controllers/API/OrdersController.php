@@ -39,9 +39,10 @@ class OrdersController extends Controller
     {
         $newOrder = new Orders();
         $newOrder->address = $request->address;
+        $newOrder->telephone = $request->telephone;
         $newOrder->user_id = $request->user_id;
         $newOrder->shipping_id = $request->shipping_id;
-        $newOrder->user_payment_id = $request->user_payment_id;
+        $newOrder->payment_id = $request->payment_id;
         $newOrder->voucher = $request->voucher;
         $newOrder->total = $request->total;
         $newOrder->status = $request->status;
@@ -69,7 +70,7 @@ class OrdersController extends Controller
      */
     public function show(string $id)
     {
-        $order = Orders::with('user')->with('shipping')->with('userPayment')->where('id', $id)->first();
+        $order = Orders::with('user')->with('shipping')->with('payment')->where('id', $id)->first();
         if ($order) {
             $orderDetail = OrderDetail::where('order_id', $order->id)->get();
             $arr = [

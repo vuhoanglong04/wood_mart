@@ -18,7 +18,6 @@
         table.dataTable.no-footer {
             border-bottom: none !important;
         }
-
         select[name="orders-table_length"] {
             height: 3rem;
             width: 5rem;
@@ -26,7 +25,7 @@
             font-size: 0.875rem;
             font-weight: 400;
             line-height: 1.5;
-            color: #5B6B79;
+            color: #5B6B79;d
             background-color: #ffffff !important;
         }
 
@@ -318,30 +317,13 @@
                             "title": "address",
                             "orderable": true,
                             "searchable": true
-                        }, {
-                            "data": "shipping_id",
-                            "name": "shipping_id",
-                            "title": "Shipping Method",
-                            "render": function(data, type, row) {
-                                if (type === 'filter' || type === 'sort') {
-                                    // Trả về shipping name để sử dụng cho tìm kiếm và sắp xếp
-                                    return row.shipping.shipping_name;
-                                } else {
-                                    // Hiển thị giá trị dữ liệu trong ô
-                                    return row.shipping.shipping_name;
-
-                                }
-                            }
-                        }, {
-                            "data": "user_payment_id",
-                            "name": "user_payment_id",
-                            "title": "Payment",
+                        },
+                        {
+                            "data": "telephone",
+                            "name": "telephone",
+                            "title": "telephone",
                             "orderable": true,
-                            "searchable": true,
-                            "render": function(data, type, row) {
-                                console.log(row);
-                                return row.user_payment.payment.payment_name;
-                            }
+                            "searchable": true
                         },
                         {
                             "data": "voucher",

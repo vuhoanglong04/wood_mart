@@ -74,6 +74,7 @@ class Kernel extends HttpKernel
         'reset-password'=>\App\Http\Middleware\ResetPasswordMiddleware::class,
         'doNotCacheResponse' => \Spatie\ResponseCache\Middlewares\DoNotCacheResponse::class,
         'cacheResponse' => \Spatie\ResponseCache\Middlewares\CacheResponse::class,
+        'checkTokenExpiration' => \App\Http\Middleware\CheckTokenExpiration::class,
 
     ];
 }
