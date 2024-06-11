@@ -32,9 +32,15 @@ class ProductsController extends Controller
             });
         }
         if($request->material_id) {
-            $material = $request->material_id;
-            $products = $products->whereHas('variants', function ($query) use ($material) {
-                $query->where('material_id', $material);
+            $materials = $request->material_id;
+            $products = $products->whereHas('variants', function ($query) use ($materials) {
+                foreach($materials as $key=> $item) {
+                    if ($key === 0) {
+                        $query->where('material_id', $item);
+                    } else {
+                        $query->orWhere('material_id', $item);
+                    }
+                }
             });
         }
 
