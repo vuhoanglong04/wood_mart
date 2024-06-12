@@ -83,7 +83,6 @@ class ProductsController extends Controller
         // $colors = Colors::whereIn('id', $listColorsOfProduct)->get();
         $listMaterial = ProductsVariant::withTrashed()->with('material')->where('product_id', $id)->distinct('material_id')->pluck('material_id');
         $material = Materials::whereIn('id', $listMaterial)->get();
-        dd(ProductsVariant::with('product')->get());
         return view('products.detail', compact('product', 'colors', 'materials', 'listVariant' , 'material'));
     }
 

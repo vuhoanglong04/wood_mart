@@ -6,6 +6,7 @@ use App\Http\Controllers\API\AuthController;
 use App\Http\Controllers\API\CartController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\PostsController;
+use App\Http\Controllers\ApI\ColorsController;
 use App\Http\Controllers\API\GroupsController;
 use App\Http\Controllers\API\OrdersController;
 use App\Http\Controllers\API\TopicsController;
@@ -13,6 +14,7 @@ use App\Http\Controllers\API\AddressController;
 use App\Http\Controllers\API\CategoryController;
 use App\Http\Controllers\API\ProductsController;
 use App\Http\Controllers\API\WishlistController;
+use App\Http\Controllers\ApI\MaterialsController;
 use App\Http\Controllers\API\UserReviewsController;
 use App\Http\Controllers\API\PaymentOnlineController;
 
@@ -38,6 +40,10 @@ Route::get('/auth/google/callback', [AuthController::class, 'loginGoogleHandle']
 //Product
 Route::get('/products', [ProductsController::class, 'index']);
 Route::get('/products/{id}', [ProductsController::class, 'show']);
+//Colors
+Route::get('/colors', [ColorsController::class, 'index']);
+Route::get('/materials', [MaterialsController::class, 'index']);
+
 //Category
 Route::get('/category', [CategoryController::class, 'index']);
 //Topic

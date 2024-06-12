@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Models\OrderDetail;
+use Carbon\Carbon;
 use App\Models\Products;
+use App\Models\OrderDetail;
 use Illuminate\Http\Request;
 use App\Models\ProductsVariant;
 use Illuminate\Support\Facades\DB;
@@ -21,20 +22,20 @@ class ProductsController extends Controller
 
     public function index(Request $request)
     {
-        $products = Products::with('category')->with('variants.color')->with('variants.material')->withAvg('reviews','stars');
+        $products = Products::with('category')->with('variants.color')->with('variants.material')->withAvg('reviews', 'stars');
         if ($request->category_id) {
             $products = $products->where('category_id', $request->category_id);
         }
-        if($request->color_id) {
+        if ($request->color_id) {
             $color = $request->color_id;
             $products = $products->whereHas('variants', function ($query) use ($color) {
                 $query->where('color_id', $color);
             });
         }
-        if($request->material_id) {
+        if ($request->material_id) {
             $materials = $request->material_id;
             $products = $products->whereHas('variants', function ($query) use ($materials) {
-                foreach($materials as $key=> $item) {
+                foreach ($materials as $key => $item) {
                     if ($key === 0) {
                         $query->where('material_id', $item);
                     } else {
@@ -44,38 +45,54 @@ class ProductsController extends Controller
             });
         }
 
-        if($request->material_id && $request->color_id) {
+        if ($request->material_id && $request->color_id) {
             $material = $request->material_id;
             $color = $request->color_id;
 
-            $products = $products->whereHas('variants', function ($query) use ($material , $color) {
-                $query->where('material_id', $material)->where("color_id" , $color);
+            $products = $products->whereHas('variants', function ($query) use ($material, $color) {
+                $query->where('material_id', $material)->where("color_id", $color);
             });
         }
-        if($request->from && $request->to){
-            $products = $products->whereBetween('price' , [$request->from , $request->to]);
+        if ($request->from && $request->to) {
+            $products = $products->whereBetween('price', [$request->from, $request->to]);
         }
-        if($request->sort_low_to_high){
-            $products = $products->orderBy('price' , 'asc');
+        if ($request->sort_low_to_high) {
+            $products = $products->orderBy('price', 'asc');
         }
-        if($request->sort_high_to_low){
-            $products = $products->orderBy('price' , 'desc');
+        if ($request->sort_high_to_low) {
+            $products = $products->orderBy('price', 'desc');
         }
 
         $products = $products->paginate(10);
 
-        if($request->group_by_category){
-            $products = Products::with('category')->select('category_id' , DB::raw('COUNT(id)'))->groupBy('category_id')->get();
-           return $products;
+        if ($request->group_by_category) {
+            $products = Products::with('category')->select('category_id', DB::raw('COUNT(id)'))->groupBy('category_id')->get();
+            return $products;
         }
-        if($request->best_seller){
-            $products = OrderDetail::orderBy('quantity' , 'desc')->with(['product.variants.color', 'product.variants.material'])
-            ->with(['product.reviews' => function ($query) {
-                $query->select('product_id', DB::raw('AVG(stars) as average_rating'))
-                    ->groupBy('product_id');
-            }])
-            ->limit(10)->get();
-           return $products;
+        if ($request->best_seller) {
+            $products = OrderDetail::orderBy('quantity', 'desc')->with(['product.variants.color', 'product.variants.material'])
+                ->with([
+                    'product.reviews' => function ($query) {
+                        $query->select('product_id', DB::raw('AVG(stars) as average_rating'))
+                            ->groupBy('product_id');
+                    }
+                ])
+                ->limit(10)->get();
+            return $products;
+        }
+        if ($request->popular_week) {
+            $startOfWeek = Carbon::now()->startOfWeek();
+            $endOfWeek = Carbon::now()->endOfWeek();
+            $products = OrderDetail::orderBy('quantity', 'desc')->with(['product.variants.color', 'product.variants.material'])
+                ->with([
+                    'product.reviews' => function ($query) {
+                        $query->select('product_id', DB::raw('AVG(stars) as average_rating'))
+                            ->groupBy('product_id');
+                    }
+                ])
+                ->whereBetween('created_at', [$startOfWeek , $endOfWeek])
+                ->limit(6)->get();
+            return $products;
         }
         return $products;
     }
