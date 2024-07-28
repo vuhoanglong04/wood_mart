@@ -3,8 +3,8 @@
 </p>
 
 ## Giới thiệu tổng quan
-Link Website : https://woodmart-project.vercel.app/ 
-Link Trang Quản Trị : https://woodmart.click/login  (testAdmin@gmail.com /  12345)
+1. Link Website : https://woodmart-project.vercel.app/ 
+2. Link Trang Quản Trị : https://woodmart.click/login  (testAdmin@gmail.com /  12345)
 **Công nghệ** 
 HTML, CSS, JavaScript, ReactJS, Laravel, Ajax, MySQL, Cloudinary, JQuery, Axious, Tailwind, Pusher
 **Giao diện website khách** 
