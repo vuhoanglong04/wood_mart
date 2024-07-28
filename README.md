@@ -8,6 +8,7 @@
    
 **Công nghệ** 
 HTML, CSS, JavaScript, ReactJS, Laravel, Ajax, MySQL, Cloudinary, JQuery, Axious, Tailwind, Pusher
+
 **Giao diện website khách** 
 
     1. Trang chủ
